@@ -29,8 +29,8 @@ public class StudyGroup {
     @Setter
     private String name;
 
-    @ManyToMany
-    private List<User> users = new ArrayList<>();
+    @ManyToMany(mappedBy = "studyGroups")
+    private List<User> members = new ArrayList<>();
 
     @OneToMany(mappedBy = "studyGroup")
     private List<Timeline> timelines = new ArrayList<>();

@@ -39,11 +39,11 @@ public class User {
     @Setter
     private String passwordHash;
 
-//    @OneToMany
-//    private final List<Comment> comments = new ArrayList<Comment>();
+    @OneToMany(mappedBy = "author")
+    private final List<Comment> comments = new ArrayList<>();
 
-//    @ManyToMany
-//    private final List<StudyGroup> studyGroups = new ArrayList<StudyGroup>();
+    @ManyToMany
+    private final List<StudyGroup> studyGroups = new ArrayList<>();
 
     public User() {
     }

@@ -6,6 +6,8 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
@@ -24,8 +26,9 @@ import java.util.Objects;
 @ToString
 public class Event {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter
-    private int id;
+    private Long id;
 
     @NotNull
     @Column(nullable = false, unique = true)
@@ -47,6 +50,9 @@ public class Event {
     @ManyToMany
     private final List<Timeline> timelines = new ArrayList<>();
 
+
+    public Event() {
+    }
 
     @Override
     public boolean equals(Object o) {

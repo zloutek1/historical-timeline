@@ -25,6 +25,7 @@ public class Timeline {
     private Long id;
 
     @NotNull
+    @Column(nullable = false, unique = true)
     @Setter
     private String name;
 

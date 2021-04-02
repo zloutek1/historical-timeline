@@ -38,7 +38,7 @@ public class Timeline {
     //private List<Comment> comments = new ArrayList<>();
 
     //@OneToMany
-    //private Set<Event> events = new HashSet<>();
+    //private List<Event> events = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

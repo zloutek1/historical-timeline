@@ -7,6 +7,8 @@ import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -25,6 +27,7 @@ public class Timeline {
     private Long id;
 
     @NotNull
+    @Column(nullable = false, unique = true)
     @Setter
     private String name;
 
@@ -39,11 +42,19 @@ public class Timeline {
     @Setter
     private StudyGroup studyGroup;
 
-    //@OneToMany
-    //private List<Comment> comments = new ArrayList<>();
+    @OneToMany
+    private List<Comment> comments = new ArrayList<>();
 
-    //@OneToMany
-    //private List<Event> events = new ArrayList<>();
+    @OneToMany
+    private List<Event> events = new ArrayList<>();
+
+    public void addComment(Comment comment) { comments.add(comment); }
+
+    public void removeComment(Comment comment) { comments.remove(comment); }
+
+    public void addEvent(Event event) { events.add(event); }
+
+    public void removeEvent(Event event) { events.remove(event); }
 
     @Override
     public boolean equals(Object o) {

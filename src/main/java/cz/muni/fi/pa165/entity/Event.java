@@ -47,6 +47,7 @@ public class Event {
     @ManyToMany
     private final List<Timeline> timelines = new ArrayList<>();
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

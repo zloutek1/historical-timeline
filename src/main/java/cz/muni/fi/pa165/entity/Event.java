@@ -7,9 +7,11 @@ import lombok.ToString;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -42,9 +44,9 @@ public class Event {
     @Setter
     private String imageIdentifier;
 
-    @ManyToOne(optional = false)
-    @NotNull
-    private Timeline timeline;
+    @ManyToMany
+    private final List<Timeline> timelines = new ArrayList<>();
+
 
     @Override
     public boolean equals(Object o) {

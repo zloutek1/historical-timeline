@@ -19,19 +19,22 @@ import java.util.Objects;
  */
 @Entity
 @Getter
-@Setter
 @ToString
 public class Timeline {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter
     private Long id;
 
     @NotNull
+    @Setter
     private String name;
 
+    @Setter
     private LocalDate from;
 
+    @Setter
     private LocalDate to;
 
     //@OneToMany

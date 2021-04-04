@@ -52,6 +52,15 @@ public class Timeline {
     @ManyToMany(mappedBy = "timelines")
     private List<Event> events = new ArrayList<>();
 
+    public Timeline() {
+    }
+
+    public Timeline(@NotNull String name, @NotNull LocalDate from, @NotNull LocalDate to) {
+        this.name = name;
+        this.from = from;
+        this.to = to;
+    }
+
     public void addComment(Comment comment) { comments.add(comment); }
 
     public void removeComment(Comment comment) { comments.remove(comment); }

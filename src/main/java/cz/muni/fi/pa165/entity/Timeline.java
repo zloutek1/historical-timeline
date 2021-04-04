@@ -49,7 +49,7 @@ public class Timeline {
     @OneToMany
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany
+    @ManyToMany(mappedBy = "timelines")
     private List<Event> events = new ArrayList<>();
 
     public void addComment(Comment comment) { comments.add(comment); }

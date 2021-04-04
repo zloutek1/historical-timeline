@@ -46,7 +46,7 @@ public class Timeline {
     @Setter
     private StudyGroup studyGroup;
 
-    @OneToMany
+    @OneToMany(mappedBy = "timeline")
     private List<Comment> comments = new ArrayList<>();
 
     @ManyToMany(mappedBy = "timelines")

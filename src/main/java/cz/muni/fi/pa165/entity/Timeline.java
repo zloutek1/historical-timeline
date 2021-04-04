@@ -1,6 +1,8 @@
 package cz.muni.fi.pa165.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -19,6 +21,8 @@ import java.util.Objects;
 @Entity
 @Getter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Timeline {
 
     @Id
@@ -51,15 +55,6 @@ public class Timeline {
 
     @ManyToMany(mappedBy = "timelines")
     private final List<Event> events = new ArrayList<>();
-
-    public Timeline() {
-    }
-
-    public Timeline(@NotNull String name, @NotNull LocalDate from, @NotNull LocalDate to) {
-        this.name = name;
-        this.from = from;
-        this.to = to;
-    }
 
     public void addComment(Comment comment) { comments.add(comment); }
 

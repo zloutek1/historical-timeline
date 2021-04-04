@@ -31,9 +31,13 @@ public class Timeline {
     @Setter
     private String name;
 
+    @NotNull
+    @Column(nullable = false)
     @Setter
     private LocalDate from;
 
+    @NotNull
+    @Column(nullable = false)
     @Setter
     private LocalDate to;
 

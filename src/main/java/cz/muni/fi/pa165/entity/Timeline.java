@@ -20,6 +20,7 @@ import java.util.Objects;
  */
 @Entity
 @Getter
+@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,26 +28,21 @@ public class Timeline {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter
     private Long id;
 
     @NotNull
     @Column(nullable = false, unique = true)
-    @Setter
     private String name;
 
     @NotNull
     @Column(nullable = false)
-    @Setter
     private LocalDate from;
 
     @NotNull
     @Column(nullable = false)
-    @Setter
     private LocalDate to;
 
     @NotNull
-    @Setter
     @ManyToOne(optional = false)
     private StudyGroup studyGroup;
 

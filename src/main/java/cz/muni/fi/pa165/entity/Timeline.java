@@ -47,10 +47,10 @@ public class Timeline {
     private StudyGroup studyGroup;
 
     @OneToMany(mappedBy = "timeline")
-    private List<Comment> comments = new ArrayList<>();
+    private final List<Comment> comments = new ArrayList<>();
 
     @ManyToMany(mappedBy = "timelines")
-    private List<Event> events = new ArrayList<>();
+    private final List<Event> events = new ArrayList<>();
 
     public Timeline() {
     }

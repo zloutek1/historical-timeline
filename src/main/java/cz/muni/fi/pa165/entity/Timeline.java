@@ -45,14 +45,16 @@ public class Timeline {
     @Setter
     private LocalDate to;
 
-    @ManyToOne(optional = false)
     @NotNull
     @Setter
+    @ManyToOne(optional = false)
     private StudyGroup studyGroup;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "timeline")
     private final List<Comment> comments = new ArrayList<>();
 
+    @ToString.Exclude
     @ManyToMany(mappedBy = "timelines")
     private final List<Event> events = new ArrayList<>();
 

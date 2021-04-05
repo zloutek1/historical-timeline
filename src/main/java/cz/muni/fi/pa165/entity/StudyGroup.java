@@ -7,7 +7,6 @@ import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,37 +17,29 @@ import java.util.Objects;
  */
 @Entity
 @Getter
+@Setter
 @ToString
-public class StudyGroup {
+public class StudyGroup implements DbEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter
     private Long id;
 
     @NotNull
     @Column(nullable = false, unique = true)
-    @Setter
     private String name;
 
     @ManyToMany(mappedBy = "studyGroups")
+    @ToString.Exclude
     private List<User> members = new ArrayList<>();
 
     @OneToMany(mappedBy = "studyGroup")
+    @ToString.Exclude
     private List<Timeline> timelines = new ArrayList<>();
 
-    public void addMember(User member)
-    {
-        members.add(member);
-    }
+    public StudyGroup() {}
 
-    public void removeMember(User member)
-    {
-        members.remove(member);
-    }
-
-    public List<User> getMembers()
-    {
-        return Collections.unmodifiableList(members);
+    public StudyGroup(String name) {
+        this.name = name;
     }
 
     @Override

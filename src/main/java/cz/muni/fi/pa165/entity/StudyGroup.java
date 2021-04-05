@@ -7,6 +7,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,12 +31,23 @@ public class StudyGroup implements DbEntity<Long> {
 
     @ManyToMany(mappedBy = "studyGroups")
     @ToString.Exclude
-    private List<User> members = new ArrayList<>();
+    private final List<User> members = new ArrayList<>();
 
     @OneToMany(mappedBy = "studyGroup")
     @ToString.Exclude
-    private List<Timeline> timelines = new ArrayList<>();
+    private final List<Timeline> timelines = new ArrayList<>();
 
+    public void addMember(User member)
+    {
+        members.add(member);
+    }
+
+    public void removeMember(User member)
+    {
+        members.remove(member);
+    }
+
+    
     public StudyGroup() {}
 
     public StudyGroup(String name) {

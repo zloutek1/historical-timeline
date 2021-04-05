@@ -7,6 +7,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,6 +35,21 @@ public class StudyGroup {
 
     @OneToMany(mappedBy = "studyGroup")
     private List<Timeline> timelines = new ArrayList<>();
+
+    public void addMember(User member)
+    {
+        members.add(member);
+    }
+
+    public void removeMember(User member)
+    {
+        members.remove(member);
+    }
+
+    public List<User> getMembers()
+    {
+        return Collections.unmodifiableList(members);
+    }
 
     @Override
     public boolean equals(Object o) {

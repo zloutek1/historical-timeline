@@ -1,6 +1,8 @@
 package cz.muni.fi.pa165.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -18,35 +20,39 @@ import java.util.Objects;
  */
 @Entity
 @Getter
+@Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Timeline {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter
     private Long id;
 
     @NotNull
     @Column(nullable = false, unique = true)
-    @Setter
     private String name;
 
-    @Setter
+    @NotNull
+    @Column(nullable = false)
     private LocalDate from;
 
-    @Setter
+    @NotNull
+    @Column(nullable = false)
     private LocalDate to;
 
-    @ManyToOne(optional = false)
     @NotNull
-    @Setter
+    @ManyToOne(optional = false)
     private StudyGroup studyGroup;
 
-    @OneToMany
-    private List<Comment> comments = new ArrayList<>();
+    @ToString.Exclude
+    @OneToMany(mappedBy = "timeline")
+    private final List<Comment> comments = new ArrayList<>();
 
-    @OneToMany
-    private List<Event> events = new ArrayList<>();
+    @ToString.Exclude
+    @ManyToMany(mappedBy = "timelines")
+    private final List<Event> events = new ArrayList<>();
 
     public void addComment(Comment comment) { comments.add(comment); }
 

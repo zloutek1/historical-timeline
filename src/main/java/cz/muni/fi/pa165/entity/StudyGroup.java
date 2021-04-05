@@ -18,23 +18,24 @@ import java.util.Objects;
  */
 @Entity
 @Getter
+@Setter
 @ToString
-public class StudyGroup {
+public class StudyGroup implements DbEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter
     private Long id;
 
     @NotNull
     @Column(nullable = false, unique = true)
-    @Setter
     private String name;
 
     @ManyToMany(mappedBy = "studyGroups")
-    private List<User> members = new ArrayList<>();
+    @ToString.Exclude
+    private final List<User> members = new ArrayList<>();
 
     @OneToMany(mappedBy = "studyGroup")
-    private List<Timeline> timelines = new ArrayList<>();
+    @ToString.Exclude
+    private final List<Timeline> timelines = new ArrayList<>();
 
     public void addMember(User member)
     {
@@ -46,9 +47,11 @@ public class StudyGroup {
         members.remove(member);
     }
 
-    public List<User> getMembers()
-    {
-        return Collections.unmodifiableList(members);
+    
+    public StudyGroup() {}
+
+    public StudyGroup(String name) {
+        this.name = name;
     }
 
     @Override

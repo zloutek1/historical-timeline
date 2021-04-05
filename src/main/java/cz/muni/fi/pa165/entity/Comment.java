@@ -6,7 +6,6 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.Objects;
 

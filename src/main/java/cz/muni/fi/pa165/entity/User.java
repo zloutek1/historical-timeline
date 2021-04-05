@@ -3,6 +3,7 @@ package cz.muni.fi.pa165.entity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,18 +25,22 @@ public class User {
     private Long id;
 
     @NotNull
+    @Column(nullable = false)
     @Setter
     private String email;
 
     @NotNull
+    @Column(nullable = false)
     @Setter
     private String firstName;
 
     @NotNull
+    @Column(nullable = false)
     @Setter
     private String lastName;
 
     @NotNull
+    @Column(nullable = false)
     @Setter
     private String passwordHash;
 
@@ -54,6 +59,37 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.passwordHash = passwordHash;
+    }
+
+    public void addComment(Comment comment)
+    {
+        comments.add(comment);
+    }
+
+    public void removeComment(Comment comment)
+    {
+        comments.remove(comment);
+    }
+
+    public List<Comment> getComments()
+    {
+        return Collections.unmodifiableList(comments);
+    }
+
+    public void addStudyGroup(StudyGroup group)
+    {
+        studyGroups.add(group);
+        //group.addUser(this); TODO: uncomment when the method will be created
+    }
+
+    public void removeStudyGroup(StudyGroup group)
+    {
+        studyGroups.remove(group);
+    }
+
+    public List<StudyGroup> getStudyGroups()
+    {
+        return Collections.unmodifiableList(studyGroups);
     }
 
     @Override

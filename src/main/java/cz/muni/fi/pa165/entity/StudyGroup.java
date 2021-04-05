@@ -17,23 +17,30 @@ import java.util.Objects;
  */
 @Entity
 @Getter
+@Setter
 @ToString
-public class StudyGroup {
+public class StudyGroup implements DbEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter
     private Long id;
 
     @NotNull
     @Column(nullable = false, unique = true)
-    @Setter
     private String name;
 
     @ManyToMany(mappedBy = "studyGroups")
+    @ToString.Exclude
     private List<User> members = new ArrayList<>();
 
     @OneToMany(mappedBy = "studyGroup")
+    @ToString.Exclude
     private List<Timeline> timelines = new ArrayList<>();
+
+    public StudyGroup() {}
+
+    public StudyGroup(String name) {
+        this.name = name;
+    }
 
     @Override
     public boolean equals(Object o) {

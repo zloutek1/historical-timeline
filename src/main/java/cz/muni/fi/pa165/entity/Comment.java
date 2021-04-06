@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -16,30 +17,38 @@ import java.util.Objects;
  */
 @Entity
 @Getter
+@Setter
 @ToString
+@NoArgsConstructor
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter
     private Long id;
 
     @NotNull
-    @Setter
+    @Column(nullable = false)
     private String text;
 
     @NotNull
-    @Setter
+    @Column(nullable = false)
     private LocalDateTime time;
 
     @ManyToOne(optional = false)
     @NotNull
-    @Setter
+    @Column(nullable = false)
+    @ToString.Exclude
     private Timeline timeline;
 
     @ManyToOne(optional = false)
     @NotNull
-    @Setter
+    @Column(nullable = false)
+    @ToString.Exclude
     private User author;
+
+    public Comment(@NotNull String text, @NotNull LocalDateTime time) {
+        this.text = text;
+        this.time = time;
+    }
 
     @Override
     public boolean equals(Object o) {

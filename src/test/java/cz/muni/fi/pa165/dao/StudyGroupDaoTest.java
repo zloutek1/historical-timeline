@@ -16,6 +16,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintViolationException;
 
+import java.util.Optional;
+
 import static org.testng.Assert.*;
 
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
@@ -51,9 +53,9 @@ public class StudyGroupDaoTest extends AbstractTestNGSpringContextTests {
     private void create_givenValidStudyGroup_itIsPersisted() {
         StudyGroup newStudyGroup = new StudyGroup("C1");
         studyGroupDao.create(newStudyGroup);
-        StudyGroup studyGroup = studyGroupDao.findById(newStudyGroup.getId());
-        assertNotNull(studyGroup);
-        assertEquals(studyGroup.getName(), newStudyGroup.getName());
+        Optional<StudyGroup> studyGroup = studyGroupDao.findById(newStudyGroup.getId());
+        assertTrue(studyGroup.isPresent());
+        assertEquals(studyGroup.get().getName(), newStudyGroup.getName());
     }
 
 

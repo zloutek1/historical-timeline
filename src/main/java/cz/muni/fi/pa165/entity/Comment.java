@@ -20,7 +20,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @NoArgsConstructor
-public class Comment {
+public class Comment implements DbEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

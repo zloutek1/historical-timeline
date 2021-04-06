@@ -16,24 +16,15 @@ public class CrudDaoImpl<T extends DbEntity<U>, U> implements CrudDao<T,U> {
         this.clazz = clazz;
     }
 
-    public T findById(U id) {
-        if (id == null) throw new IllegalArgumentException("Id cannot be null");
-        return entityManager.find(clazz, id);
-    }
-
-    public void create(T entity) {
-        if (entity == null) throw new IllegalArgumentException("Entity cannot be null");
-        if (entity.getId() != null) throw new IllegalArgumentException("Entity has id set");
+    public void create(@NonNull T entity) {
         entityManager.persist(entity);
     }
 
-    public void update(T entity) {
-        if (entity == null) throw new IllegalArgumentException("Entity cannot be null");
+    public void update(@NonNull T entity) {
         entityManager.merge(entity);
     }
 
-    public void delete(T entity) {
-        if (entity == null) throw new IllegalArgumentException("Entity cannot be null");
+    public void delete(@NonNull T entity) {
         entityManager.remove(entity);
     }
 

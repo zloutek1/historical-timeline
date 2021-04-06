@@ -1,11 +1,13 @@
 package cz.muni.fi.pa165.dao;
 
-import cz.muni.fi.pa165.entity.DbEntity;
+import lombok.NonNull;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
+import java.util.Optional;
 
-public class CrudDaoImpl<T extends DbEntity<U>, U> implements CrudDao<T,U> {
+public class CrudDaoImpl<T, U> implements CrudDao<T, U> {
 
     private final Class<T> clazz;
 
@@ -27,5 +29,20 @@ public class CrudDaoImpl<T extends DbEntity<U>, U> implements CrudDao<T,U> {
     public void delete(@NonNull T entity) {
         entityManager.remove(entity);
     }
+
+    @Override
+    public void deleteById(U id) {
+        Optional<T> entity = findById(id);
+        entity.ifPresent(this::delete);
+    }
+
+    public List<T> findAll(){
+        return entityManager.createQuery( "from " + clazz.getName(), clazz ).getResultList();
+    }
+
+    public Optional<T> findById(@NonNull U id) {
+        return Optional.of(entityManager.find(clazz, id));
+    }
+
 
 }

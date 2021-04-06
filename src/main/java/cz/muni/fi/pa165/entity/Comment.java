@@ -35,13 +35,11 @@ public class Comment implements DbEntity<Long> {
 
     @ManyToOne(optional = false)
     @NotNull
-    @Column(nullable = false)
     @ToString.Exclude
     private Timeline timeline;
 
     @ManyToOne(optional = false)
     @NotNull
-    @Column(nullable = false)
     @ToString.Exclude
     private User author;
 

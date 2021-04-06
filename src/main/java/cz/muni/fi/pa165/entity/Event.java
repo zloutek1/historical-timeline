@@ -21,37 +21,50 @@ import java.util.Objects;
  *
  * @author Eva Krajíková
  */
+
 @Entity
 @Getter
+@Setter
 @ToString
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter
     private Long id;
 
     @NotNull
     @Column(nullable = false, unique = true)
-    @Setter
     private String name;
 
-    @Setter
     private LocalDate date;
 
-    @Setter
     private String location;
 
-    @Setter
     private String description;
 
-    @Setter
     private String imageIdentifier;
 
     @ManyToMany
+    @ToString.Exclude
     private final List<Timeline> timelines = new ArrayList<>();
 
 
     public Event() {
+    }
+
+    public Event(@NotNull String name, LocalDate date, String location, String description, String imageIdentifier) {
+        this.name = name;
+        this.date = date;
+        this.location = location;
+        this.description = description;
+        this.imageIdentifier = imageIdentifier;
+    }
+
+    public void addTimeline(Timeline timeline){
+        timelines.add(timeline);
+    }
+
+    public void removeTimeline(Timeline timeline){
+        timelines.remove(timeline);
     }
 
     @Override

@@ -14,19 +14,6 @@ public class UserDaoImpl extends CrudDaoImpl<User, Long> implements UserDao {
     }
 
     @Override
-    public User findByFullName(String firstname, String lastname) {
-        if ((firstname == null) || (lastname == null)) throw new IllegalArgumentException("First and Last Name cannot be null");
-        try {
-           return (User) entityManager.createQuery("SELECT u FROM User u WHERE u.firstName LIKE :firstname AND u.lastName LIKE :lastname")
-                      .setParameter("firstname", firstname)
-                      .setParameter("lastname", lastname)
-                      .getSingleResult();
-        } catch (NoResultException ex) {
-           return null;
-        }
-    }
-
-    @Override
     public User findByEmail(String email) {
         if (email == null) throw new IllegalArgumentException("email cannot be null");
         try {

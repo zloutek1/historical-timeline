@@ -20,12 +20,12 @@ import java.util.Optional;
 
 import static org.testng.Assert.*;
 
-@ContextConfiguration(classes = PersistenceApplicationContext.class)
-@TestExecutionListeners(TransactionalTestExecutionListener.class)
-@Transactional
 /**
  * @author Ondřej Machala
  */
+@ContextConfiguration(classes = PersistenceApplicationContext.class)
+@TestExecutionListeners(TransactionalTestExecutionListener.class)
+@Transactional
 public class StudyGroupDaoTest extends AbstractTestNGSpringContextTests {
 
     @PersistenceContext

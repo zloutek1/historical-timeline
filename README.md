@@ -1,7 +1,7 @@
 # historical-timeline
 
 [![CI](https://github.com/zloutek1/historical-timeline/actions/workflows/maven.yml/badge.svg)](https://github.com/zloutek1/historical-timeline/actions/workflows/maven.yml)
-[![coverage report](https://github.com/zloutek1/historical-timeline/blob/main/.github/badges/jacoco.svg)](https://github.com/zloutek1/historical-timeline/blob/main/.github/badges/jacoco.svg)
+[![codecov](https://codecov.io/gh/zloutek1/historical-timeline/branch/main/graph/badge.svg?token=KX0SYDY65Z)](https://codecov.io/gh/zloutek1/historical-timeline)
 [![java](https://img.shields.io/badge/java%20version-11%2B-green?logo=java)]()
 [![maven](https://img.shields.io/badge/maven-3.6.3-ff69b4?logo=apache%20maven)]()
 

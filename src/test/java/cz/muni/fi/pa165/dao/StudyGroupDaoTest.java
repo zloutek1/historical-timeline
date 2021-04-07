@@ -20,6 +20,9 @@ import java.util.Optional;
 
 import static org.testng.Assert.*;
 
+/**
+ * @author Ondřej Machala
+ */
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
 @TestExecutionListeners(TransactionalTestExecutionListener.class)
 @Transactional
@@ -31,12 +34,17 @@ public class StudyGroupDaoTest extends AbstractTestNGSpringContextTests {
     @Autowired
     private StudyGroupDao studyGroupDao;
 
+    private StudyGroup a1;
+    private StudyGroup a2;
+    private StudyGroup b1;
+    private StudyGroup b2;
+
     @BeforeMethod
     public void setup() {
-        StudyGroup a1 = new StudyGroup("A1");
-        StudyGroup a2 = new StudyGroup("A2");
-        StudyGroup b1 = new StudyGroup("B1");
-        StudyGroup b2 = new StudyGroup("B2");
+        a1 = new StudyGroup("A1");
+        a2 = new StudyGroup("A2");
+        b1 = new StudyGroup("B1");
+        b2 = new StudyGroup("B2");
         em.persist(a1);
         em.persist(a2);
         em.persist(b1);
@@ -58,22 +66,55 @@ public class StudyGroupDaoTest extends AbstractTestNGSpringContextTests {
         assertEquals(studyGroup.get().getName(), newStudyGroup.getName());
     }
 
-
     @Test
-    private void findByName_givenExistingName_returnStudyGroup() {
-        StudyGroup studyGroup = studyGroupDao.findByName("A1");
-        assertNotNull(studyGroup);
-        assertEquals(studyGroup.getName(),"A1");
+    public void delete_givenExistingStudyGroup_removeIt() {
+        studyGroupDao.delete(b2);
+        Optional<StudyGroup> studyGroup = studyGroupDao.findById(b2.getId());
+        assertFalse(studyGroup.isPresent());
     }
 
     @Test
-    private void findByName_givenNonExistingName_returnNull() {
-        StudyGroup studyGroup = studyGroupDao.findByName("NonexistentName");
-        assertNull(studyGroup);
+    public void update_givenUpdateToExistingStudyGroup_itIsUpdated() {
+        b1.setName("E4");
+        studyGroupDao.update(b1);
+        Optional<StudyGroup> studyGroup = studyGroupDao.findById(b1.getId());
+        assertTrue(studyGroup.isPresent());
+        assertEquals(studyGroup.get().getName(), "E4");
+    }
+
+    @Test(expectedExceptions = InvalidDataAccessApiUsageException.class)
+    private void findById_givenNullId_throw() {
+        Optional<StudyGroup> studyGroup = studyGroupDao.findById(null);
+    }
+
+    @Test
+    private void findById_givenExistingId_returnStudyGroup() {
+        Optional<StudyGroup> studyGroup = studyGroupDao.findById(a1.getId());
+        assertTrue(studyGroup.isPresent());
+        assertEquals(studyGroup.get().getName(), a1.getName());
+    }
+
+    @Test
+    private void findById_givenNonExistingId_returnEmpty() {
+        Optional<StudyGroup> studyGroup = studyGroupDao.findById(222222l);
+        assertFalse(studyGroup.isPresent());
+    }
+
+    @Test
+    private void findByName_givenExistingName_returnStudyGroup() {
+        Optional<StudyGroup> studyGroup = studyGroupDao.findByName(a1.getName());
+        assertTrue(studyGroup.isPresent());
+        assertEquals(studyGroup.get().getName(),a1.getName());
+    }
+
+    @Test
+    private void findByName_givenNonExistingName_returnEmpty() {
+        Optional<StudyGroup> studyGroup = studyGroupDao.findByName("NonexistentName");
+        assertFalse(studyGroup.isPresent());
     }
 
     @Test(expectedExceptions = InvalidDataAccessApiUsageException.class)
     private void findByName_givenNullName_throw() {
-        StudyGroup studyGroup = studyGroupDao.findByName(null);
+        Optional<StudyGroup> studyGroup = studyGroupDao.findByName(null);
     }
 }

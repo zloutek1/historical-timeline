@@ -28,7 +28,7 @@ public class User {
     private Long id;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @NotNull
@@ -45,7 +45,7 @@ public class User {
 
     @NotNull
     @Enumerated
-    UserRole role;
+    private UserRole role;
 
     @OneToMany(mappedBy = "author")
     private final List<Comment> comments = new ArrayList<>();

@@ -1,27 +1,26 @@
 package cz.muni.fi.pa165.dao;
 import cz.muni.fi.pa165.entity.User;
+import lombok.NonNull;
+import org.springframework.stereotype.Repository;
 
-import javax.persistence.NoResultException;
+import java.util.Optional;
 
 /**
  * DAO class for user entity.
  *
  * @author David Sevcik
  */
+@Repository
 public class UserDaoImpl extends CrudDaoImpl<User, Long> implements UserDao {
     public UserDaoImpl() {
         super(User.class);
     }
 
     @Override
-    public User findByEmail(String email) {
-        if (email == null) throw new IllegalArgumentException("email cannot be null");
-        try {
-            return (User) entityManager.createQuery("SELECT u FROM User u WHERE u.email LIKE :email")
-                    .setParameter("email", email)
-                    .getSingleResult();
-        } catch (NoResultException ex) {
-            return null;
-        }
+    public Optional<User> findByEmail(@NonNull String email) {
+       return entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+          .setParameter("email", email)
+          .getResultStream()
+          .findFirst();
     }
 }

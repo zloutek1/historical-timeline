@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.dao;
 
+import cz.muni.fi.pa165.entity.StudyGroup;
 import lombok.NonNull;
 
 import javax.persistence.EntityManager;
@@ -46,8 +47,7 @@ public class CrudDaoImpl<T, U> implements CrudDao<T, U> {
 
     @Override
     public Optional<T> findById(@NonNull U id) {
-        return Optional.of(entityManager.find(clazz, id));
+        return Optional.ofNullable(entityManager.find(clazz, id));
     }
-
 
 }

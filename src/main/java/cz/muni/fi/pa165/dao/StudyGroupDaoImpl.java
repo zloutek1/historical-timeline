@@ -1,10 +1,14 @@
 package cz.muni.fi.pa165.dao;
 
 import cz.muni.fi.pa165.entity.StudyGroup;
+import lombok.NonNull;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.NoResultException;
+import java.util.Optional;
 
+/**
+ * @author Ondřej Machala
+ */
 @Repository
 public class StudyGroupDaoImpl extends CrudDaoImpl<StudyGroup, Long> implements StudyGroupDao {
 
@@ -13,14 +17,9 @@ public class StudyGroupDaoImpl extends CrudDaoImpl<StudyGroup, Long> implements 
     }
 
     @Override
-    public StudyGroup findByName(String name) {
-        if (name == null) throw new IllegalArgumentException("Name cannot be null");
-        try {
-            return entityManager.createQuery("SELECT sg FROM StudyGroup sg WHERE sg.name LIKE :name", StudyGroup.class)
-                    .setParameter("name", '%' + name + '%')
-                    .getSingleResult();
-        } catch (NoResultException ex) {
-            return null;
-        }
+    public Optional<StudyGroup> findByName(@NonNull String name) {
+        return entityManager.createQuery("SELECT sg FROM StudyGroup sg WHERE sg.name LIKE :name", StudyGroup.class)
+                .setParameter("name", '%' + name + '%')
+                .getResultStream().findFirst();
     }
 }

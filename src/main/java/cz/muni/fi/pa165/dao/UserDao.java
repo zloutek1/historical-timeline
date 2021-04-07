@@ -2,6 +2,13 @@ package cz.muni.fi.pa165.dao;
 
 import cz.muni.fi.pa165.entity.User;
 
-public interface UserDao {
-    User findByEmail(String email);
+import java.util.Optional;
+
+/**
+ * Dao interface for timeline entity
+ *
+ * @author Tomáš Ljutenko
+ */
+public interface UserDao extends CrudDao<User, Long> {
+    Optional<User> findByEmail(String email);
 }

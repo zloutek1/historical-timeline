@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.dao;
 import cz.muni.fi.pa165.entity.User;
 import lombok.NonNull;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import java.util.Optional;
  *
  * @author David Sevcik
  */
+@Repository
 public class UserDaoImpl extends CrudDaoImpl<User, Long> implements UserDao {
     public UserDaoImpl() {
         super(User.class);

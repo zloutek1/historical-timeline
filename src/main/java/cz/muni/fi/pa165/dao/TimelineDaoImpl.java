@@ -2,9 +2,16 @@ package cz.muni.fi.pa165.dao;
 
 import cz.muni.fi.pa165.entity.Timeline;
 import lombok.NonNull;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Dao class for timeline entity
+ *
+ * @author Tomáš Ljutenko
+ */
+@Repository
 public class TimelineDaoImpl extends CrudDaoImpl<Timeline, Long> implements TimelineDao {
 
     protected TimelineDaoImpl() { super(Timeline.class); }

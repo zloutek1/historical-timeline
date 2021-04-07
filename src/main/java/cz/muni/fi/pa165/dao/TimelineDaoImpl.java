@@ -7,8 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 /**
- * Dao class for timeline entity
- *
  * @author Tomáš Ljutenko
  */
 @Repository

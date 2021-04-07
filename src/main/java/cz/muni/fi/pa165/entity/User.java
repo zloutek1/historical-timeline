@@ -40,12 +40,12 @@ public class User {
     private String lastName;
 
     @NotNull
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String passwordHash;
 
     @NotNull
     @Enumerated
-    UserRole role;
+    private UserRole role;
 
     @OneToMany(mappedBy = "author")
     private final List<Comment> comments = new ArrayList<>();

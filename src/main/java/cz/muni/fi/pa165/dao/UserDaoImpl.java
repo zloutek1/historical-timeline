@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.dao;
 import cz.muni.fi.pa165.entity.User;
+import lombok.NonNull;
 
 import javax.persistence.NoResultException;
 import javax.validation.constraints.NotNull;
@@ -16,7 +17,7 @@ public class UserDaoImpl extends CrudDaoImpl<User, Long> implements UserDao {
     }
 
     @Override
-    public Optional<User> findByEmail(@NotNull String email) {
+    public Optional<User> findByEmail(@NonNull String email) {
        return entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
           .setParameter("email", email)
           .getResultStream()

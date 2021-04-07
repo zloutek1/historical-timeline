@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.entity;
 
+import cz.muni.fi.pa165.enums.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,32 +17,32 @@ import java.util.*;
  */
 @Entity
 @Getter
+@Setter
 @ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter
     private Long id;
 
     @NotNull
     @Column(nullable = false)
-    @Setter
     private String email;
 
     @NotNull
     @Column(nullable = false)
-    @Setter
     private String firstName;
 
     @NotNull
     @Column(nullable = false)
-    @Setter
     private String lastName;
 
     @NotNull
     @Column(nullable = false)
-    @Setter
     private String passwordHash;
+
+    @NotNull
+    @Enumerated
+    UserRole role;
 
     @OneToMany(mappedBy = "author")
     private final List<Comment> comments = new ArrayList<>();
@@ -52,12 +53,13 @@ public class User {
     public User() {
     }
 
-    public User(Long id, @NotNull String email, @NotNull String firstName, @NotNull String lastName, @NotNull String passwordHash) {
+    public User(Long id, @NotNull String email, @NotNull String firstName, @NotNull String lastName, @NotNull String passwordHash, @NotNull UserRole role) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.passwordHash = passwordHash;
+        this.role = role;
     }
 
     public void addComment(Comment comment)

@@ -110,13 +110,6 @@ public class TimelineDaoTest extends AbstractTestNGSpringContextTests {
         Optional<Timeline> t2 = timelineDao.findByName(t1.getName());
         assertTrue(t2.isEmpty());
     }
-
-
-
-
-
-
-
-
+    
 }
 

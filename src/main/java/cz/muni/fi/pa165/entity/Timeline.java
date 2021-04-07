@@ -41,11 +41,11 @@ public class Timeline {
 
     @NotNull
     @Column(nullable = false)
-    private LocalDate from;
+    private LocalDate fromDate;
 
     @NotNull
     @Column(nullable = false)
-    private LocalDate to;
+    private LocalDate toDate;
 
     @NotNull
     @ManyToOne(optional = false)
@@ -67,10 +67,10 @@ public class Timeline {
 
     public void removeEvent(Event event) { events.remove(event); }
 
-    public Timeline(@NotNull String name, @NotNull LocalDate from, @NotNull LocalDate to, @NotNull StudyGroup studyGroup) {
+    public Timeline(@NotNull String name, @NotNull LocalDate fromDate, @NotNull LocalDate toDate, @NotNull StudyGroup studyGroup) {
         this.name = name;
-        this.from = from;
-        this.to = to;
+        this.fromDate = fromDate;
+        this.toDate = toDate;
         this.studyGroup = studyGroup;
     }
 
@@ -79,11 +79,11 @@ public class Timeline {
         if (this == o) return true;
         if (!(o instanceof Timeline)) return false;
         Timeline timeline = (Timeline) o;
-        return getName().equals(timeline.getName()) && Objects.equals(getFrom(), timeline.getFrom()) && Objects.equals(getTo(), timeline.getTo());
+        return getName().equals(timeline.getName()) && Objects.equals(getFromDate(), timeline.getFromDate()) && Objects.equals(getToDate(), timeline.getToDate());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getFrom(), getTo());
+        return Objects.hash(getName(), getFromDate(), getToDate());
     }
 }

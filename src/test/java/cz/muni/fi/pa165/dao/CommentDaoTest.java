@@ -7,7 +7,7 @@ import cz.muni.fi.pa165.entity.Timeline;
 import cz.muni.fi.pa165.entity.User;
 import cz.muni.fi.pa165.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -19,11 +19,8 @@ import org.testng.annotations.Test;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintViolationException;
-import javax.validation.constraints.AssertTrue;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static org.testng.Assert.*;
 
@@ -119,7 +116,7 @@ public class CommentDaoTest extends AbstractTestNGSpringContextTests {
         assertFalse(deletedComment.isPresent());
     }
 
-    @Test(expectedExceptions = {InvalidDataAccessApiUsageException.class})
+    @Test(expectedExceptions = {DataAccessException.class})
     private void update_onNullThrows() {
         commentDao.update(null);
     }
@@ -134,7 +131,7 @@ public class CommentDaoTest extends AbstractTestNGSpringContextTests {
         var commentAfterCommitedChange = commentDao.findById(c1.getId());
         assertEquals(commentAfterCommitedChange.get().getText(), newText);
     }
-    @Test(expectedExceptions = {InvalidDataAccessApiUsageException.class})
+    @Test(expectedExceptions = {DataAccessException.class})
     private void update_deletedComment_throw() {
         commentDao.delete(c1);
         c1.setText("This should fail");
@@ -161,7 +158,7 @@ public class CommentDaoTest extends AbstractTestNGSpringContextTests {
         assertEquals(comments.size(), 0);
     }
 
-    @Test(expectedExceptions = {InvalidDataAccessApiUsageException.class})
+    @Test(expectedExceptions = {DataAccessException.class})
     private void findByTimeline_onNull_throws(){
         var comments = commentDao.findByTimeline(null);
     }

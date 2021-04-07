@@ -2,6 +2,7 @@ package cz.muni.fi.pa165.entity;
 
 import cz.muni.fi.pa165.enums.UserRole;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -19,6 +20,8 @@ import java.util.*;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
+@Table(name = "Users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,9 +52,6 @@ public class User {
 
     @ManyToMany
     private final List<StudyGroup> studyGroups = new ArrayList<>();
-
-    public User() {
-    }
 
     public User(@NotNull String email, @NotNull String firstName, @NotNull String lastName, @NotNull String passwordHash, @NotNull UserRole role) {
         this.email = email;

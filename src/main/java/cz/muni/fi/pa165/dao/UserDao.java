@@ -5,9 +5,7 @@ import cz.muni.fi.pa165.entity.User;
 import java.util.Optional;
 
 /**
- * Dao interface for timeline entity
- *
- * @author Tomáš Ljutenko
+ * @author David Sevcik
  */
 public interface UserDao extends CrudDao<User, Long> {
     /**

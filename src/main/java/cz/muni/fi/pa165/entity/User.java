@@ -28,7 +28,7 @@ public class User {
     private Long id;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @NotNull
@@ -40,7 +40,7 @@ public class User {
     private String lastName;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String passwordHash;
 
     @NotNull

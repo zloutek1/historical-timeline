@@ -66,13 +66,13 @@ public class CommentDaoTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    private void findById_existing_comment_returnsComment() {
+    private void findById_givenIdOfExistingComment_returnsComment() {
         var existingComment = commentDao.findById(c1.getId());
         assertTrue(existingComment.isPresent());
     }
 
     @Test
-    private void findById_nonexisting_comment_returnsNull() {
+    private void findById_givenNonexistingComment_returnsNull() {
         var existingComment = commentDao.findById(1000000L);
         assertFalse(existingComment.isPresent());
     }
@@ -90,7 +90,7 @@ public class CommentDaoTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    private void create_givenCommentChange_persists() {
+    private void create_givenCommentAndChangeIt_itIsPersisted() {
         var comment = new Comment("This is just a test", LocalDateTime.now());
         comment.setAuthor(u2);
         comment.setTimeline(t1);

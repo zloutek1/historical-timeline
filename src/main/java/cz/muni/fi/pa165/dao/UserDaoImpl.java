@@ -2,8 +2,6 @@ package cz.muni.fi.pa165.dao;
 import cz.muni.fi.pa165.entity.User;
 import lombok.NonNull;
 
-import javax.persistence.NoResultException;
-import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 /**

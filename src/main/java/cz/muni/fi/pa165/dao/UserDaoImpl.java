@@ -2,6 +2,8 @@ package cz.muni.fi.pa165.dao;
 import cz.muni.fi.pa165.entity.User;
 
 import javax.persistence.NoResultException;
+import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 /**
  * DAO class for user entity.
@@ -14,14 +16,10 @@ public class UserDaoImpl extends CrudDaoImpl<User, Long> implements UserDao {
     }
 
     @Override
-    public User findByEmail(String email) {
-        if (email == null) throw new IllegalArgumentException("email cannot be null");
-        try {
-            return (User) entityManager.createQuery("SELECT u FROM User u WHERE u.email LIKE :email")
-                    .setParameter("email", email)
-                    .getSingleResult();
-        } catch (NoResultException ex) {
-            return null;
-        }
+    public Optional<User> findByEmail(@NotNull String email) {
+       return entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+          .setParameter("email", email)
+          .getResultStream()
+          .findFirst();
     }
 }

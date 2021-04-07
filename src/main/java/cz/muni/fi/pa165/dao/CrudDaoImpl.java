@@ -1,6 +1,5 @@
 package cz.muni.fi.pa165.dao;
 
-import cz.muni.fi.pa165.entity.StudyGroup;
 import lombok.NonNull;
 
 import javax.persistence.EntityManager;
@@ -8,6 +7,12 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Ondřej Machala, Tomáš Ljutenko
+ *
+ * @param <T> Type of the entity class
+ * @param <U> Type of the primary key of the entity class
+ */
 public class CrudDaoImpl<T, U> implements CrudDao<T, U> {
 
     private final Class<T> clazz;

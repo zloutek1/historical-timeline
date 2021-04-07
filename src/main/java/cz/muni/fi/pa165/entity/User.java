@@ -53,8 +53,7 @@ public class User {
     public User() {
     }
 
-    public User(Long id, @NotNull String email, @NotNull String firstName, @NotNull String lastName, @NotNull String passwordHash, @NotNull UserRole role) {
-        this.id = id;
+    public User(@NotNull String email, @NotNull String firstName, @NotNull String lastName, @NotNull String passwordHash, @NotNull UserRole role) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;

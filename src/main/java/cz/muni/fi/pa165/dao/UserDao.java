@@ -9,6 +9,6 @@ import java.util.Optional;
  *
  * @author Tomáš Ljutenko
  */
-public interface UserDao {
+public interface UserDao extends CrudDao<User, Long> {
     Optional<User> findByEmail(String email);
 }

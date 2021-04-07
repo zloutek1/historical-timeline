@@ -12,6 +12,8 @@ import java.util.*;
 
 
 /**
+ * Class that represents user entity
+ *
  * @author David Sevcik
  */
 @Entity
@@ -46,9 +48,11 @@ public class User {
     private UserRole role;
 
     @OneToMany(mappedBy = "author")
+    @ToString.Exclude
     private final List<Comment> comments = new ArrayList<>();
 
     @ManyToMany
+    @ToString.Exclude
     private final List<StudyGroup> studyGroups = new ArrayList<>();
 
     public User(@NotNull String email, @NotNull String firstName, @NotNull String lastName, @NotNull String passwordHash, @NotNull UserRole role) {

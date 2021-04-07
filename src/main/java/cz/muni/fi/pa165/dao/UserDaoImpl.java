@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 /**
- * DAO class for user entity.
- *
  * @author David Sevcik
  */
 @Repository

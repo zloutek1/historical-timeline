@@ -12,8 +12,6 @@ import java.util.*;
 
 
 /**
- * Class representing a user.
- *
  * @author David Sevcik
  */
 @Entity

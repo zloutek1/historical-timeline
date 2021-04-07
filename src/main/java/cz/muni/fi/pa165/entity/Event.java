@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -25,6 +26,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @ToString
 public class Event {
     @Id
@@ -47,9 +49,6 @@ public class Event {
     @ToString.Exclude
     private final List<Timeline> timelines = new ArrayList<>();
 
-
-    public Event() {
-    }
 
     public Event(@NotNull String name, LocalDate date, String location, String description, String imageIdentifier) {
         this.name = name;

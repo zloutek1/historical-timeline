@@ -6,8 +6,6 @@ import lombok.NonNull;
 import java.util.Optional;
 
 /**
- * DAO interface for event entity.
- *
  * @author Eva Krajíková
  */
 

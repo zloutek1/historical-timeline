@@ -34,4 +34,4 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: jacoco-reports
-        path: test-coverage/target/site/jacoco-aggregate
+        path: target/site/jacoco-aggregate

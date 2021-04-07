@@ -27,7 +27,6 @@ import static org.testng.Assert.*;
 /**
  * @author David Sevcik
  */
-
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
 @TestExecutionListeners(TransactionalTestExecutionListener.class)
 @Transactional

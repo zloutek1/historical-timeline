@@ -50,7 +50,7 @@ public class UserDaoTest extends AbstractTestNGSpringContextTests {
         em.persist(cecilia);
     }
 
-    @Test(priority = 1)
+    @Test
     public void create_givenValidUser_itIsPersisted() {
         User john = new User("user@gmail.com", "John", "Doe", "passwordHash", UserRole.STUDENT );
         userDao.create(john);
@@ -59,19 +59,19 @@ public class UserDaoTest extends AbstractTestNGSpringContextTests {
         assertEquals(user.get(), john);
     }
 
-    @Test(priority = 1,expectedExceptions = ConstraintViolationException.class)
+    @Test(expectedExceptions = ConstraintViolationException.class)
     public void create_givenNullEmail_Throws() {
         User john = new User(null, "John", "Doe", "passwordHash", UserRole.STUDENT );
         userDao.create(john);
     }
 
-    @Test(priority = 1, expectedExceptions = ConstraintViolationException.class)
+    @Test(expectedExceptions = ConstraintViolationException.class)
     public void create_givenNullNames_Throws() {
         User john = new User("user123@gmail.com", null, null, "passwordHash", UserRole.STUDENT );
         userDao.create(john);
     }
 
-    @Test(priority = 1, expectedExceptions = DataAccessException.class)
+    @Test(expectedExceptions = DataAccessException.class)
     public void create_givenDuplicateEmail_Throws() {
         User user = new User("peter@gmail.com", "Peter", "Happy", "passwordHash", UserRole.STUDENT );
         userDao.create(user);
@@ -79,27 +79,36 @@ public class UserDaoTest extends AbstractTestNGSpringContextTests {
         userDao.create(duplicateUser);;
     }
 
-    @Test(priority = 2)
+    @Test
     public void delete_givenExistingUser_removeHim() {
         userDao.delete(alice);
         Optional<User> user = userDao.findById(alice.getId());
         assertFalse(user.isPresent());
     }
 
-    @Test(priority = 2)
+    @Test
     public void deleteById_givenExistingIdOfUser_removeHim() {
         userDao.deleteById(bob.getId());
         Optional<User> user = userDao.findById(bob.getId());
         assertFalse(user.isPresent());
     }
 
-    @Test(priority = 1)
+    @Test
     public void update_givenUpdateToExistingUser_heIsUpdated() {
         cecilia.setRole(UserRole.ADMINISTRATOR);
         userDao.update(cecilia);
         Optional<User> user = userDao.findById(cecilia.getId());
         assertTrue(user.isPresent());
         assertEquals(user.get().getRole(), UserRole.ADMINISTRATOR);
+    }
+
+    @Test
+    public void update_givenInvalidUser_throws() {
+        cecilia.setFirstName(null);
+        userDao.update(cecilia);
+        Optional<User> user = userDao.findById(cecilia.getId());
+        assertTrue(user.isPresent());
+        assertNull(user.get().getFirstName());
     }
 
     @Test

@@ -18,14 +18,17 @@ public class CrudDaoImpl<T, U> implements CrudDao<T, U> {
         this.clazz = clazz;
     }
 
+    @Override
     public void create(@NonNull T entity) {
         entityManager.persist(entity);
     }
 
+    @Override
     public void update(@NonNull T entity) {
         entityManager.merge(entity);
     }
 
+    @Override
     public void delete(@NonNull T entity) {
         entityManager.remove(entity);
     }
@@ -36,10 +39,12 @@ public class CrudDaoImpl<T, U> implements CrudDao<T, U> {
         entity.ifPresent(this::delete);
     }
 
+    @Override
     public List<T> findAll(){
         return entityManager.createQuery( "from " + clazz.getName(), clazz ).getResultList();
     }
 
+    @Override
     public Optional<T> findById(@NonNull U id) {
         return Optional.of(entityManager.find(clazz, id));
     }

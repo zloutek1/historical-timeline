@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -19,7 +20,8 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-public class StudyGroup implements DbEntity<Long> {
+@NoArgsConstructor
+public class StudyGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -46,10 +48,15 @@ public class StudyGroup implements DbEntity<Long> {
         members.remove(member);
     }
 
-    
-    public StudyGroup() {}
+    public void addTimeline(Timeline timeline) {
+        timelines.add(timeline);
+    }
 
-    public StudyGroup(String name) {
+    public void removeTimeline(Timeline timeline) {
+        timelines.remove(timeline);
+    }
+
+    public StudyGroup(@NotNull String name) {
         this.name = name;
     }
 

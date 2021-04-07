@@ -61,19 +61,19 @@ public class StudyGroupDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     private void findByName_givenExistingName_returnStudyGroup() {
-        StudyGroup studyGroup = studyGroupDao.findByName("A1");
-        assertNotNull(studyGroup);
-        assertEquals(studyGroup.getName(),"A1");
+        Optional<StudyGroup> studyGroup = studyGroupDao.findByName("A1");
+        assertTrue(studyGroup.isPresent());
+        assertEquals(studyGroup.get().getName(),"A1");
     }
 
     @Test
     private void findByName_givenNonExistingName_returnNull() {
-        StudyGroup studyGroup = studyGroupDao.findByName("NonexistentName");
-        assertNull(studyGroup);
+        Optional<StudyGroup> studyGroup = studyGroupDao.findByName("NonexistentName");
+        assertFalse(studyGroup.isPresent());
     }
 
     @Test(expectedExceptions = InvalidDataAccessApiUsageException.class)
     private void findByName_givenNullName_throw() {
-        StudyGroup studyGroup = studyGroupDao.findByName(null);
+        Optional<StudyGroup> studyGroup = studyGroupDao.findByName(null);
     }
 }

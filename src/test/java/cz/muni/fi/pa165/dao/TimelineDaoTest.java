@@ -21,16 +21,12 @@ import java.util.Optional;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-
-
 /**
  * @author Eva Krajníková
  */
-
 @ContextConfiguration(classes = PersistenceApplicationContext.class)
 @TestExecutionListeners(TransactionalTestExecutionListener.class)
 @Transactional
-
 public class TimelineDaoTest extends AbstractTestNGSpringContextTests {
 
     @PersistenceContext

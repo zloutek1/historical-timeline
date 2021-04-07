@@ -8,7 +8,6 @@ import java.util.Optional;
 /**
  * @author Eva Krajíková
  */
-
 public interface EventDao extends CrudDao<Event, Long> {
     /**
      * Finds Event by name

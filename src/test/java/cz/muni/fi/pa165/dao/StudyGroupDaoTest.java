@@ -3,7 +3,7 @@ package cz.muni.fi.pa165.dao;
 import cz.muni.fi.pa165.PersistenceApplicationContext;
 import cz.muni.fi.pa165.entity.StudyGroup;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -16,6 +16,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintViolationException;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.testng.Assert.*;
@@ -82,7 +83,13 @@ public class StudyGroupDaoTest extends AbstractTestNGSpringContextTests {
         assertEquals(studyGroup.get().getName(), "E4");
     }
 
-    @Test(expectedExceptions = InvalidDataAccessApiUsageException.class)
+    @Test
+    private void findAll_returnsAllStudyGroups() {
+        List<StudyGroup> all = studyGroupDao.findAll();
+        assertEquals(all.size(), 4);
+    }
+
+    @Test(expectedExceptions = DataAccessException.class)
     private void findById_givenNullId_throw() {
         Optional<StudyGroup> studyGroup = studyGroupDao.findById(null);
     }
@@ -113,7 +120,7 @@ public class StudyGroupDaoTest extends AbstractTestNGSpringContextTests {
         assertFalse(studyGroup.isPresent());
     }
 
-    @Test(expectedExceptions = InvalidDataAccessApiUsageException.class)
+    @Test(expectedExceptions = DataAccessException.class)
     private void findByName_givenNullName_throw() {
         Optional<StudyGroup> studyGroup = studyGroupDao.findByName(null);
     }

@@ -7,6 +7,7 @@ import cz.muni.fi.pa165.entity.Timeline;
 import cz.muni.fi.pa165.entity.User;
 import cz.muni.fi.pa165.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -18,13 +19,15 @@ import org.testng.annotations.Test;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintViolationException;
+import javax.validation.constraints.AssertTrue;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
+
+import static org.testng.Assert.*;
 
 /**
- * Class with CommentDao unit tests.
- *
  * @author David Sevcik
  */
 
@@ -39,37 +42,42 @@ public class CommentDaoTest extends AbstractTestNGSpringContextTests {
     @Autowired
     private CommentDao commentDao;
 
+    private User u1;
+    private User u2;
+    private StudyGroup a1;
+    private Timeline t1;
+    private Comment c1;
+
     @BeforeMethod
     public void setup() {
-        User u1 = new User("login@email.com", "Jan", "Novak", "nfjkdhgf5g45fdh", UserRole.STUDENT);
-        User u2 = new User("login2@email2.com", "Jiri", "Dvorak", "ljgfdkjgdfkth b", UserRole.TEACHER);
+        u1 = new User("login@email.com", "Jan", "Novak", "nfjkdhgf5g45fdh", UserRole.STUDENT);
+        u2 = new User("login2@email2.com", "Jiri", "Dvorak", "ljgfdkjgdfkth b", UserRole.TEACHER);
         em.persist(u1);
         em.persist(u2);
 
-        StudyGroup a1 = new StudyGroup("A1");
-
-        Timeline t1 = new Timeline("testing timeline", LocalDate.now(), LocalDate.now(), a1);
-
-        //Timeline t1 = new Timeline("WW2", LocalDate.of(1939, 9, 1), LocalDate.of(1945, 9, 2), a1);
-
+        a1 = new StudyGroup("A1");
         em.persist(a1);
+
+        t1 = new Timeline("WW2", LocalDate.of(1939, 9, 1), LocalDate.of(1945, 9, 2), a1);
         em.persist(t1);
 
-//        Timeline t1 = new Timeline();
-//        t1.setName("WW2");
-//        t1.setFrom(LocalDate.of(1939, 9, 1));
-//        t1.setTo(LocalDate.of(1945, 9, 2));
-//        t1.setStudyGroup(a1);
+        c1 = new Comment("Lorem ipsum", LocalDateTime.now());
+        c1.setAuthor(u1);
+        c1.setTimeline(t1);
 
-//        Timeline t1 = new Timeline(null, "WW2", LocalDate.of(1939, 9, 1), LocalDate.of(1945,9,2), a1);
+        em.persist(c1);
+    }
 
+    @Test
+    private void findById_existing_comment_finds_succesfully() {
+        var existingComment = commentDao.findById(c1.getId());
+        assertTrue(existingComment.isPresent());
+    }
 
-
-//        var com1 = new Comment("Lorem ipsum", LocalDateTime.now());
-//        com1.setAuthor(u1);
-        //com1.setTimeline(t1);
-
-//        em.persist(com1);
+    @Test
+    private void findById_nonexisting_comment_finds_nothing() {
+        var existingComment = commentDao.findById(1000000L);
+        assertFalse(existingComment.isPresent());
     }
 
     @Test(expectedExceptions = ConstraintViolationException.class)
@@ -84,5 +92,89 @@ public class CommentDaoTest extends AbstractTestNGSpringContextTests {
         commentDao.create(comment);
     }
 
+    @Test
+    private void create_givenCommentChangeIsPersistent() {
+        var comment = new Comment("This is just a test", LocalDateTime.now());
+        comment.setAuthor(u2);
+        comment.setTimeline(t1);
+        commentDao.create(comment);
+
+        var persistentComment = commentDao.findById(comment.getId());
+        assertEquals(comment.getAuthor(), persistentComment.get().getAuthor());
+        assertEquals(comment.getText(), persistentComment.get().getText());
+        assertEquals(comment.getTime(), persistentComment.get().getTime());
+    }
+
+    @Test
+    private void delete_givenCommentChangeIsPersistent() {
+        commentDao.delete(c1);
+        var deletedComment = commentDao.findById(c1.getId());
+        assertFalse(deletedComment.isPresent());
+    }
+
+    @Test
+    private void deleteById_givenCommentChangeIsPersistent() {
+        commentDao.deleteById(c1.getId());
+        var deletedComment = commentDao.findById(c1.getId());
+        assertFalse(deletedComment.isPresent());
+    }
+
+    @Test(expectedExceptions = {InvalidDataAccessApiUsageException.class})
+    private void update_onNullThrows() {
+        commentDao.update(null);
+    }
+
+    @Test
+    private void update_givenCommentChangeIsPersistent() {
+        var comment = commentDao.findById(c1.getId());
+        var newText = "This is new text";
+        comment.get().setText(newText);
+        commentDao.update(comment.get());
+
+        var commentAfterCommitedChange = commentDao.findById(c1.getId());
+        assertEquals(commentAfterCommitedChange.get().getText(), newText);
+    }
+    @Test(expectedExceptions = {InvalidDataAccessApiUsageException.class})
+    private void update_deletedComment_throw() {
+        commentDao.delete(c1);
+        c1.setText("This should fail");
+        commentDao.update(c1);
+    }
+
+    @Test
+    private void findAll_whenOneCommentIsPersisted(){
+        var comments = commentDao.findAll();
+        assertEquals(comments.size(), 1);
+    }
+
+    @Test
+    private void findAll_whenNoCommentIsPersisted(){
+        commentDao.delete(c1);
+        var comments = commentDao.findAll();
+        assertEquals(comments.size(), 0);
+    }
+
+    @Test
+    private void findByTimeline_whenNoCommentIsInTimeline(){
+        commentDao.delete(c1);
+        var comments = commentDao.findByTimeline(t1);
+        assertEquals(comments.size(), 0);
+    }
+
+    @Test(expectedExceptions = {InvalidDataAccessApiUsageException.class})
+    private void findByTimeline_onNull_throws(){
+        var comments = commentDao.findByTimeline(null);
+    }
+
+    @Test
+    private void findByTimeline_onMultipleCommentsInTimeline(){
+        var comment = new Comment("This is just a test", LocalDateTime.now());
+        comment.setAuthor(u2);
+        comment.setTimeline(t1);
+        commentDao.create(comment);
+
+        var comments = commentDao.findByTimeline(t1);
+        assertEquals(comments.size(), 2);
+    }
 
 }

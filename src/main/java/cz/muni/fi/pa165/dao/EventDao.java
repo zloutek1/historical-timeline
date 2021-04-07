@@ -10,5 +10,10 @@ import java.util.Optional;
  */
 
 public interface EventDao extends CrudDao<Event, Long> {
-    Optional<Event> findByName(@NonNull String name);
+    /**
+     * Finds Event by name
+     * @param name Event name
+     * @return Empty if null, Event otherwise
+     */
+    Optional<Event> findByName(String name);
 }

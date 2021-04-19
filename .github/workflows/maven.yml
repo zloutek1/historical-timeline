@@ -40,6 +40,8 @@ jobs:
         uses: nikitasavinov/checkstyle-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          checkstyle_config: 'checkstyle.xml'
+          fail_on_error: 'true'
           reporter: 'github-pr-check'
           tool_name: 'testtool'
 

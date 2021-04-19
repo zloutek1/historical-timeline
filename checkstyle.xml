@@ -5,16 +5,16 @@
 <module name="Checker">
     <property name="charset" value="UTF-8"/>
 
-    <property name="severity" value="warning"/>
+    <property name="severity" value="error"/>
 
     <property name="fileExtensions" value="java, properties, xml"/>
 
     <module name="TreeWalker">
-        <module name="AvoidStarImport">
-            <property name="severity" value="error"/>
-        </module>
+        <module name="AvoidStarImport"/>
+        <module name="UnusedImports"/>
         <module name="ConstantName"/>
         <module name="EmptyBlock"/>
         <module name="EmptyCatchBlock"/>
+        <module name="ModifierOrder"/>
     </module>
 </module>

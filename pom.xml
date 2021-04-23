@@ -111,13 +111,6 @@
                         <configLocation>checkstyle.xml</configLocation>
                         <includeTestSourceDirectory>true</includeTestSourceDirectory>
                     </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>check</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>

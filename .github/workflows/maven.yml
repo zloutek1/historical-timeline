@@ -43,7 +43,7 @@ jobs:
           checkstyle_config: 'checkstyle.xml'
           fail_on_error: 'true'
           reporter: 'github-pr-check'
-          tool_name: 'testtool'
+          tool_name: 'checkstyle'
 
   coverage:
     needs: build

@@ -30,6 +30,17 @@ jobs:
     - name: Build with Maven
       run: mvn -B clean install
 
+  checkstyle:
+    needs: build
+    runs-on: ubuntu-latest
+    name: Checkstyle
+    steps:
+      - uses: actions/checkout@v2
+      - run: mvn jxr:jxr checkstyle:checkstyle
+      - uses: jwgmeligmeyling/checkstyle-github-action@master
+        with:
+          path: '**/checkstyle-result.xml'
+
   coverage:
     needs: build
     runs-on: ubuntu-latest

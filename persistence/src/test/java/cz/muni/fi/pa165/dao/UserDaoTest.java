@@ -20,7 +20,10 @@ import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
 
 /**
  * @author Ondřej Machala
@@ -76,7 +79,7 @@ public class UserDaoTest extends AbstractTestNGSpringContextTests {
         User user = new User("peter@gmail.com", "Peter", "Happy", "passwordHash", UserRole.STUDENT );
         userDao.create(user);
         User duplicateUser = new User("peter@gmail.com", "Peter", "Unhappy", "passwordHash", UserRole.STUDENT );
-        userDao.create(duplicateUser);;
+        userDao.create(duplicateUser);
     }
 
     @Test

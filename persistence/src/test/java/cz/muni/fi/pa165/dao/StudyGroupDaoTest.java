@@ -19,7 +19,9 @@ import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 /**
  * @author Ondřej Machala
@@ -103,7 +105,7 @@ public class StudyGroupDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     private void findById_givenNonExistingId_returnEmpty() {
-        Optional<StudyGroup> studyGroup = studyGroupDao.findById(222222l);
+        Optional<StudyGroup> studyGroup = studyGroupDao.findById(222222L);
         assertFalse(studyGroup.isPresent());
     }
 

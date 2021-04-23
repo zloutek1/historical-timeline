@@ -20,10 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
 
 /**
  * @author Tomáš Ljutenko
@@ -42,7 +42,7 @@ public class EventDaoTest extends AbstractTestNGSpringContextTests {
     @Test
     public void get_emptyDatabase_isEmpty() {
         List<Event> rows = eventDao.findAll();
-        assertEquals(0, rows.size());
+        assertThat(rows).isEmpty();
     }
 
     @Test
@@ -58,12 +58,12 @@ public class EventDaoTest extends AbstractTestNGSpringContextTests {
         assertNotNull(event.getId());
 
         List<Event> rows = eventDao.findAll();
-        assertEquals(rows, new ArrayList<Event>() {{ add(event); }} );
+        assertThat(rows).containsExactlyInAnyOrder(event);
     }
 
     @Test
     public void insert_givenMultipleValidEvents_persisted() {
-        Event a = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
+        Event a = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "https://image.jpg");
         Event b = new Event("B", LocalDate.of(2021, 8, 22), "Slovak republic", "Some other day of the week", "https://image.gif");
         Event c = new Event("C", LocalDate.of(2023, 9, 30), "England", "None provided", null);
 
@@ -78,14 +78,13 @@ public class EventDaoTest extends AbstractTestNGSpringContextTests {
         }
 
         List<Event> rows = eventDao.findAll();
-        assertEquals(3, rows.size());
-        assertEquals(rows, events);
+        assertThat(rows).containsExactlyInAnyOrderElementsOf(events);
     }
 
     @Test(expectedExceptions = DataAccessException.class)
     public void insert_withDuplicateName_throws() {
-        Event a1 = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
-        Event a2 = new Event("A", LocalDate.of(2020, 5, 15), "Czech republic", "another event with same name", "http://image.jpg");
+        Event a1 = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "https://image.jpg");
+        Event a2 = new Event("A", LocalDate.of(2020, 5, 15), "Czech republic", "another event with same name", "https://image.jpg");
 
         eventDao.create(a1);
         eventDao.create(a2);
@@ -99,7 +98,7 @@ public class EventDaoTest extends AbstractTestNGSpringContextTests {
         Timeline timeline = new Timeline("Alphabet", LocalDate.of(2020, 1, 1), LocalDate.of(2020, 12, 31), studyGroup);
         em.persist(timeline);
 
-        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
+        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "https://image.jpg");
 
         event.addTimeline(timeline);
         timeline.addEvent(event);
@@ -107,65 +106,65 @@ public class EventDaoTest extends AbstractTestNGSpringContextTests {
         eventDao.create(event);
 
         List<Event> rows = eventDao.findAll();
-        assertEquals(rows, new ArrayList<Event>() {{ add(event); }} );
+        assertThat(rows).containsExactlyInAnyOrder(event);
     }
 
     @Test
     public void findById_givenValidId_returnsEvent() {
-        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
+        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "https://image.jpg");
 
         eventDao.create(event);
 
         Optional<Event> foundEvent = eventDao.findById(event.getId());
-        assertTrue(foundEvent.isPresent());
-        assertEquals(event, foundEvent.get());
+        assertThat(foundEvent).hasValue(event);
     }
 
     @Test
     public void findById_givenInvalidId_returnNull() {
-        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
+        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "https://image.jpg");
 
         eventDao.create(event);
 
         Optional<Event> foundEvent = eventDao.findById(event.getId() + 999);
-        assertFalse(foundEvent.isPresent());
+        assertThat(foundEvent).isEmpty();
     }
 
-    @Test(expectedExceptions = DataAccessException.class)
+    @Test
     public void findById_givenNullId_throws() {
-        eventDao.findById(null);
+        assertThatExceptionOfType(DataAccessException.class)
+            .isThrownBy(() -> eventDao.findById(null));
     }
 
     @Test
     public void findByName_givenValidName_returnsEvent() {
-        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
+        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "https://image.jpg");
 
         eventDao.create(event);
 
         Optional<Event> foundEvent = eventDao.findByName("A");
-        assertTrue(foundEvent.isPresent());
-        assertEquals(event, foundEvent.get());
+        assertThat(foundEvent).hasValue(event);
     }
 
     @Test
     public void findByName_givenInvalidName_returnNull() {
-        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
+        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "https://image.jpg");
 
         eventDao.create(event);
 
         Optional<Event> foundEvent = eventDao.findByName("BBB");
-        assertFalse(foundEvent.isPresent());
+        assertThat(foundEvent).isEmpty();
     }
 
-    @Test(expectedExceptions = DataAccessException.class)
+    @Test
     public void findByName_givenNullName_throws() {
-        eventDao.findByName(null);
+        assertThatExceptionOfType(DataAccessException.class)
+                .isThrownBy(() -> eventDao.findByName(null));
     }
 
 
     @Test
     public void delete_singleValidEvent_isRemoved() {
-        Event event = new Event("Event", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
+        Event event = new Event("Event", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "https://image.jpg");
         eventDao.create(event);
         assertEquals(1, eventDao.findAll().size());
 
@@ -175,7 +174,7 @@ public class EventDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void delete_multipleValidEvents_areRemoved() {
-        Event a = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
+        Event a = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "https://image.jpg");
         Event b = new Event("B", LocalDate.of(2021, 8, 22), "Slovak republic", "Some other day of the week", "https://image.gif");
         Event c = new Event("C", LocalDate.of(2023, 9, 30), "England", "None provided", null);
         Event d = new Event("D", LocalDate.of(2023, 9, 30), "England", "None provided", null);
@@ -195,36 +194,28 @@ public class EventDaoTest extends AbstractTestNGSpringContextTests {
         eventDao.delete(events.get(1));
         eventDao.delete(events.get(3));
 
-        List<Event> expected = new ArrayList<>() {{
-            add(events.get(0));
-            add(events.get(2));
-            add(events.get(4));
-        }};
-
-        assertEquals(eventDao.findAll(), expected);
+        assertThat(eventDao.findAll()).containsExactlyInAnyOrder(events.get(0), events.get(2), events.get(4));
     }
 
     @Test
     public void delete_nonExisting_throws() {
-        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
+        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "https://image.jpg");
         eventDao.delete(event);
     }
 
     @Test
     public void update_validEventWithNonUniqueField_updatedCorrectly() {
-        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
+        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "https://image.jpg");
         eventDao.create(event);
 
         Optional<Event> foundEvent = eventDao.findById(event.getId());
-        assertTrue(foundEvent.isPresent());
-        assertEquals(foundEvent.get(), event);
+        assertThat(foundEvent).hasValue(event);
 
         event.setLocation("Slovak republic");
         event.setImageIdentifier(null);
 
         eventDao.create(event);
         Optional<Event> updatedEvent = eventDao.findById(event.getId());
-        assertTrue(updatedEvent.isPresent());
-        assertEquals(updatedEvent.get(), event);
+        assertThat(updatedEvent).hasValue(event);
     }
 }

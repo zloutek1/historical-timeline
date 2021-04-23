@@ -36,7 +36,7 @@ jobs:
     name: Checkstyle
     steps:
       - uses: actions/checkout@v2
-      - run: mvn checkstyle:checkstyle
+      - run: mvn jxr:jxr checkstyle:checkstyle
       - uses: jwgmeligmeyling/checkstyle-github-action@master
         with:
           path: '**/checkstyle-result.xml'

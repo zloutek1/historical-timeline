@@ -42,7 +42,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           checkstyle_config: 'checkstyle.xml'
           fail_on_error: 'true'
-          reporter: 'github-pr-check'
+          reporter: 'github-pr-review'
           tool_name: 'checkstyle'
 
   coverage:

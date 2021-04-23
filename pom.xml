@@ -110,6 +110,7 @@
                     <configuration>
                         <configLocation>checkstyle.xml</configLocation>
                         <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                        <failsOnError>false</failsOnError>
                     </configuration>
                 </plugin>
             </plugins>

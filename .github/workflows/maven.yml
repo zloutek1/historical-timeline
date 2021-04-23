@@ -35,15 +35,10 @@ jobs:
     runs-on: ubuntu-latest
     name: Checkstyle
     steps:
-      - uses: actions/checkout@v2
-      - name: Run check style
-        uses: nikitasavinov/checkstyle-action@master
+      - run: mvn checkstyle:checkstyle
+      - uses: jwgmeligmeyling/checkstyle-github-action@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          checkstyle_config: 'checkstyle.xml'
-          fail_on_error: 'true'
-          reporter: 'github-pr-review'
-          tool_name: 'checkstyle'
+          path: '**/checkstyle-result.xml'
 
   coverage:
     needs: build
@@ -54,11 +49,10 @@ jobs:
         java: [ '11' ]
 
     steps:
-      - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
         with:
           java-version: ${{ matrix.java }}
-      - run: mvn -B verify -P coverage --no-transfer-progress
+      - run: mvn -P coverage --no-transfer-progress
 
       - uses: codecov/codecov-action@v1
         with:

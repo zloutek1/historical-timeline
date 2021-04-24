@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.facade;
 
+import cz.muni.fi.pa165.dto.CommentCreateDTO;
 import cz.muni.fi.pa165.dto.TimelineCreateDTO;
 import cz.muni.fi.pa165.dto.TimelineDTO;
 import cz.muni.fi.pa165.service.TimelineService;
@@ -20,7 +21,7 @@ public class TimelineFacadeImpl implements TimelineFacade {
     }
 
     @Override
-    public Long createTimeline(TimelineCreateDTO t) {
+    public Long createTimeline(TimelineCreateDTO timeline) {
         throw new UnsupportedOperationException();
     }
 
@@ -35,7 +36,7 @@ public class TimelineFacadeImpl implements TimelineFacade {
     }
 
     @Override
-    public void addComment(Long timelineId, Long commentId) {
+    public void addComment(Long timelineId, CommentCreateDTO comment) {
         throw new UnsupportedOperationException();
     }
 

@@ -25,6 +25,7 @@
 
     <modules>
         <module>persistence</module>
+        <module>api</module>
     </modules>
 
     <dependencyManagement>

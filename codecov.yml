@@ -1,6 +1,5 @@
 # configuration related to pull request comments
-comment:
-  require_changes: true
+comment: false
 
 coverage:
   range: 50..80 # coverage lower than 50 is red, higher than 90 green, between color code

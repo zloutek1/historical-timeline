@@ -1,5 +1,7 @@
 package cz.muni.fi.pa165.service;
 
+import cz.muni.fi.pa165.entity.Comment;
+import cz.muni.fi.pa165.entity.Event;
 import cz.muni.fi.pa165.entity.Timeline;
 import org.springframework.stereotype.Service;
 
@@ -15,27 +17,27 @@ public class TimelineServiceImpl implements TimelineService {
     }
 
     @Override
-    public void addEvent(Long timelineId, Long eventId) {
+    public void addEvent(Timeline timeline, Event event) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void removeEvent(Long timelineId, Long eventId) {
+    public void removeEvent(Timeline timelineId, Event event) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void addComment(Long timelineId, Long commentId) {
+    public void addComment(Timeline timeline, Comment comment) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void removeComment(Long timelineId, Long commentId) {
+    public void removeComment(Timeline timeline, Comment comment) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void deleteTimeline(Long id) {
+    public void deleteTimeline(Timeline timeline) {
         throw new UnsupportedOperationException();
     }
 

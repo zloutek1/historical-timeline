@@ -26,6 +26,7 @@
     <modules>
         <module>persistence</module>
         <module>api</module>
+        <module>service</module>
     </modules>
 
     <dependencyManagement>
@@ -42,6 +43,13 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>1.18.20</version>
+            </dependency>
+
+            <!-- dozer-->
+            <dependency>
+                <groupId>net.sf.dozer</groupId>
+                <artifactId>dozer</artifactId>
+                <version>5.5.1</version>
             </dependency>
 
             <!-- logging -->

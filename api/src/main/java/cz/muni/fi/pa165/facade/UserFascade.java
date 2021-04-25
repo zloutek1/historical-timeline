@@ -15,7 +15,7 @@ public interface  UserFascade {
     Boolean authenticate(UserAuthenticateDTO user);
 
     void registerToStudyGroup(UserDTO user, Long studyGroupID);
-    void UnregisterFromStudyGroup(UserDTO user, Long studyGroupID);
+    void unregisterFromStudyGroup(UserDTO user, Long studyGroupID);
     List<UserDTO> getAllUsersFromStudyGroup(UserDTO user, StudyGroupDTO studyGroup);
 
     List<UserDTO> getAllUsers();

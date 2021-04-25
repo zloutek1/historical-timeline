@@ -52,6 +52,13 @@
                 <version>5.5.1</version>
             </dependency>
 
+            <!-- dependency injection -->
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>1</version>
+            </dependency>
+
             <!-- logging -->
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>

@@ -13,11 +13,14 @@ import java.util.Optional;
  */
 public interface TimelineService {
     void create(Timeline timeline);
+    void update(Timeline timeline);
+    void delete(Timeline timeline);
+
     void addEvent(Timeline timeline, Event event);
     void removeEvent(Timeline timeline, Event event);
     void addComment(Timeline timeline, Comment comment);
     void removeComment(Timeline timeline, Comment comment);
-    void delete(Timeline timeline);
+
     List<Timeline> getAll();
     List<Timeline> getAllBetweenDates(LocalDate from, LocalDate to);
     Optional<Timeline> getById(Long id);

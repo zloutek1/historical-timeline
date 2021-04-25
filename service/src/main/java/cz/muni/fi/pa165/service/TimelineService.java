@@ -8,7 +8,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-
+/**
+ * @author Tomáš Ljutenko
+ */
 public interface TimelineService {
     void create(Timeline timeline);
     void addEvent(Timeline timeline, Event event);

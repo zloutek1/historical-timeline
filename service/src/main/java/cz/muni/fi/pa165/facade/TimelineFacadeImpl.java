@@ -10,6 +10,9 @@ import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author Tomáš Ljutenko
+ */
 @Service
 @Transactional
 public class TimelineFacadeImpl implements TimelineFacade {

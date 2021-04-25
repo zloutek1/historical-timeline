@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * @author Tomáš Ljutenko
+ */
 @Service
 public class TimelineServiceImpl implements TimelineService {
 

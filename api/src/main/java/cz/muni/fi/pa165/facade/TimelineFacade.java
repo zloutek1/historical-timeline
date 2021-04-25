@@ -7,6 +7,9 @@ import cz.muni.fi.pa165.dto.TimelineDTO;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author Tomáš Ljutenko
+ */
 public interface TimelineFacade {
     Long createTimeline(TimelineCreateDTO timeline);
     void addEvent(Long timelineId, Long eventId);

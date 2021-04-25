@@ -1,6 +1,11 @@
 package cz.muni.fi.pa165.facade;
 
-import cz.muni.fi.pa165.dto.*;
+
+import cz.muni.fi.pa165.dto.UserAuthenticateDTO;
+import cz.muni.fi.pa165.dto.UserCreateDTO;
+import cz.muni.fi.pa165.dto.UserDTO;
+import cz.muni.fi.pa165.dto.UserRole;
+import cz.muni.fi.pa165.dto.StudyGroupDTO;
 
 import java.util.List;
 import java.util.Optional;

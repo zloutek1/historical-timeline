@@ -1,6 +1,6 @@
 package cz.muni.fi.pa165.entity;
 
-import cz.muni.fi.pa165.enums.UserRole;
+import cz.muni.fi.pa165.dto.UserRole;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -19,6 +19,12 @@
     </properties>
 
     <dependencies>
+        <!-- api -->
+        <dependency>
+            <groupId>cz.fi.muni.pa165</groupId>
+            <artifactId>api</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
         <!-- unit testing -->
         <dependency>
             <groupId>org.testng</groupId>

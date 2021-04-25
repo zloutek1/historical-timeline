@@ -5,7 +5,7 @@ import cz.muni.fi.pa165.entity.Comment;
 import cz.muni.fi.pa165.entity.StudyGroup;
 import cz.muni.fi.pa165.entity.Timeline;
 import cz.muni.fi.pa165.entity.User;
-import cz.muni.fi.pa165.enums.UserRole;
+import cz.muni.fi.pa165.dto.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;

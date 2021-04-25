@@ -2,7 +2,7 @@ package cz.muni.fi.pa165.dao;
 
 import cz.muni.fi.pa165.PersistenceApplicationContext;
 import cz.muni.fi.pa165.entity.User;
-import cz.muni.fi.pa165.enums.UserRole;
+import cz.muni.fi.pa165.dto.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;

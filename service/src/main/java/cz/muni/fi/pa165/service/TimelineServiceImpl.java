@@ -5,6 +5,7 @@ import cz.muni.fi.pa165.entity.Comment;
 import cz.muni.fi.pa165.entity.Event;
 import cz.muni.fi.pa165.entity.Timeline;
 import cz.muni.fi.pa165.exceptions.ServiceException;
+import lombok.NonNull;
 import org.dozer.inject.Inject;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +24,22 @@ public class TimelineServiceImpl implements TimelineService {
     private TimelineDao timelineDao;
 
     @Override
-    public void create(Timeline timeline) {
+    public void create(@NonNull Timeline timeline) {
         timelineDao.create(timeline);
     }
 
     @Override
-    public void addEvent(Timeline timeline, Event event) {
+    public void update(@NonNull Timeline timeline) {
+        timelineDao.update(timeline);
+    }
+
+    @Override
+    public void delete(@NonNull Timeline timeline) {
+        timelineDao.delete(timeline);
+    }
+
+    @Override
+    public void addEvent(@NonNull Timeline timeline, @NonNull Event event) {
         if (timeline.getEvents().contains(event)) {
             throw new ServiceException(
                     "Timeline already contains this event. Product: "
@@ -39,12 +50,12 @@ public class TimelineServiceImpl implements TimelineService {
     }
 
     @Override
-    public void removeEvent(Timeline timeline, Event event) {
+    public void removeEvent(@NonNull Timeline timeline, @NonNull Event event) {
         timeline.removeEvent(event);
     }
 
     @Override
-    public void addComment(Timeline timeline, Comment comment) {
+    public void addComment(@NonNull Timeline timeline, @NonNull Comment comment) {
         if (timeline.getComments().contains(comment)) {
             throw new ServiceException(
                     "Timeline already contains this comment. Product: "
@@ -55,13 +66,8 @@ public class TimelineServiceImpl implements TimelineService {
     }
 
     @Override
-    public void removeComment(Timeline timeline, Comment comment) {
+    public void removeComment(@NonNull Timeline timeline, @NonNull Comment comment) {
         timeline.removeComment(comment);
-    }
-
-    @Override
-    public void delete(Timeline timeline) {
-        timelineDao.delete(timeline);
     }
 
     @Override
@@ -70,7 +76,7 @@ public class TimelineServiceImpl implements TimelineService {
     }
 
     @Override
-    public List<Timeline> getAllBetweenDates(LocalDate from, LocalDate to) {
+    public List<Timeline> getAllBetweenDates(@NonNull LocalDate from, @NonNull LocalDate to) {
         return timelineDao
                 .findAll()
                 .stream()
@@ -80,12 +86,12 @@ public class TimelineServiceImpl implements TimelineService {
     }
 
     @Override
-    public Optional<Timeline> getById(Long id) {
+    public Optional<Timeline> getById(@NonNull Long id) {
         return timelineDao.findById(id);
     }
 
     @Override
-    public Optional<Timeline> getByName(String name) {
+    public Optional<Timeline> getByName(@NonNull String name) {
         return timelineDao.findByName(name);
     }
 }

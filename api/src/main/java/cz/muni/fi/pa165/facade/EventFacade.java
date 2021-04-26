@@ -20,8 +20,8 @@ public interface EventFacade {
     void setLocation(Long eventId, String location);
     void setDescription(Long eventId, String description);
     void setImageIdentifier(Long eventId, String imageIdentifier);
-    void addTimeline(Long timelineId);
-    void removeTimeline(Long timelineId);
+    void addTimeline(Long eventId, Long timelineId);
+    void removeTimeline(Long eventId, Long timelineId);
 
     Optional<EventDTO> getById(Long eventId);
     Optional<EventDTO> getByName(String name);
@@ -29,12 +29,6 @@ public interface EventFacade {
     List<EventDTO> getAllInRange(LocalDate since, LocalDate to);
     List<EventDTO> getByLocation(String location);
     List<EventDTO> getByDescription(String description);
-    List<TimelineDTO> getAllTimelines(Long eventId);
-
-
-
-
-
-
-
+    List<TimelineDTO> getTimelines(Long eventId);
 }
+

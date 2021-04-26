@@ -26,14 +26,6 @@ public class TimelineFacadeImpl implements TimelineFacade {
     @Inject
     private TimelineService timelineService;
 
-    /*
-    @Inject
-    private EventService eventService;
-
-    @Inject
-    private CommentService commentService;
-     */
-
     @Autowired
     private BeanMappingService beanMappingService;
 
@@ -43,39 +35,6 @@ public class TimelineFacadeImpl implements TimelineFacade {
         timelineService.create(mappedTimeline);
         return mappedTimeline.getId();
     }
-
-    /*
-    @Override
-    public void addEvent(Long timelineId, Long eventId) {
-        Timeline timeline = timelineService.getById(timelineId).orElseThrow(IllegalArgumentException::new);
-        Event event = eventService.getById(eventId).orElseThrow(IllegalArgumentException::new);
-        timelineService.addEvent(timeline, event);
-    }
-
-    @Override
-    public void removeEvent(Long timelineId, Long eventId) {
-        Timeline timeline = timelineService.getById(timelineId).orElseThrow(IllegalArgumentException::new);
-        Event event = eventService.getById(eventId).orElseThrow(IllegalArgumentException::new);
-        timelineService.removeEvent(timeline, event);
-    }
-
-    @Override
-    public void addComment(Long timelineId, CommentCreateDTO comment) {
-        Timeline timeline = timelineService.getById(timelineId).orElseThrow(IllegalArgumentException::new);
-
-        Comment mappedComment = beanMappingService.mapTo(comment, Comment.class);
-        commentService.create(mappedComment);
-
-        timelineService.addComment(timeline, mappedComment);
-    }
-
-    @Override
-    public void removeComment(Long timelineId, Long commentId) {
-        Timeline timeline = timelineService.getById(timelineId).orElseThrow(IllegalArgumentException::new);
-        Comment comment = eventService.getById(commentId).orElseThrow(IllegalArgumentException::new);
-        timelineService.removeComment(timeline, comment);
-    }
-     */
 
     @Override
     public void delete(Long id) {

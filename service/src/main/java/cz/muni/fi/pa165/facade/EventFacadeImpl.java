@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -87,21 +88,26 @@ public class EventFacadeImpl implements EventFacade{
     @Override
     public Optional<EventDTO> getById(Long eventId) {
         Optional<Event> event = eventService.getById(eventId);
-        if (event.isPresent()) {
-            EventDTO mappedEvent = beanMappingService.mapTo(event.get(), EventDTO.class);
-            return Optional.of(mappedEvent);
+
+        if (event.isEmpty()) {
+            return Optional.empty();
         }
-        return Optional.empty();
+
+        EventDTO mappedEvent = beanMappingService.mapTo(event.get(), EventDTO.class);
+        return Optional.of(mappedEvent);
     }
 
     @Override
     public Optional<EventDTO> getByName(String name) {
         Optional<Event> event = eventService.getByName(name);
-        if (event.isPresent()) {
-            EventDTO mappedEvent = beanMappingService.mapTo(event.get(), EventDTO.class);
-            return Optional.of(mappedEvent);
+
+        if (event.isEmpty()) {
+            return Optional.empty();
         }
-        return Optional.empty();
+
+        EventDTO mappedEvent = beanMappingService.mapTo(event.get(), EventDTO.class);
+        return Optional.of(mappedEvent);
+
     }
 
     @Override
@@ -143,17 +149,17 @@ public class EventFacadeImpl implements EventFacade{
     @Override
     public List<TimelineDTO> getTimelines(Long eventId) {
         Optional<Event> event = eventService.getById(eventId);
-        List<TimelineDTO> timelines = null;
-        if (event.isPresent()){
-            timelines = event
-                    .get()
-                    .getTimelines()
-                    .stream()
-                    .map(timeline -> beanMappingService.mapTo(timeline, TimelineDTO.class))
-                    .collect(Collectors.toList());
+
+        if (event.isEmpty()){
+            return new ArrayList<>();
         }
 
-        return timelines;
+        return event
+                .get()
+                .getTimelines()
+                .stream()
+                .map(timeline -> beanMappingService.mapTo(timeline, TimelineDTO.class))
+                .collect(Collectors.toList());
 
     }
 }

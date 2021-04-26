@@ -3,70 +3,90 @@ package cz.muni.fi.pa165.facade;
 import cz.muni.fi.pa165.dto.CommentCreateDTO;
 import cz.muni.fi.pa165.dto.TimelineCreateDTO;
 import cz.muni.fi.pa165.dto.TimelineDTO;
+import cz.muni.fi.pa165.entity.Timeline;
+import cz.muni.fi.pa165.service.BeanMappingService;
 import cz.muni.fi.pa165.service.TimelineService;
+import org.apache.commons.lang3.NotImplementedException;
+import org.dozer.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
+/**
+ * @author Tomáš Ljutenko
+ */
 @Service
 @Transactional
 public class TimelineFacadeImpl implements TimelineFacade {
 
-    private final TimelineService timelineService;
+    @Inject
+    private TimelineService timelineService;
 
-    public TimelineFacadeImpl(TimelineService timelineService) {
-        this.timelineService = timelineService;
+    @Autowired
+    private BeanMappingService beanMappingService;
+
+    @Override
+    public Long create(TimelineCreateDTO timeline) {
+        Timeline mappedTimeline = beanMappingService.mapTo(timeline, Timeline.class);
+        timelineService.create(mappedTimeline);
+        return mappedTimeline.getId();
     }
 
     @Override
-    public Long createTimeline(TimelineCreateDTO timeline) {
-        throw new UnsupportedOperationException();
+    public void delete(Long id) {
+        Timeline timeline = timelineService.getById(id).orElseThrow(IllegalArgumentException::new);
+        timelineService.delete(timeline);
     }
 
     @Override
     public void addEvent(Long timelineId, Long eventId) {
-        throw new UnsupportedOperationException();
+        throw new NotImplementedException();
     }
 
     @Override
     public void removeEvent(Long timelineId, Long eventId) {
-        throw new UnsupportedOperationException();
+        throw new NotImplementedException();
     }
 
     @Override
     public void addComment(Long timelineId, CommentCreateDTO comment) {
-        throw new UnsupportedOperationException();
+        throw new NotImplementedException();
     }
 
     @Override
     public void removeComment(Long timelineId, Long commentId) {
-        throw new UnsupportedOperationException();
+        throw new NotImplementedException();
     }
 
     @Override
-    public void deleteTimeline(Long id) {
-        throw new UnsupportedOperationException();
+    public List<TimelineDTO> getAll() {
+        return beanMappingService.mapTo(timelineService.getAll(), TimelineDTO.class);
     }
 
     @Override
-    public List<TimelineDTO> getAllTimelines() {
-        throw new UnsupportedOperationException();
+    public List<TimelineDTO> getAllBetweenDates(LocalDate from, LocalDate to) {
+        return beanMappingService.mapTo(timelineService.getAllBetweenDates(from, to), TimelineDTO.class);
     }
 
     @Override
-    public List<TimelineDTO> getAllTimelinesBetweenDates(Date from, Date to) {
-        throw new UnsupportedOperationException();
+    public Optional<TimelineDTO> findById(Long id) {
+        Optional<Timeline> timeline = timelineService.getById(id);
+        if( timeline.isEmpty() )
+            return Optional.empty();
+        TimelineDTO mappedTimeline = beanMappingService.mapTo(timeline.get(), TimelineDTO.class);
+        return Optional.of(mappedTimeline);
     }
 
     @Override
-    public TimelineDTO getTimelineById(Long id) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public TimelineDTO getTimelineByName(String name) {
-        throw new UnsupportedOperationException();
+    public Optional<TimelineDTO> findByName(String name) {
+        Optional<Timeline> timeline = timelineService.getByName(name);
+        if( timeline.isEmpty() )
+            return Optional.empty();
+        TimelineDTO mappedTimeline = beanMappingService.mapTo(timeline.get(), TimelineDTO.class);
+        return Optional.of(mappedTimeline);
     }
 }

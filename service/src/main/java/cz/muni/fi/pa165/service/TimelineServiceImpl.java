@@ -1,63 +1,97 @@
 package cz.muni.fi.pa165.service;
 
+import cz.muni.fi.pa165.dao.TimelineDao;
 import cz.muni.fi.pa165.entity.Comment;
 import cz.muni.fi.pa165.entity.Event;
 import cz.muni.fi.pa165.entity.Timeline;
+import cz.muni.fi.pa165.exceptions.ServiceException;
+import lombok.NonNull;
+import org.dozer.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+/**
+ * @author Tomáš Ljutenko
+ */
 @Service
 public class TimelineServiceImpl implements TimelineService {
 
+    @Inject
+    private TimelineDao timelineDao;
+
     @Override
-    public void createTimeline(Timeline timeline) {
-        throw new UnsupportedOperationException();
+    public void create(@NonNull Timeline timeline) {
+        timelineDao.create(timeline);
     }
 
     @Override
-    public void addEvent(Timeline timeline, Event event) {
-        throw new UnsupportedOperationException();
+    public void update(@NonNull Timeline timeline) {
+        timelineDao.update(timeline);
     }
 
     @Override
-    public void removeEvent(Timeline timelineId, Event event) {
-        throw new UnsupportedOperationException();
+    public void delete(@NonNull Timeline timeline) {
+        timelineDao.delete(timeline);
     }
 
     @Override
-    public void addComment(Timeline timeline, Comment comment) {
-        throw new UnsupportedOperationException();
+    public void addEvent(@NonNull Timeline timeline, @NonNull Event event) {
+        if (timeline.getEvents().contains(event)) {
+            throw new ServiceException(
+                    "Timeline already contains this event. Product: "
+                            + timeline.getId() + ", category: "
+                            + event.getId());
+        }
+        timeline.addEvent(event);
     }
 
     @Override
-    public void removeComment(Timeline timeline, Comment comment) {
-        throw new UnsupportedOperationException();
+    public void removeEvent(@NonNull Timeline timeline, @NonNull Event event) {
+        timeline.removeEvent(event);
     }
 
     @Override
-    public void deleteTimeline(Timeline timeline) {
-        throw new UnsupportedOperationException();
+    public void addComment(@NonNull Timeline timeline, @NonNull Comment comment) {
+        if (timeline.getComments().contains(comment)) {
+            throw new ServiceException(
+                    "Timeline already contains this comment. Product: "
+                            + timeline.getId() + ", category: "
+                            + comment.getId());
+        }
+        timeline.addComment(comment);
     }
 
     @Override
-    public List<Timeline> getAllTimelines() {
-        throw new UnsupportedOperationException();
+    public void removeComment(@NonNull Timeline timeline, @NonNull Comment comment) {
+        timeline.removeComment(comment);
     }
 
     @Override
-    public List<Timeline> getAllTimelinesBetweenDates(LocalDate from, LocalDate to) {
-        throw new UnsupportedOperationException();
+    public List<Timeline> getAll() {
+        return timelineDao.findAll();
     }
 
     @Override
-    public Timeline getTimelineById(Long id) {
-        throw new UnsupportedOperationException();
+    public List<Timeline> getAllBetweenDates(@NonNull LocalDate from, @NonNull LocalDate to) {
+        return timelineDao
+                .findAll()
+                .stream()
+                .filter(timeline -> timeline.getFromDate().isAfter(from) &&
+                                    timeline.getToDate().isBefore(to))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Timeline getTimelineByName(String name) {
-        throw new UnsupportedOperationException();
+    public Optional<Timeline> getById(@NonNull Long id) {
+        return timelineDao.findById(id);
+    }
+
+    @Override
+    public Optional<Timeline> getByName(@NonNull String name) {
+        return timelineDao.findByName(name);
     }
 }

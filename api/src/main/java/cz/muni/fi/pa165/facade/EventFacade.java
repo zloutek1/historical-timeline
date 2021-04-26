@@ -30,5 +30,5 @@ public interface EventFacade {
     List<EventDTO> getByLocation(String location);
     List<EventDTO> getByDescription(String description);
     List<TimelineDTO> getTimelines(Long eventId);
-
 }
+

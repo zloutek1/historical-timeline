@@ -1,13 +1,9 @@
 package cz.muni.fi.pa165.service;
 
 import cz.muni.fi.pa165.config.ServiceConfiguration;
-import cz.muni.fi.pa165.dao.UserDao;
-import cz.muni.fi.pa165.dao.UserDaoImpl;
 import cz.muni.fi.pa165.dto.UserRole;
-import cz.muni.fi.pa165.entity.StudyGroup;
 import cz.muni.fi.pa165.entity.User;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -16,18 +12,15 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import javax.inject.Inject;
-
-import static org.mockito.Mockito.verify;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.assertThrows;
 
 /**
  * @author David Sevcik
  */
 @ContextConfiguration(classes = ServiceConfiguration.class)
 public class UserServiceTest extends AbstractTestNGSpringContextTests {
-    @Mock
-    private UserDao userDao;
 
     @Autowired
     @InjectMocks

@@ -4,6 +4,7 @@ import cz.muni.fi.pa165.dto.EventCreateDTO;
 import cz.muni.fi.pa165.dto.EventDTO;
 import cz.muni.fi.pa165.dto.TimelineDTO;
 import cz.muni.fi.pa165.entity.Event;
+import cz.muni.fi.pa165.entity.Timeline;
 import cz.muni.fi.pa165.service.BeanMappingService;
 import cz.muni.fi.pa165.service.EventService;
 import cz.muni.fi.pa165.service.TimelineService;
@@ -41,48 +42,58 @@ public class EventFacadeImpl implements EventFacade{
 
     @Override
     public void setName(Long eventId, EventCreateDTO name) {
-        Optional<Event> event = eventService.getById(eventId);
-        event.orElseThrow(IllegalArgumentException::new)
-                .setName(name.getName());
+        getEvent(eventId).setName(name.getName());
     }
 
     @Override
     public void setDate(Long eventId, LocalDate date) {
-        Optional<Event> event = eventService.getById(eventId);
-        event.orElseThrow(IllegalArgumentException::new)
-                .setDate(date);
+        getEvent(eventId).setDate(date);
 
     }
 
     @Override
     public void setLocation(Long eventId, String location) {
-        Optional<Event> event = eventService.getById(eventId);
-        event.orElseThrow(IllegalArgumentException::new)
-                .setLocation(location);
+        getEvent(eventId).setLocation(location);
     }
 
     @Override
     public void setDescription(Long eventId, String description) {
-        Optional<Event> event = eventService.getById(eventId);
-        event.orElseThrow(IllegalArgumentException::new)
-                .setDescription(description);
+        getEvent(eventId).setDescription(description);
     }
 
     @Override
     public void setImageIdentifier(Long eventId, String imageIdentifier) {
-        Optional<Event> event = eventService.getById(eventId);
-        event.orElseThrow(IllegalArgumentException::new)
-                .setImageIdentifier(imageIdentifier);
+        getEvent(eventId).setImageIdentifier(imageIdentifier);
     }
 
     @Override
     public void addTimeline(Long eventId, Long timelineId) {
-        throw new UnsupportedOperationException();
+        getEvent(eventId).addTimeline(getTimeline(timelineId));
     }
 
     @Override
     public void removeTimeline(Long eventId, Long timelineId) {
         throw new UnsupportedOperationException();
+    }
+
+    private Event getEvent(Long eventId){
+        Optional<Event> event = eventService.getById(eventId);
+
+        if (event.isEmpty()){
+            throw new IllegalArgumentException("Could not find Event by ID: " + eventId);
+        }
+
+        return event.get();
+    }
+
+    private Timeline getTimeline(Long timelineId){
+        Optional<Timeline> timeline = timelineService.getById(timelineId);
+
+        if (timeline.isEmpty()){
+            throw new IllegalArgumentException("Could not find Timeline by ID: " + timelineId);
+        }
+
+        return timeline.get();
     }
 
     @Override

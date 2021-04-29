@@ -61,6 +61,7 @@ public class UserServiceImpl implements UserService {
         if (studyGroup.isPresent()) {
             user.addStudyGroup(studyGroup.get());
             userDao.update(user);
+            return;
         }
         throw new ServiceException("Could not register User to StudyGroup");
     }
@@ -71,6 +72,7 @@ public class UserServiceImpl implements UserService {
         if (studyGroup.isPresent()) {
             user.removeStudyGroup(studyGroup.get());
             userDao.update(user);
+            return;
         }
         throw new ServiceException("Could not unregister User from StudyGroup");
     }

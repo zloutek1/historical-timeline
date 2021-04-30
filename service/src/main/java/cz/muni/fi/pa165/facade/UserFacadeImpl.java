@@ -4,12 +4,12 @@ import cz.muni.fi.pa165.dto.UserAuthenticateDTO;
 import cz.muni.fi.pa165.dto.UserCreateDTO;
 import cz.muni.fi.pa165.dto.UserDTO;
 import cz.muni.fi.pa165.dto.StudyGroupDTO;
-import cz.muni.fi.pa165.dto.UserRole;
+import cz.muni.fi.pa165.dto.UserUpdateDTO;
 import cz.muni.fi.pa165.entity.User;
 import cz.muni.fi.pa165.service.BeanMappingService;
 import cz.muni.fi.pa165.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -20,12 +20,13 @@ import java.util.stream.Collectors;
  * @author David Sevcik
  */
 @Service
+@Transactional
 public class UserFacadeImpl implements UserFacade {
 
     @Inject
     private UserService userService;
 
-    @Autowired
+    @Inject
     private BeanMappingService beanMappingService;
 
     @Override
@@ -35,62 +36,58 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override
-    public void setUserRole(UserDTO user, UserRole role) {
-        User mappedUser = beanMappingService.mapTo(user, User.class);
-        userService.setUserRole(mappedUser, role);
-    }
-
-    @Override
-    public UserRole getUserRole(UserDTO user) {
-        User mappedUser = beanMappingService.mapTo(user, User.class);
-        return userService.getUserRole(mappedUser);
-    }
-
-    @Override
     public Boolean authenticate(UserAuthenticateDTO user) {
         User mappedUser = beanMappingService.mapTo(user, User.class);
         return userService.authenticate(mappedUser, user.getPassword());
     }
 
     @Override
-    public void registerToStudyGroup(UserDTO user, Long studyGroupID) {
-        User mappedUser = beanMappingService.mapTo(user, User.class);
-        userService.registerToStudyGroup(mappedUser, studyGroupID);
+    public void changeUserPassword(Long userID, String unencryptedPassword) {
+        userService.changeUserPassword(userID, unencryptedPassword);
     }
 
     @Override
-    public void unregisterFromStudyGroup(UserDTO user, Long studyGroupID) {
-        User mappedUser = beanMappingService.mapTo(user, User.class);
-        userService.unregisterFromStudyGroup(mappedUser, studyGroupID);
+    public void updateUser(Long userID, UserUpdateDTO userUpdate) {
+        User mappedUser = beanMappingService.mapTo(userUpdate, User.class);
+        userService.updateUser(userID, mappedUser);
     }
 
     @Override
-    public List<StudyGroupDTO> getUsersStudyGroups(UserDTO user) {
-        User mappedUser = beanMappingService.mapTo(user, User.class);
-        return userService.getUsersStudyGroups(mappedUser)
+    public void registerToStudyGroup(Long userID, Long studyGroupID) {
+        userService.registerToStudyGroup(userID, studyGroupID);
+    }
+
+    @Override
+    public void unregisterFromStudyGroup(Long userID, Long studyGroupID) {
+        userService.unregisterFromStudyGroup(userID, studyGroupID);
+    }
+
+    @Override
+    public List<StudyGroupDTO> findUserStudyGroups(Long userID) {
+        return userService.findUserStudyGroups(userID)
                 .stream()
                 .map(studygroup -> beanMappingService.mapTo(studygroup, StudyGroupDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<UserDTO> getAllUsers() {
-        return userService.getAllUsers()
+    public List<UserDTO> findAllUsers() {
+        return userService.findAllUsers()
                 .stream()
                 .map(user -> beanMappingService.mapTo(user, UserDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<UserDTO> getUserByID(Long id) {
-        Optional<User> user = userService.getUserById(id);
+    public Optional<UserDTO> findUserByID(Long id) {
+        Optional<User> user = userService.findUserByID(id);
         UserDTO mappedUser = beanMappingService.mapTo(user.get(), UserDTO.class);
         return Optional.of(mappedUser);
     }
 
     @Override
-    public Optional<UserDTO> getUserByEmail(String email) {
-        Optional<User> user = userService.getUserByEmail(email);
+    public Optional<UserDTO> findUserByEmail(String email) {
+        Optional<User> user = userService.findUserByEmail(email);
         UserDTO mappedUser = beanMappingService.mapTo(user.get(), UserDTO.class);
         return Optional.of(mappedUser);
     }

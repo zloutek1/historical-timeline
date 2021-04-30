@@ -6,7 +6,7 @@ import cz.muni.fi.pa165.dto.UserAuthenticateDTO;
 import cz.muni.fi.pa165.dto.UserCreateDTO;
 import cz.muni.fi.pa165.dto.UserDTO;
 import cz.muni.fi.pa165.dto.StudyGroupDTO;
-import cz.muni.fi.pa165.dto.UserRole;
+import cz.muni.fi.pa165.dto.UserUpdateDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,16 +16,17 @@ import java.util.Optional;
  */
 public interface UserFacade {
     Long registerUser(UserCreateDTO user, String unencryptedPassword);
-    void setUserRole(UserDTO user, UserRole role);
-    UserRole getUserRole(UserDTO user);
     Boolean authenticate(UserAuthenticateDTO user);
+    void changeUserPassword(Long userID, String unencryptedPassword);
 
-    void registerToStudyGroup(UserDTO user, Long studyGroupID);
-    void unregisterFromStudyGroup(UserDTO user, Long studyGroupID);
-    List<StudyGroupDTO> getUsersStudyGroups(UserDTO user);
+    void updateUser(Long userID, UserUpdateDTO userUpdate);
 
-    List<UserDTO> getAllUsers();
-    Optional<UserDTO> getUserByID(Long id);
-    Optional<UserDTO> getUserByEmail(String email);
+    void registerToStudyGroup(Long userID, Long studyGroupID);
+    void unregisterFromStudyGroup(Long userID, Long studyGroupID);
+    List<StudyGroupDTO> findUserStudyGroups(Long userID);
+
+    List<UserDTO> findAllUsers();
+    Optional<UserDTO> findUserByID(Long id);
+    Optional<UserDTO> findUserByEmail(String email);
 
 }

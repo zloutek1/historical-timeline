@@ -3,14 +3,12 @@ package cz.muni.fi.pa165.service;
 import cz.muni.fi.pa165.config.ServiceConfiguration;
 import cz.muni.fi.pa165.dto.UserRole;
 import cz.muni.fi.pa165.entity.User;
-import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import javax.inject.Inject;
 
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -22,30 +20,17 @@ import static org.testng.Assert.assertThrows;
 @ContextConfiguration(classes = ServiceConfiguration.class)
 public class UserServiceTest extends AbstractTestNGSpringContextTests {
 
-    @Autowired
-    @InjectMocks
+    @Inject
     private UserService userService;
-
-    private AutoCloseable closeable;
-
-    @BeforeClass
-    public void setup() {
-        closeable = MockitoAnnotations.openMocks(this);
-    }
-
-    @AfterClass
-    public void finish() throws Exception {
-        closeable.close();
-    }
 
     @Test
     public void register_givenNullUser_throws() {
-        assertThrows(NullPointerException.class, () -> userService.registerUser(null, "some_password"));
+        assertThrows(IllegalArgumentException.class, () -> userService.registerUser(null, "some_password"));
     }
 
     @Test
     public void authenticate_givenNullUser_throws() {
-        assertThrows(NullPointerException.class, () -> userService.authenticate(null, null));
+        assertThrows(IllegalArgumentException.class, () -> userService.authenticate(null, null));
     }
 
     @Test

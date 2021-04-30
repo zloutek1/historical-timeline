@@ -12,7 +12,7 @@ import java.util.Optional;
  */
 
 public interface EventService {
-    void createEvent(Event event);
+    void create(Event event);
 
     void addTimeline(Event event, Timeline timeline);
     void removeTimeline(Event event, Timeline timeline);

@@ -3,6 +3,8 @@ package cz.muni.fi.pa165.service;
 import cz.muni.fi.pa165.dao.EventDao;
 import cz.muni.fi.pa165.entity.Event;
 import cz.muni.fi.pa165.entity.Timeline;
+import cz.muni.fi.pa165.exceptions.ServiceException;
+import lombok.NonNull;
 import org.dozer.inject.Inject;
 import org.springframework.stereotype.Service;
 
@@ -22,29 +24,39 @@ public class EventServiceImpl implements EventService{
     private EventDao eventDao;
 
     @Override
-    public void createEvent(Event event) {
+    public void create(@NonNull Event event) {
         eventDao.create(event);
     }
 
     @Override
-    public void addTimeline(Event event, Timeline timeline) {
+    public void addTimeline(@NonNull Event event,@NonNull Timeline timeline) {
+        if (event.getTimelines().contains(timeline)) {
+            throw new ServiceException(
+                    "Event already contains this Timeline. Event: "
+                            + event.getId() + ", Timeline: "
+                            + timeline.getId());
+        }
         event.addTimeline(timeline);
-        eventDao.update(event);
     }
 
     @Override
-    public void removeTimeline(Event event, Timeline timeline) {
+    public void removeTimeline(@NonNull Event event,@NonNull Timeline timeline) {
+        if (!event.getTimelines().contains(timeline)){
+            throw new ServiceException(
+                    "Event does not contain this Timeline. Event: "
+                            + event.getId() + ", Timeline: "
+                            + timeline.getId());
+        }
         event.removeTimeline(timeline);
-        eventDao.update(event);
     }
 
     @Override
-    public Optional<Event> getById(Long eventId) {
+    public Optional<Event> getById(@NonNull Long eventId) {
         return eventDao.findById(eventId);
     }
 
     @Override
-    public Optional<Event> getByName(String name) {
+    public Optional<Event> getByName(@NonNull String name) {
         return eventDao.findByName(name);
     }
 

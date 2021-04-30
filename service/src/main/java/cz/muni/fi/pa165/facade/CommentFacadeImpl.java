@@ -39,7 +39,7 @@ public class CommentFacadeImpl implements CommentFacade {
 
     @Override
     public Long createComment(CommentCreateDTO comment) {
-        Optional<User> user = userService.getUserById(comment.getUserId());
+        Optional<User> user = userService.findUserByID(comment.getUserId());
         if (user.isEmpty())
             throw new ServiceException("User with id " + comment.getUserId() + " does not exist");
         Optional<Timeline> timeline = timelineService.getById(comment.getTimelineId());

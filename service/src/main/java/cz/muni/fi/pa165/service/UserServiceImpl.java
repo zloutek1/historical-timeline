@@ -2,11 +2,12 @@ package cz.muni.fi.pa165.service;
 
 import cz.muni.fi.pa165.dao.StudyGroupDao;
 import cz.muni.fi.pa165.dao.UserDao;
-import cz.muni.fi.pa165.dto.UserRole;
 import cz.muni.fi.pa165.entity.StudyGroup;
 import cz.muni.fi.pa165.entity.User;
 import cz.muni.fi.pa165.exceptions.ServiceException;
+import lombok.NonNull;
 import org.dozer.inject.Inject;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,11 +29,17 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder = new Argon2PasswordEncoder();
 
     @Override
-    public Long registerUser(User user, String unencryptedPassword) {
+    public Long registerUser(@NonNull User user, @NonNull String unencryptedPassword) {
         user.setPasswordHash(encoder.encode(unencryptedPassword));
-        userDao.create(user);
+        Optional<User> createdUser;
+        try {
+            userDao.create(user);
+            createdUser = userDao.findByEmail(user.getEmail());
+        }
+        catch (DataAccessException e) {
+            throw new ServiceException("Cannot register user. ", e);
+        }
 
-        var createdUser = userDao.findByEmail(user.getEmail());
         if (createdUser.isEmpty()) {
             throw new ServiceException("Could not persist User");
         }
@@ -41,60 +48,133 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserRole getUserRole(User user) {
-        return user.getRole();
+    public Boolean authenticate(@NonNull User user, @NonNull String unencryptedPassword) {
+        return encoder.matches(unencryptedPassword, user.getPasswordHash());
     }
 
     @Override
-    public void setUserRole(User user, UserRole role) {
-        user.setRole(role);
-        userDao.update(user);
+    public void changeUserPassword(@NonNull Long userID, @NonNull String unencryptedPassword) {
+        User user = findUserFromDaoIfExistsElseThrow(userID);
+        user.setPasswordHash(encoder.encode(unencryptedPassword));
+        try {
+            userDao.update(user);
+        }
+        catch (DataAccessException e) {
+            throw new ServiceException("Cannot change password. ", e);
+        }
     }
 
     @Override
-    public Boolean authenticate(User user, String password) {
-        return encoder.matches(password, user.getPasswordHash());
-    }
+    public void updateUser(@NonNull Long userID, @NonNull User userUpdate){
+        User user = findUserFromDaoIfExistsElseThrow(userID);
 
-    @Override
-    public void registerToStudyGroup(User user, Long studyGroupID) {
-        var studyGroup = studyGroupDao.findById(studyGroupID);
-        if (studyGroup.isEmpty()) {
-            throw new ServiceException("Could not register User to StudyGroup");
+        if (userUpdate.getFirstName() != null) {
+            user.setFirstName(userUpdate.getFirstName());
         }
 
-        user.addStudyGroup(studyGroup.get());
-        userDao.update(user);
-    }
-
-    @Override
-    public void unregisterFromStudyGroup(User user, Long studyGroupID) {
-        var studyGroup = studyGroupDao.findById(studyGroupID);
-        if (studyGroup.isEmpty()) {
-            throw new ServiceException("Could not unregister User from StudyGroup");
+        if (userUpdate.getLastName() != null) {
+            user.setLastName(userUpdate.getLastName());
         }
 
-        user.removeStudyGroup(studyGroup.get());
-        userDao.update(user);
+        if (userUpdate.getRole() != null) {
+            user.setRole(userUpdate.getRole());
+        }
+
+        try {
+            userDao.update(user);
+        }
+        catch (DataAccessException e) {
+            throw new ServiceException("Cannot update user. ", e);
+        }
     }
 
     @Override
-    public List<StudyGroup> getUsersStudyGroups(User user) {
+    public void registerToStudyGroup(@NonNull Long userID, @NonNull Long studyGroupID) {
+        try {
+            Optional<StudyGroup> studyGroup = studyGroupDao.findById(studyGroupID);
+            if (studyGroup.isEmpty()) {
+                throw new ServiceException("Could not register user to StudyGroup");
+            }
+            User user = findUserFromDaoIfExistsElseThrow(userID);
+            user.addStudyGroup(studyGroup.get());
+
+            userDao.update(user);
+        }
+        catch (DataAccessException e) {
+            throw new ServiceException("Could nor reguster user from studygroup. ", e);
+        }
+    }
+
+    @Override
+    public void unregisterFromStudyGroup(@NonNull Long userID, @NonNull Long studyGroupID) {
+        try {
+            Optional<StudyGroup> studyGroup = studyGroupDao.findById(studyGroupID);
+
+
+            if (studyGroup.isEmpty()) {
+                throw new ServiceException("Could not unregister user from StudyGroup.");
+            }
+            User user = findUserFromDaoIfExistsElseThrow(userID);
+            user.removeStudyGroup(studyGroup.get());
+
+            userDao.update(user);
+        }
+        catch (DataAccessException e) {
+            throw new ServiceException("Could not unregister user from StudyGroup. ", e);
+        }
+    }
+
+    @Override
+    public List<StudyGroup> findUserStudyGroups(@NonNull Long userID)
+    {
+        User user = findUserFromDaoIfExistsElseThrow(userID);
         return user.getStudyGroups();
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userDao.findAll();
+    public List<User> findAllUsers() {
+        try {
+            return userDao.findAll();
+        }
+        catch (DataAccessException e) {
+            throw new ServiceException("Could not find list of users. ", e);
+        }
     }
 
     @Override
-    public Optional<User> getUserById(Long userID) {
-        return userDao.findById(userID);
+    public Optional<User> findUserByID(@NonNull Long userID) {
+        try {
+            return userDao.findById(userID);
+        }
+        catch (DataAccessException e) {
+            throw new ServiceException("Could not find user", e);
+        }
     }
 
     @Override
-    public Optional<User> getUserByEmail(String email) {
-        return userDao.findByEmail(email);
+    public Optional<User> findUserByEmail(@NonNull String email) {
+        try {
+            return userDao.findByEmail(email);
+        }
+        catch (DataAccessException e) {
+            throw new ServiceException("Could not find user with email " + email + ". ", e);
+        }
+
     }
+
+    private User findUserFromDaoIfExistsElseThrow(Long userID) {
+        Optional<User> user;
+        try {
+            user = userDao.findById(userID);
+        }
+        catch (DataAccessException e) {
+            throw new ServiceException("Could not Find user. ", e);
+        }
+
+        if (user.isEmpty()) {
+            throw new ServiceException("Could not Find user. ");
+        }
+        return user.get();
+    }
+
 }

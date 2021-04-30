@@ -10,10 +10,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -25,6 +25,11 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertThrows;
@@ -42,27 +47,24 @@ public class TimelineServiceTest extends AbstractTestNGSpringContextTests {
     @InjectMocks
     private TimelineService timelineService;
 
-    private Timeline timeline;
-
     private AutoCloseable closeable;
 
-    @BeforeClass
+    private Timeline timeline;
+
+    @BeforeMethod
     public void setup() {
         closeable = MockitoAnnotations.openMocks(this);
+
+        timeline = new Timeline("T1", LocalDate.of(2020, 1, 11), LocalDate.of(2021,6, 15), null);
     }
 
-    @AfterClass
+    @AfterMethod
     public void finish() throws Exception {
         closeable.close();
     }
 
-    @BeforeMethod
-    public void prepareTimeline() {
-        timeline = new Timeline("T1", LocalDate.of(2020, 1, 11), LocalDate.of(2021,6, 15), null);
-    }
-
     @Test
-    public void create_givenTimeline_daoCreates() {
+    public void create_givenTimeline_callsDaoCreate() {
         timelineService.create(timeline);
         verify(timelineDao).create(timeline);
     }
@@ -73,6 +75,34 @@ public class TimelineServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
+    public void create_givenFailingDatabase_throwsServiceException() {
+        doThrow(mock(DataAccessException.class)).when(timelineDao).create(any(Timeline.class));
+        assertThatExceptionOfType(ServiceException.class)
+            .isThrownBy(() -> timelineService.create(timeline))
+            .withMessageContaining(timeline.toString());
+    }
+
+    @Test
+    public void update_givenTimeline_callsDaoUpdate() {
+        timelineService.update(timeline);
+        verify(timelineDao).update(timeline);
+    }
+
+    @Test
+    public void update_givenNull_throws() {
+        assertThatExceptionOfType(IllegalArgumentException.class)
+            .isThrownBy(() -> timelineService.update(null));
+    }
+
+    @Test
+    public void update_givenFailingDatabase_throwsServiceException() {
+        doThrow(mock(DataAccessException.class)).when(timelineDao).update(any(Timeline.class));
+        assertThatExceptionOfType(ServiceException.class)
+                .isThrownBy(() -> timelineService.update(timeline))
+                .withMessageContaining(timeline.toString());
+    }
+
+    @Test
     public void delete_givenTimeline_daoDeletes() {
         timelineService.delete(timeline);
         verify(timelineDao).delete(timeline);
@@ -80,7 +110,16 @@ public class TimelineServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void delete_givenNull_throws() {
-        assertThrows(IllegalArgumentException.class, () -> timelineService.delete(null));
+        assertThatExceptionOfType(IllegalArgumentException.class)
+            .isThrownBy(() -> timelineService.delete(null));
+    }
+
+    @Test
+    public void delete_givenFailingDatabase_throwsServiceException() {
+        doThrow(mock(DataAccessException.class)).when(timelineDao).delete(any(Timeline.class));
+        assertThatExceptionOfType(ServiceException.class)
+                .isThrownBy(() -> timelineService.delete(timeline))
+                .withMessageContaining(timeline.toString());
     }
 
     @Test
@@ -100,7 +139,8 @@ public class TimelineServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void addEvent_givenNullEvent_throws() {
-        assertThrows(IllegalArgumentException.class, () -> timelineService.addEvent(timeline, null));
+        assertThatExceptionOfType(IllegalArgumentException.class)
+            .isThrownBy(() -> timelineService.addEvent(timeline, null));
     }
 
     @Test
@@ -128,7 +168,8 @@ public class TimelineServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void addComment_givenNullComment_throws() {
-        assertThrows(IllegalArgumentException.class, () -> timelineService.addComment(timeline, null));
+        assertThatExceptionOfType(IllegalArgumentException.class)
+            .isThrownBy(() -> timelineService.addComment(timeline, null));
     }
 
     @Test
@@ -141,30 +182,47 @@ public class TimelineServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void getAll_withThreeTimelines_returnsAll() {
-        Timeline t1 = new Timeline("T1", LocalDate.of(2020, 1, 11), LocalDate.of(2021,6, 15), null);
-        Timeline t2 = new Timeline("T2", LocalDate.of(1995, 11, 22), LocalDate.of(1996,12, 1), null);
-        Timeline t3 = new Timeline("T3", LocalDate.of(1650, 2, 28), LocalDate.of(1950, 3, 4), null);
+        List<Timeline> timelines = new ArrayList<>();
+        timelines.add(new Timeline("T1", LocalDate.of(2020, 1, 11), LocalDate.of(2021,6, 15), null));
+        timelines.add(new Timeline("T2", LocalDate.of(1995, 11, 22), LocalDate.of(1996,12, 1), null));
+        timelines.add(new Timeline("T3", LocalDate.of(1650, 2, 28), LocalDate.of(1950, 3, 4), null));
 
-        timelineService.create(t1);
-        timelineService.create(t2);
-        timelineService.create(t2);
+        when(timelineDao.findAll()).thenReturn(timelines);
 
-        assertThat(timelineService.getAll()).containsExactlyInAnyOrder(t1, t2, t3);
+        assertThat(timelineService.getAll()).containsExactlyInAnyOrderElementsOf(timelines);
+    }
+
+    @Test
+    public void getAll_givenFailingDatabase_throwsServiceException() {
+        doThrow(mock(DataAccessException.class)).when(timelineDao).findAll();
+        assertThatExceptionOfType(ServiceException.class)
+                .isThrownBy(() -> timelineService.getAll());
     }
 
     @Test
     public void getAllBetweenDates_withOneEventContainedExactly_returnsThatOne() {
         List<Timeline> timelines = new ArrayList<>();
         timelines.add(new Timeline("T1", LocalDate.of(2020, 1, 11), LocalDate.of(2021,6, 15), null));
-        Timeline t2 = new Timeline("T2", LocalDate.of(1995, 11, 22), LocalDate.of(1996,12, 1), null);
-        timelines.add(t2);
+        timelines.add(new Timeline("T2", LocalDate.of(1995, 11, 22), LocalDate.of(1996,12, 1), null));
         timelines.add(new Timeline("T3", LocalDate.of(1650, 2, 28), LocalDate.of(1950, 3, 4), null));
 
         when(timelineDao.findAll()).thenReturn(timelines);
 
         LocalDate fromDate = LocalDate.of(1900, 1, 1);
         LocalDate toDate = LocalDate.of(2000, 1, 1);
-        assertThat(timelineService.getAllBetweenDates(fromDate, toDate)).containsExactlyInAnyOrder(t2);
+        assertThat(timelineService.getAllBetweenDates(fromDate, toDate)).containsExactlyInAnyOrder(timelines.get(1));
+    }
+
+    @Test
+    public void getAllBetweenDates_givenFailingDatabase_throwsServiceException() {
+        doThrow(mock(DataAccessException.class)).when(timelineDao).findAll();
+
+        LocalDate fromDate = LocalDate.of(1900, 1, 1);
+        LocalDate toDate = LocalDate.of(2000, 1, 1);
+        assertThatExceptionOfType(ServiceException.class)
+                .isThrownBy(() -> timelineService.getAllBetweenDates(fromDate, toDate))
+                .withMessageContaining(fromDate.toString())
+                .withMessageContaining(toDate.toString());
     }
 
     @Test
@@ -175,7 +233,16 @@ public class TimelineServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void getById_givenNullId_throws() {
-        assertThrows(IllegalArgumentException.class, () -> timelineService.getById(null));
+        assertThatExceptionOfType(IllegalArgumentException.class)
+            .isThrownBy(() -> timelineService.getById(null));
+    }
+
+    @Test
+    public void getById_givenFailingDatabase_throwsServiceException() {
+        doThrow(mock(DataAccessException.class)).when(timelineDao).findById(anyLong());
+        assertThatExceptionOfType(ServiceException.class)
+                .isThrownBy(() -> timelineService.getById(123L))
+                .withMessageContaining("123");
     }
 
     @Test
@@ -186,7 +253,15 @@ public class TimelineServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void getByName_givenNullName_throws() {
-        assertThrows(IllegalArgumentException.class, () -> timelineService.getByName(null));
+        assertThatExceptionOfType(IllegalArgumentException.class)
+            .isThrownBy(() -> timelineService.getByName(null));
     }
 
+    @Test
+    public void getByName_givenFailingDatabase_throwsServiceException() {
+        doThrow(mock(DataAccessException.class)).when(timelineDao).findByName(anyString());
+        assertThatExceptionOfType(ServiceException.class)
+                .isThrownBy(() -> timelineService.getByName("myName"))
+                .withMessageContaining("myName");
+    }
 }

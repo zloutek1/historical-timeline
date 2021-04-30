@@ -7,6 +7,7 @@ import cz.muni.fi.pa165.entity.Timeline;
 import cz.muni.fi.pa165.exceptions.ServiceException;
 import lombok.NonNull;
 import org.dozer.inject.Inject;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,17 +26,29 @@ public class TimelineServiceImpl implements TimelineService {
 
     @Override
     public void create(@NonNull Timeline timeline) {
-        timelineDao.create(timeline);
+        try {
+            timelineDao.create(timeline);
+        } catch (DataAccessException ex) {
+            throw new ServiceException("Failed to create Timeline " + timeline, ex);
+        }
     }
 
     @Override
     public void update(@NonNull Timeline timeline) {
-        timelineDao.update(timeline);
+        try {
+            timelineDao.update(timeline);
+        } catch (DataAccessException ex) {
+            throw new ServiceException("Failed to update Timeline " + timeline, ex);
+        }
     }
 
     @Override
     public void delete(@NonNull Timeline timeline) {
-        timelineDao.delete(timeline);
+        try {
+            timelineDao.delete(timeline);
+        } catch (DataAccessException ex) {
+            throw new ServiceException("Failed to delete Timeline " + timeline, ex);
+        }
     }
 
     @Override
@@ -72,26 +85,42 @@ public class TimelineServiceImpl implements TimelineService {
 
     @Override
     public List<Timeline> getAll() {
-        return timelineDao.findAll();
+        try {
+            return timelineDao.findAll();
+        } catch (DataAccessException ex) {
+            throw new ServiceException("Failed to get all timelines", ex);
+        }
     }
 
     @Override
     public List<Timeline> getAllBetweenDates(@NonNull LocalDate from, @NonNull LocalDate to) {
-        return timelineDao
-                .findAll()
-                .stream()
-                .filter(timeline -> timeline.getFromDate().isAfter(from) &&
-                                    timeline.getToDate().isBefore(to))
-                .collect(Collectors.toList());
+        try {
+            return timelineDao
+                    .findAll()
+                    .stream()
+                    .filter(timeline -> timeline.getFromDate().isAfter(from) &&
+                            timeline.getToDate().isBefore(to))
+                    .collect(Collectors.toList());
+        } catch (DataAccessException ex) {
+            throw new ServiceException("Failed to get all timelines between dates " + from + " and " + to, ex);
+        }
     }
 
     @Override
     public Optional<Timeline> getById(@NonNull Long id) {
-        return timelineDao.findById(id);
+        try {
+            return timelineDao.findById(id);
+        } catch (DataAccessException ex) {
+            throw new ServiceException("Failed to get timeline by id " + id, ex);
+        }
     }
 
     @Override
     public Optional<Timeline> getByName(@NonNull String name) {
-        return timelineDao.findByName(name);
+        try {
+            return timelineDao.findByName(name);
+        } catch (DataAccessException ex) {
+            throw new ServiceException("Failed to get timeline by name " + name, ex);
+        }
     }
 }

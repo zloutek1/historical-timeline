@@ -36,7 +36,7 @@ jobs:
     name: Checkstyle
     steps:
       - uses: actions/checkout@v2
-      - run: mvn compile jxr:jxr checkstyle:checkstyle
+      - run: mvn -B clean compile jxr:jxr checkstyle:checkstyle
       - uses: jwgmeligmeyling/checkstyle-github-action@master
         with:
           path: '**/checkstyle-result.xml'
@@ -54,7 +54,7 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: ${{ matrix.java }}
-      - run: mvn -B verify -P coverage --no-transfer-progress
+      - run: mvn -B clean verify -P coverage --no-transfer-progress
 
       - uses: codecov/codecov-action@v1
         with:

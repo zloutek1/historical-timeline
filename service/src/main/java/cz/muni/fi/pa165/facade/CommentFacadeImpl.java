@@ -2,6 +2,7 @@ package cz.muni.fi.pa165.facade;
 
 import cz.muni.fi.pa165.dto.CommentCreateDTO;
 import cz.muni.fi.pa165.dto.CommentDTO;
+import cz.muni.fi.pa165.dto.CommentUpdateDTO;
 import cz.muni.fi.pa165.entity.Comment;
 import cz.muni.fi.pa165.entity.Timeline;
 import cz.muni.fi.pa165.entity.User;
@@ -10,7 +11,6 @@ import cz.muni.fi.pa165.service.BeanMappingService;
 import cz.muni.fi.pa165.service.CommentService;
 import cz.muni.fi.pa165.service.TimelineService;
 import cz.muni.fi.pa165.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -34,7 +34,7 @@ public class CommentFacadeImpl implements CommentFacade {
     @Inject
     private TimelineService timelineService;
 
-    @Autowired
+    @Inject
     private BeanMappingService beanMappingService;
 
     @Override
@@ -50,6 +50,16 @@ public class CommentFacadeImpl implements CommentFacade {
         newComment.setTimeline(timeline.get());
         commentService.create(newComment);
         return newComment.getId();
+    }
+
+    @Override
+    public void updateComment(CommentUpdateDTO comment) {
+        Optional<Comment> optionalComment = commentService.findById(comment.getId());
+        if (optionalComment.isEmpty())
+            throw new ServiceException("Comment with id " + comment.getId() + " does not exist");
+        Comment commentEntity = optionalComment.get();
+        commentEntity.setText(comment.getText());
+        commentService.update(commentEntity);
     }
 
     @Override

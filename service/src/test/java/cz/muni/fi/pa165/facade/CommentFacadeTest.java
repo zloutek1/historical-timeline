@@ -4,6 +4,7 @@ import cz.muni.fi.pa165.config.ServiceConfiguration;
 import cz.muni.fi.pa165.dto.CommentCreateDTO;
 import cz.muni.fi.pa165.dto.CommentDTO;
 import cz.muni.fi.pa165.dto.CommentUpdateDTO;
+import cz.muni.fi.pa165.dto.UserShortDTO;
 import cz.muni.fi.pa165.entity.Comment;
 import cz.muni.fi.pa165.entity.Timeline;
 import cz.muni.fi.pa165.entity.User;
@@ -65,15 +66,24 @@ public class CommentFacadeTest extends AbstractTestNGSpringContextTests {
         userEntity = new User();
         userEntity.setId(2l);
         userEntity.setEmail("bla@ble.blu");
+        userEntity.setFirstName("John");
+        userEntity.setLastName("Doe");
+
+        commentEntity.setAuthor(userEntity);
 
         timelineEntity = new Timeline();
         timelineEntity.setId(4l);
         timelineEntity.setName("T1");
 
+        UserShortDTO userShortDTO = new UserShortDTO();
+        userShortDTO.setFirstName("John");
+        userShortDTO.setLastName("Does");
+        userShortDTO.setId(2l);
         commentDTO = new CommentDTO();
         commentDTO.setText("Comment");
         commentDTO.setTime(now);
         commentDTO.setId(id);
+        commentDTO.setAuthor(userShortDTO);
     }
 
     @AfterMethod

@@ -37,7 +37,7 @@ public class EventFacadeImpl implements EventFacade{
     @Override
     public void createEvent(EventCreateDTO event) {
         Event mappedEvent = beanMappingService.mapTo(event, Event.class);
-        eventService.createEvent(mappedEvent);
+        eventService.create(mappedEvent);
     }
 
     @Override
@@ -48,7 +48,6 @@ public class EventFacadeImpl implements EventFacade{
     @Override
     public void setDate(Long eventId, LocalDate date) {
         getEvent(eventId).setDate(date);
-
     }
 
     @Override
@@ -171,6 +170,5 @@ public class EventFacadeImpl implements EventFacade{
                 .stream()
                 .map(timeline -> beanMappingService.mapTo(timeline, TimelineDTO.class))
                 .collect(Collectors.toList());
-
     }
 }

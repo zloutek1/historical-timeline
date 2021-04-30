@@ -46,10 +46,42 @@ public class TimelineFacadeImpl implements TimelineFacade {
     }
 
     @Override
+    public void update(TimelineUpdateDTO timelineDto) {
+        Timeline timeline = timelineService.getById(timelineDto.getId())
+                .orElseThrow(() -> new ServiceException("No timeline with id " + timelineDto.getId() + " found."));
+
+        if (timelineDto.getName() != null) {
+            timeline.setName(timelineDto.getName());
+        }
+        if (timelineDto.getFromDate() != null) {
+            timeline.setFromDate(timelineDto.getFromDate());
+        }
+        if (timelineDto.getToDate() != null) {
+            timeline.setToDate(timelineDto.getToDate());
+        }
+    }
+
+    @Override
     public void delete(Long id) {
         Timeline timeline = timelineService.getById(id)
                 .orElseThrow(() -> new ServiceException("No timeline with id " + id + " found."));
         timelineService.delete(timeline);
+    }
+
+    @Override
+    public void setStudyGroup(Long timelineId, Long studyGroupId) {
+        Timeline timeline = timelineService.getById(timelineId)
+                .orElseThrow(() -> new ServiceException("No timeline with id " + timelineId + " found."));
+        StudyGroup studyGroup = studyGroupService.findById(timelineId)
+                .orElseThrow(() -> new ServiceException("No study group with id " + studyGroupId + " found."));
+        timeline.setStudyGroup(studyGroup);
+    }
+
+    @Override
+    public void removeStudyGroup(Long timelineId) {
+        Timeline timeline = timelineService.getById(timelineId)
+                .orElseThrow(() -> new ServiceException("No timeline with id " + timelineId + " found."));
+        timeline.setStudyGroup(null);
     }
 
     @Override

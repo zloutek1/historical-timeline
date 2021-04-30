@@ -33,10 +33,11 @@ public class UserServiceImpl implements UserService {
         userDao.create(user);
 
         var createdUser = userDao.findByEmail(user.getEmail());
-        if (createdUser.isPresent())
-            return createdUser.get().getId();
+        if (createdUser.isEmpty()) {
+            throw new ServiceException("Could not persist User");
+        }
 
-        throw new ServiceException("Could not persist User");
+        return createdUser.get().getId();
     }
 
     @Override
@@ -58,23 +59,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public void registerToStudyGroup(User user, Long studyGroupID) {
         var studyGroup = studyGroupDao.findById(studyGroupID);
-        if (studyGroup.isPresent()) {
-            user.addStudyGroup(studyGroup.get());
-            userDao.update(user);
-            return;
+        if (studyGroup.isEmpty()) {
+            throw new ServiceException("Could not register User to StudyGroup");
         }
-        throw new ServiceException("Could not register User to StudyGroup");
+
+        user.addStudyGroup(studyGroup.get());
+        userDao.update(user);
     }
 
     @Override
     public void unregisterFromStudyGroup(User user, Long studyGroupID) {
         var studyGroup = studyGroupDao.findById(studyGroupID);
-        if (studyGroup.isPresent()) {
-            user.removeStudyGroup(studyGroup.get());
-            userDao.update(user);
-            return;
+        if (studyGroup.isEmpty()) {
+            throw new ServiceException("Could not unregister User from StudyGroup");
         }
-        throw new ServiceException("Could not unregister User from StudyGroup");
+
+        user.removeStudyGroup(studyGroup.get());
+        userDao.update(user);
     }
 
     @Override

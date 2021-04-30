@@ -23,10 +23,10 @@ import java.util.stream.Collectors;
 public class UserFacadeImpl implements UserFacade {
 
     @Inject
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    BeanMappingService beanMappingService;
+    private BeanMappingService beanMappingService;
 
     @Override
     public Long registerUser(UserCreateDTO user, String unencryptedPassword) {

@@ -17,8 +17,6 @@ public interface TimelineFacade {
     
     void addEvent(Long timelineId, Long eventId);
     void removeEvent(Long timelineId, Long eventId);
-    void addComment(Long timelineId, CommentCreateDTO comment);
-    void removeComment(Long timelineId, Long commentId);
     
     List<TimelineDTO> getAll();
     List<TimelineDTO> getAllBetweenDates(LocalDate from, LocalDate to);

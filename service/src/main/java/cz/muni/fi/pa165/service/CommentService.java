@@ -12,5 +12,5 @@ public interface CommentService {
     void update(Comment comment);
     void delete(Comment comment);
     Optional<Comment> findById(Long id);
-    List<Comment> getAll();
+    List<Comment> findAll();
 }

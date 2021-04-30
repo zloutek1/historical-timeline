@@ -3,17 +3,18 @@ package cz.muni.fi.pa165.service;
 import cz.muni.fi.pa165.config.ServiceConfiguration;
 import cz.muni.fi.pa165.dao.CommentDao;
 import cz.muni.fi.pa165.entity.Comment;
+import cz.muni.fi.pa165.exceptions.ServiceException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import javax.validation.ConstraintViolationException;
+import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -28,18 +29,18 @@ public class CommentServiceTest extends AbstractTestNGSpringContextTests {
     @Mock
     private CommentDao commentDao;
 
-    @Autowired
+    @Inject
     @InjectMocks
     private CommentService commentService;
 
     private AutoCloseable closeable;
 
-    @BeforeClass
+    @BeforeMethod
     public void setup() {
         closeable = MockitoAnnotations.openMocks(this);
     }
 
-    @AfterClass
+    @AfterMethod
     public void finish() throws Exception {
         closeable.close();
     }
@@ -55,13 +56,20 @@ public class CommentServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void create_givenInvalidComment_throws() {
-        doThrow(ConstraintViolationException.class).when(commentDao).create(commentInvalid);
-        assertThrows(Exception.class, () -> commentService.create(commentInvalid));
+        doThrow(RecoverableDataAccessException.class).when(commentDao).create(commentInvalid);
+        assertThrows(ServiceException.class, () -> commentService.create(commentInvalid));
     }
 
     @Test
     public void create_givenNull_throws() {
         assertThrows(IllegalArgumentException.class, () -> commentService.create(null));
+    }
+
+    @Test
+    public void update_givenExistingComment_updates() {
+        commentValid.setText("Update");
+        commentService.update(commentValid);
+        verify(commentDao).update(commentValid);
     }
 
     @Test
@@ -92,6 +100,12 @@ public class CommentServiceTest extends AbstractTestNGSpringContextTests {
     @Test
     public void findById_givenNullId_throws() {
         assertThrows(IllegalArgumentException.class, () -> commentService.findById(null));
+    }
+
+    @Test
+    public void findAll_retrievesAll() {
+        commentService.findAll();
+        verify(commentDao).findAll();
     }
 
 }

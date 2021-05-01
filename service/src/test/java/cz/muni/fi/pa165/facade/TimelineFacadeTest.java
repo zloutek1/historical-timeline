@@ -21,6 +21,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -200,8 +201,17 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
     public void getAllBetweenDates_withValidDates_returnsAllMatching() {
         var fromDate = LocalDate.of(2020, 2, 10);
         var toDate = LocalDate.of(2020, 3, 15);
-        timelineFacade.findAllBetweenDates(fromDate, toDate);
+
+        var listOfTimelines = new ArrayList<Timeline>() {{ add(timeline); }};
+        var listOfTimelinesDTO = new ArrayList<TimelineDTO>() {{ add(timelineDTO); }};
+
+        when(timelineService.findAllBetweenDates(fromDate, toDate)).thenReturn(listOfTimelines);
+        when(beanMappingService.mapTo(listOfTimelines, TimelineDTO.class)).thenReturn(listOfTimelinesDTO);
+
+        var actual = timelineFacade.findAllBetweenDates(fromDate, toDate);
         verify(timelineService).findAllBetweenDates(fromDate, toDate);
+
+        assertThat(actual).containsExactly(timelineDTO);
     }
 
     @Test

@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 
 /**
  * @author Tomáš Ljutenko
@@ -13,4 +14,6 @@ public class TimelineCreateDTO {
     @NotNull
     @Size(min = 3, max = 50)
     private String name;
+    private LocalDate fromDate;
+    private LocalDate toDate;
 }

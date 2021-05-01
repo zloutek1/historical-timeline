@@ -58,7 +58,6 @@ public class TimelineFacadeImpl implements TimelineFacade {
         if (timelineDto.getToDate() != null) {
             timeline.setToDate(timelineDto.getToDate());
         }
-        timelineService.update(timeline);
     }
 
     @Override
@@ -75,7 +74,6 @@ public class TimelineFacadeImpl implements TimelineFacade {
         StudyGroup studyGroup = studyGroupService.findById(timelineId)
                 .orElseThrow(() -> new ServiceException("No study group with id " + studyGroupId + " found."));
         timeline.setStudyGroup(studyGroup);
-        timelineService.update(timeline);
     }
 
     @Override
@@ -83,7 +81,6 @@ public class TimelineFacadeImpl implements TimelineFacade {
         Timeline timeline = timelineService.findById(timelineId)
                 .orElseThrow(() -> new ServiceException("No timeline with id " + timelineId + " found."));
         timeline.setStudyGroup(null);
-        timelineService.update(timeline);
     }
 
     @Override
@@ -93,7 +90,6 @@ public class TimelineFacadeImpl implements TimelineFacade {
         Event event = eventService.getById(timelineId)
                 .orElseThrow(() -> new ServiceException("No event with id " + eventId + " found."));
         timeline.addEvent(event);
-        timelineService.update(timeline);
     }
 
     @Override
@@ -103,7 +99,6 @@ public class TimelineFacadeImpl implements TimelineFacade {
         Event event = eventService.getById(timelineId)
                 .orElseThrow(() -> new ServiceException("No event with id " + eventId + " found."));
         timeline.removeEvent(event);
-        timelineService.update(timeline);
     }
 
     @Override

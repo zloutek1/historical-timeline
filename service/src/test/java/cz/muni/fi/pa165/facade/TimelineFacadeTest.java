@@ -107,7 +107,7 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
 
         when(timelineService.findById(1L)).thenReturn(Optional.of(timeline));
         timelineFacade.update(updateDTO);
-        verify(timelineService).update(expected);
+        assertThat(timeline).isEqualTo(expected);
     }
 
     @Test
@@ -130,7 +130,7 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
                 studyGroup
         );
         timelineFacade.setStudyGroup(timeline.getId(), studyGroup.getId());
-        verify(timelineService).update(expected);
+        assertThat(timeline.getStudyGroup()).isEqualTo(studyGroup);
     }
 
     @Test
@@ -148,7 +148,7 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
         when(studyGroupService.findById(anyLong())).thenReturn(Optional.of(studyGroup));
 
         timelineFacade.removeStudyGroup(timelineWithStudyGroup.getId());
-        verify(timelineService).update(timeline);
+        assertThat(timeline.getStudyGroup()).isNull();
     }
 
     @Test
@@ -164,7 +164,7 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
         when(eventService.getById(anyLong())).thenReturn(Optional.of(event));
 
         timelineFacade.addEvent(timeline.getId(), event.getId());
-        verify(timelineService).update(timeline);
+        assertThat(timeline.getEvents()).contains(event);
     }
 
     @Test
@@ -175,6 +175,7 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
                 "Paris",
                 "no description",
                 null);
+        event.setId(789L);
 
         var timelineWithEvent = new Timeline(
                 "Timeline name",
@@ -182,23 +183,24 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
                 LocalDate.of(2020, 3, 15),
                 null
         );
+        timelineWithEvent.setId(456L);
         timelineWithEvent.addEvent(event);
 
-        when(timelineService.findById(anyLong())).thenReturn(Optional.of(timeline));
+        when(timelineService.findById(anyLong())).thenReturn(Optional.of(timelineWithEvent));
         when(eventService.getById(anyLong())).thenReturn(Optional.of(event));
 
-        timelineFacade.removeEvent(timeline.getId(), event.getId());
-        verify(timelineService).update(timeline);
+        timelineFacade.removeEvent(timelineWithEvent.getId(), event.getId());
+        assertThat(timelineWithEvent.getEvents()).doesNotContain(event);
     }
 
     @Test
-    public void getAll_withOneTimeline_returnsAll() {
+    public void findAll_withOneTimeline_returnsAll() {
         timelineFacade.findAll();
         verify(timelineService).findAll();
     }
 
     @Test
-    public void getAllBetweenDates_withValidDates_returnsAllMatching() {
+    public void findAllBetweenDates_withValidDates_returnsAllMatching() {
         var fromDate = LocalDate.of(2020, 2, 10);
         var toDate = LocalDate.of(2020, 3, 15);
 

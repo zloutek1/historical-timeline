@@ -2,8 +2,10 @@ package cz.muni.fi.pa165.service;
 
 import cz.muni.fi.pa165.dao.StudyGroupDao;
 import cz.muni.fi.pa165.entity.StudyGroup;
+import cz.muni.fi.pa165.exceptions.ServiceException;
 import lombok.NonNull;
 import org.dozer.inject.Inject;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,32 +18,57 @@ public class StudyGroupServiceImpl implements StudyGroupService {
     private StudyGroupDao studyGroupDao;
 
     @Override
-    public List<StudyGroup> getAll() {
-        return studyGroupDao.findAll();
-    }
-
-    @Override
-    public Optional<StudyGroup> findById(@NonNull Long id) {
-        return studyGroupDao.findById(id);
-    }
-
-    @Override
-    public Optional<StudyGroup> findByName(@NonNull String name) {
-        return studyGroupDao.findByName(name);
-    }
-
-    @Override
     public void create(@NonNull StudyGroup studyGroup) {
-        studyGroupDao.create(studyGroup);
+        try {
+            studyGroupDao.create(studyGroup);
+        } catch (DataAccessException ex) {
+            throw new ServiceException("Failed to create study group " + studyGroup, ex);
+        }
     }
 
     @Override
     public void update(@NonNull StudyGroup studyGroup) {
-        studyGroupDao.update(studyGroup);
+        try {
+            studyGroupDao.update(studyGroup);
+        } catch (DataAccessException ex) {
+            throw new ServiceException("Failed to update study group " + studyGroup, ex);
+        }
     }
 
     @Override
     public void delete(@NonNull StudyGroup studyGroup) {
-        studyGroupDao.delete(studyGroup);
+        try {
+            studyGroupDao.delete(studyGroup);
+        } catch (DataAccessException ex) {
+            throw new ServiceException("Failed to delete study group " + studyGroup, ex);
+        }
     }
+
+    @Override
+    public Optional<StudyGroup> findById(@NonNull Long id) {
+        try {
+            return studyGroupDao.findById(id);
+        } catch (DataAccessException ex) {
+            throw new ServiceException("Failed to retrieve study group with id " + id, ex);
+        }
+    }
+
+    @Override
+    public Optional<StudyGroup> findByName(@NonNull String name) {
+        try {
+            return studyGroupDao.findByName(name);
+        } catch (DataAccessException ex) {
+            throw new ServiceException("Failed to retrieve study group with name " + name, ex);
+        }
+    }
+
+    @Override
+    public List<StudyGroup> findAll() {
+        try {
+            return studyGroupDao.findAll();
+        } catch (DataAccessException ex) {
+            throw new ServiceException("Failed to retrieve all study groups", ex);
+        }
+    }
+
 }

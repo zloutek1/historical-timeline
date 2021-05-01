@@ -189,14 +189,14 @@ public class TimelineServiceTest extends AbstractTestNGSpringContextTests {
 
         when(timelineDao.findAll()).thenReturn(timelines);
 
-        assertThat(timelineService.getAll()).containsExactlyInAnyOrderElementsOf(timelines);
+        assertThat(timelineService.findAll()).containsExactlyInAnyOrderElementsOf(timelines);
     }
 
     @Test
     public void getAll_givenFailingDatabase_throwsServiceException() {
         doThrow(mock(DataAccessException.class)).when(timelineDao).findAll();
         assertThatExceptionOfType(ServiceException.class)
-                .isThrownBy(() -> timelineService.getAll());
+                .isThrownBy(() -> timelineService.findAll());
     }
 
     @Test
@@ -210,7 +210,7 @@ public class TimelineServiceTest extends AbstractTestNGSpringContextTests {
 
         LocalDate fromDate = LocalDate.of(1900, 1, 1);
         LocalDate toDate = LocalDate.of(2000, 1, 1);
-        assertThat(timelineService.getAllBetweenDates(fromDate, toDate)).containsExactlyInAnyOrder(timelines.get(1));
+        assertThat(timelineService.findAllBetweenDates(fromDate, toDate)).containsExactlyInAnyOrder(timelines.get(1));
     }
 
     @Test
@@ -220,48 +220,48 @@ public class TimelineServiceTest extends AbstractTestNGSpringContextTests {
         LocalDate fromDate = LocalDate.of(1900, 1, 1);
         LocalDate toDate = LocalDate.of(2000, 1, 1);
         assertThatExceptionOfType(ServiceException.class)
-                .isThrownBy(() -> timelineService.getAllBetweenDates(fromDate, toDate))
+                .isThrownBy(() -> timelineService.findAllBetweenDates(fromDate, toDate))
                 .withMessageContaining(fromDate.toString())
                 .withMessageContaining(toDate.toString());
     }
 
     @Test
     public void getById_givenValidId_returnsTimeline() {
-        timelineService.getById(123L);
+        timelineService.findById(123L);
         verify(timelineDao).findById(123L);
     }
 
     @Test
     public void getById_givenNullId_throws() {
         assertThatExceptionOfType(IllegalArgumentException.class)
-            .isThrownBy(() -> timelineService.getById(null));
+            .isThrownBy(() -> timelineService.findById(null));
     }
 
     @Test
     public void getById_givenFailingDatabase_throwsServiceException() {
         doThrow(mock(DataAccessException.class)).when(timelineDao).findById(anyLong());
         assertThatExceptionOfType(ServiceException.class)
-                .isThrownBy(() -> timelineService.getById(123L))
+                .isThrownBy(() -> timelineService.findById(123L))
                 .withMessageContaining("123");
     }
 
     @Test
     public void getByName_givenValidName_returnsTimeline() {
-        timelineService.getByName("some name");
+        timelineService.findByName("some name");
         verify(timelineDao).findByName("some name");
     }
 
     @Test
     public void getByName_givenNullName_throws() {
         assertThatExceptionOfType(IllegalArgumentException.class)
-            .isThrownBy(() -> timelineService.getByName(null));
+            .isThrownBy(() -> timelineService.findByName(null));
     }
 
     @Test
     public void getByName_givenFailingDatabase_throwsServiceException() {
         doThrow(mock(DataAccessException.class)).when(timelineDao).findByName(anyString());
         assertThatExceptionOfType(ServiceException.class)
-                .isThrownBy(() -> timelineService.getByName("myName"))
+                .isThrownBy(() -> timelineService.findByName("myName"))
                 .withMessageContaining("myName");
     }
 }

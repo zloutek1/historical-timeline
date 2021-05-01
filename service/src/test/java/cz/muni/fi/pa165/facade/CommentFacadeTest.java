@@ -106,7 +106,7 @@ public class CommentFacadeTest extends AbstractTestNGSpringContextTests {
         commentCreateDTO.setUserId(2l);
         commentCreateDTO.setTimelineId(4l);
         when(userService.findUserByID(userEntity.getId())).thenReturn(Optional.of(userEntity));
-        when(timelineService.getById(timelineEntity.getId())).thenReturn(Optional.of(timelineEntity));
+        when(timelineService.findById(timelineEntity.getId())).thenReturn(Optional.of(timelineEntity));
         commentFacade.createComment(commentCreateDTO);
         verify(commentService).create(any());
     }

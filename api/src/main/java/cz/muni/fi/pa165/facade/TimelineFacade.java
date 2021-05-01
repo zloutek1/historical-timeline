@@ -21,8 +21,8 @@ public interface TimelineFacade {
     void addEvent(Long timelineId, Long eventId);
     void removeEvent(Long timelineId, Long eventId);
     
-    List<TimelineDTO> getAll();
-    List<TimelineDTO> getAllBetweenDates(LocalDate from, LocalDate to);
+    List<TimelineDTO> findAll();
+    List<TimelineDTO> findAllBetweenDates(LocalDate from, LocalDate to);
     Optional<TimelineDTO> findById(Long id);
     Optional<TimelineDTO> findByName(String name);
 }

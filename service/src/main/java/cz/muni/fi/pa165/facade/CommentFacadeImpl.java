@@ -42,7 +42,7 @@ public class CommentFacadeImpl implements CommentFacade {
         Optional<User> user = userService.findUserByID(comment.getUserId());
         if (user.isEmpty())
             throw new ServiceException("User with id " + comment.getUserId() + " does not exist");
-        Optional<Timeline> timeline = timelineService.getById(comment.getTimelineId());
+        Optional<Timeline> timeline = timelineService.findById(comment.getTimelineId());
         if (timeline.isEmpty())
             throw new ServiceException("Timeline with id " + comment.getTimelineId() + " does not exist");
         Comment newComment = new Comment(comment.getText(), LocalDateTime.now());

@@ -84,7 +84,7 @@ public class TimelineServiceImpl implements TimelineService {
     }
 
     @Override
-    public List<Timeline> getAll() {
+    public List<Timeline> findAll() {
         try {
             return timelineDao.findAll();
         } catch (DataAccessException ex) {
@@ -93,7 +93,7 @@ public class TimelineServiceImpl implements TimelineService {
     }
 
     @Override
-    public List<Timeline> getAllBetweenDates(@NonNull LocalDate from, @NonNull LocalDate to) {
+    public List<Timeline> findAllBetweenDates(@NonNull LocalDate from, @NonNull LocalDate to) {
         try {
             return timelineDao
                     .findAll()
@@ -107,7 +107,7 @@ public class TimelineServiceImpl implements TimelineService {
     }
 
     @Override
-    public Optional<Timeline> getById(@NonNull Long id) {
+    public Optional<Timeline> findById(@NonNull Long id) {
         try {
             return timelineDao.findById(id);
         } catch (DataAccessException ex) {
@@ -116,7 +116,7 @@ public class TimelineServiceImpl implements TimelineService {
     }
 
     @Override
-    public Optional<Timeline> getByName(@NonNull String name) {
+    public Optional<Timeline> findByName(@NonNull String name) {
         try {
             return timelineDao.findByName(name);
         } catch (DataAccessException ex) {

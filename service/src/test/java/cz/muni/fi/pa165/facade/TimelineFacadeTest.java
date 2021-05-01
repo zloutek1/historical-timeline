@@ -104,14 +104,14 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
                 LocalDate.of(2020, 3, 15),
                 null);
 
-        when(timelineService.getById(1L)).thenReturn(Optional.of(timeline));
+        when(timelineService.findById(1L)).thenReturn(Optional.of(timeline));
         timelineFacade.update(updateDTO);
         verify(timelineService).update(expected);
     }
 
     @Test
     public void delete_givenValidId_callsServiceDelete() {
-        when(timelineService.getById(123L)).thenReturn(Optional.of(timeline));
+        when(timelineService.findById(123L)).thenReturn(Optional.of(timeline));
         timelineFacade.delete(123L);
         verify(timelineService).delete(timeline);
     }
@@ -119,7 +119,7 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
     @Test
     public void setStudyGroup_givenValidStudyGroup_setsStudyGroupAndCallsUpdate() {
         var studyGroup = new StudyGroup("Group name");
-        when(timelineService.getById(anyLong())).thenReturn(Optional.of(timeline));
+        when(timelineService.findById(anyLong())).thenReturn(Optional.of(timeline));
         when(studyGroupService.findById(anyLong())).thenReturn(Optional.of(studyGroup));
 
         var expected = new Timeline(
@@ -143,7 +143,7 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
         );
         timelineWithStudyGroup.setId(16L);
 
-        when(timelineService.getById(anyLong())).thenReturn(Optional.of(timeline));
+        when(timelineService.findById(anyLong())).thenReturn(Optional.of(timeline));
         when(studyGroupService.findById(anyLong())).thenReturn(Optional.of(studyGroup));
 
         timelineFacade.removeStudyGroup(timelineWithStudyGroup.getId());
@@ -159,7 +159,7 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
                 "no description",
                 null);
 
-        when(timelineService.getById(anyLong())).thenReturn(Optional.of(timeline));
+        when(timelineService.findById(anyLong())).thenReturn(Optional.of(timeline));
         when(eventService.getById(anyLong())).thenReturn(Optional.of(event));
 
         timelineFacade.addEvent(timeline.getId(), event.getId());
@@ -183,7 +183,7 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
         );
         timelineWithEvent.addEvent(event);
 
-        when(timelineService.getById(anyLong())).thenReturn(Optional.of(timeline));
+        when(timelineService.findById(anyLong())).thenReturn(Optional.of(timeline));
         when(eventService.getById(anyLong())).thenReturn(Optional.of(event));
 
         timelineFacade.removeEvent(timeline.getId(), event.getId());
@@ -192,36 +192,36 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void getAll_withOneTimeline_returnsAll() {
-        timelineFacade.getAll();
-        verify(timelineService).getAll();
+        timelineFacade.findAll();
+        verify(timelineService).findAll();
     }
 
     @Test
     public void getAllBetweenDates_withValidDates_returnsAllMatching() {
         var fromDate = LocalDate.of(2020, 2, 10);
         var toDate = LocalDate.of(2020, 3, 15);
-        timelineFacade.getAllBetweenDates(fromDate, toDate);
-        verify(timelineService).getAllBetweenDates(fromDate, toDate);
+        timelineFacade.findAllBetweenDates(fromDate, toDate);
+        verify(timelineService).findAllBetweenDates(fromDate, toDate);
     }
 
     @Test
     public void findById_givenValidId_returnsFoundTimeline() {
-        when(timelineService.getById(anyLong())).thenReturn(Optional.of(timeline));
+        when(timelineService.findById(anyLong())).thenReturn(Optional.of(timeline));
         when(beanMappingService.mapTo(timeline, TimelineDTO.class)).thenReturn(timelineDTO);
 
         var actual = timelineFacade.findById(123L);
-        verify(timelineService).getById(123L);
+        verify(timelineService).findById(123L);
 
         assertThat(actual).contains(timelineDTO);
     }
 
     @Test
     public void findByName_givenValidName_returnsFoundTimeline() {
-        when(timelineService.getByName(anyString())).thenReturn(Optional.of(timeline));
+        when(timelineService.findByName(anyString())).thenReturn(Optional.of(timeline));
         when(beanMappingService.mapTo(timeline, TimelineDTO.class)).thenReturn(timelineDTO);
 
         var actual = timelineFacade.findByName("Timeline name");
-        verify(timelineService).getByName("Timeline name");
+        verify(timelineService).findByName("Timeline name");
 
         assertThat(actual).contains(timelineDTO);
     }

@@ -47,7 +47,7 @@ public class TimelineFacadeImpl implements TimelineFacade {
 
     @Override
     public void update(TimelineUpdateDTO timelineDto) {
-        Timeline timeline = timelineService.getById(timelineDto.getId())
+        Timeline timeline = timelineService.findById(timelineDto.getId())
                 .orElseThrow(() -> new ServiceException("No timeline with id " + timelineDto.getId() + " found."));
         if (timelineDto.getName() != null) {
             timeline.setName(timelineDto.getName());
@@ -63,14 +63,14 @@ public class TimelineFacadeImpl implements TimelineFacade {
 
     @Override
     public void delete(Long id) {
-        Timeline timeline = timelineService.getById(id)
+        Timeline timeline = timelineService.findById(id)
                 .orElseThrow(() -> new ServiceException("No timeline with id " + id + " found."));
         timelineService.delete(timeline);
     }
 
     @Override
     public void setStudyGroup(Long timelineId, Long studyGroupId) {
-        Timeline timeline = timelineService.getById(timelineId)
+        Timeline timeline = timelineService.findById(timelineId)
                 .orElseThrow(() -> new ServiceException("No timeline with id " + timelineId + " found."));
         StudyGroup studyGroup = studyGroupService.findById(timelineId)
                 .orElseThrow(() -> new ServiceException("No study group with id " + studyGroupId + " found."));
@@ -80,7 +80,7 @@ public class TimelineFacadeImpl implements TimelineFacade {
 
     @Override
     public void removeStudyGroup(Long timelineId) {
-        Timeline timeline = timelineService.getById(timelineId)
+        Timeline timeline = timelineService.findById(timelineId)
                 .orElseThrow(() -> new ServiceException("No timeline with id " + timelineId + " found."));
         timeline.setStudyGroup(null);
         timelineService.update(timeline);
@@ -88,7 +88,7 @@ public class TimelineFacadeImpl implements TimelineFacade {
 
     @Override
     public void addEvent(Long timelineId, Long eventId) {
-        Timeline timeline = timelineService.getById(timelineId)
+        Timeline timeline = timelineService.findById(timelineId)
                 .orElseThrow(() -> new ServiceException("No timeline with id " + timelineId + " found."));
         Event event = eventService.getById(timelineId)
                 .orElseThrow(() -> new ServiceException("No event with id " + eventId + " found."));
@@ -98,7 +98,7 @@ public class TimelineFacadeImpl implements TimelineFacade {
 
     @Override
     public void removeEvent(Long timelineId, Long eventId) {
-        Timeline timeline = timelineService.getById(timelineId)
+        Timeline timeline = timelineService.findById(timelineId)
                 .orElseThrow(() -> new ServiceException("No timeline with id " + timelineId + " found."));
         Event event = eventService.getById(timelineId)
                 .orElseThrow(() -> new ServiceException("No event with id " + eventId + " found."));
@@ -107,18 +107,18 @@ public class TimelineFacadeImpl implements TimelineFacade {
     }
 
     @Override
-    public List<TimelineDTO> getAll() {
-        return beanMappingService.mapTo(timelineService.getAll(), TimelineDTO.class);
+    public List<TimelineDTO> findAll() {
+        return beanMappingService.mapTo(timelineService.findAll(), TimelineDTO.class);
     }
 
     @Override
-    public List<TimelineDTO> getAllBetweenDates(LocalDate from, LocalDate to) {
-        return beanMappingService.mapTo(timelineService.getAllBetweenDates(from, to), TimelineDTO.class);
+    public List<TimelineDTO> findAllBetweenDates(LocalDate from, LocalDate to) {
+        return beanMappingService.mapTo(timelineService.findAllBetweenDates(from, to), TimelineDTO.class);
     }
 
     @Override
     public Optional<TimelineDTO> findById(Long id) {
-        Optional<Timeline> timeline = timelineService.getById(id);
+        Optional<Timeline> timeline = timelineService.findById(id);
         if( timeline.isEmpty() )
             return Optional.empty();
         TimelineDTO mappedTimeline = beanMappingService.mapTo(timeline.get(), TimelineDTO.class);
@@ -127,7 +127,7 @@ public class TimelineFacadeImpl implements TimelineFacade {
 
     @Override
     public Optional<TimelineDTO> findByName(String name) {
-        Optional<Timeline> timeline = timelineService.getByName(name);
+        Optional<Timeline> timeline = timelineService.findByName(name);
         if( timeline.isEmpty() )
             return Optional.empty();
         TimelineDTO mappedTimeline = beanMappingService.mapTo(timeline.get(), TimelineDTO.class);

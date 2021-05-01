@@ -86,7 +86,7 @@ public class EventFacadeImpl implements EventFacade{
     }
 
     private Timeline getTimeline(Long timelineId){
-        Optional<Timeline> timeline = timelineService.getById(timelineId);
+        Optional<Timeline> timeline = timelineService.findById(timelineId);
 
         if (timeline.isEmpty()){
             throw new IllegalArgumentException("Could not find Timeline by ID: " + timelineId);

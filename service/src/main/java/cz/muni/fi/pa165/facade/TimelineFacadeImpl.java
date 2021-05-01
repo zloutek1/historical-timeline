@@ -49,7 +49,6 @@ public class TimelineFacadeImpl implements TimelineFacade {
     public void update(TimelineUpdateDTO timelineDto) {
         Timeline timeline = timelineService.getById(timelineDto.getId())
                 .orElseThrow(() -> new ServiceException("No timeline with id " + timelineDto.getId() + " found."));
-
         if (timelineDto.getName() != null) {
             timeline.setName(timelineDto.getName());
         }
@@ -59,6 +58,7 @@ public class TimelineFacadeImpl implements TimelineFacade {
         if (timelineDto.getToDate() != null) {
             timeline.setToDate(timelineDto.getToDate());
         }
+        timelineService.update(timeline);
     }
 
     @Override
@@ -75,6 +75,7 @@ public class TimelineFacadeImpl implements TimelineFacade {
         StudyGroup studyGroup = studyGroupService.findById(timelineId)
                 .orElseThrow(() -> new ServiceException("No study group with id " + studyGroupId + " found."));
         timeline.setStudyGroup(studyGroup);
+        timelineService.update(timeline);
     }
 
     @Override
@@ -82,6 +83,7 @@ public class TimelineFacadeImpl implements TimelineFacade {
         Timeline timeline = timelineService.getById(timelineId)
                 .orElseThrow(() -> new ServiceException("No timeline with id " + timelineId + " found."));
         timeline.setStudyGroup(null);
+        timelineService.update(timeline);
     }
 
     @Override
@@ -91,6 +93,7 @@ public class TimelineFacadeImpl implements TimelineFacade {
         Event event = eventService.getById(timelineId)
                 .orElseThrow(() -> new ServiceException("No event with id " + eventId + " found."));
         timeline.addEvent(event);
+        timelineService.update(timeline);
     }
 
     @Override
@@ -100,6 +103,7 @@ public class TimelineFacadeImpl implements TimelineFacade {
         Event event = eventService.getById(timelineId)
                 .orElseThrow(() -> new ServiceException("No event with id " + eventId + " found."));
         timeline.removeEvent(event);
+        timelineService.update(timeline);
     }
 
     @Override

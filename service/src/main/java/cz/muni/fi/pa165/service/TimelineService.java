@@ -21,8 +21,8 @@ public interface TimelineService {
     void addComment(Timeline timeline, Comment comment);
     void removeComment(Timeline timeline, Comment comment);
 
-    List<Timeline> getAll();
-    List<Timeline> getAllBetweenDates(LocalDate from, LocalDate to);
-    Optional<Timeline> getById(Long id);
-    Optional<Timeline> getByName(String name);
+    List<Timeline> findAll();
+    List<Timeline> findAllBetweenDates(LocalDate from, LocalDate to);
+    Optional<Timeline> findById(Long id);
+    Optional<Timeline> findByName(String name);
 }

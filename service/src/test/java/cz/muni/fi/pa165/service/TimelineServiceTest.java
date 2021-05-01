@@ -181,7 +181,7 @@ public class TimelineServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void getAll_withThreeTimelines_returnsAll() {
+    public void findAll_withThreeTimelines_returnsAll() {
         List<Timeline> timelines = new ArrayList<>();
         timelines.add(new Timeline("T1", LocalDate.of(2020, 1, 11), LocalDate.of(2021,6, 15), null));
         timelines.add(new Timeline("T2", LocalDate.of(1995, 11, 22), LocalDate.of(1996,12, 1), null));
@@ -193,14 +193,14 @@ public class TimelineServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void getAll_givenFailingDatabase_throwsServiceException() {
+    public void findAll_givenFailingDatabase_throwsServiceException() {
         doThrow(mock(DataAccessException.class)).when(timelineDao).findAll();
         assertThatExceptionOfType(ServiceException.class)
                 .isThrownBy(() -> timelineService.findAll());
     }
 
     @Test
-    public void getAllBetweenDates_withOneEventContainedExactly_returnsThatOne() {
+    public void findAllBetweenDates_withOneEventContainedExactly_returnsThatOne() {
         List<Timeline> timelines = new ArrayList<>();
         timelines.add(new Timeline("T1", LocalDate.of(2020, 1, 11), LocalDate.of(2021,6, 15), null));
         timelines.add(new Timeline("T2", LocalDate.of(1995, 11, 22), LocalDate.of(1996,12, 1), null));
@@ -214,7 +214,7 @@ public class TimelineServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void getAllBetweenDates_givenFailingDatabase_throwsServiceException() {
+    public void findAllBetweenDates_givenFailingDatabase_throwsServiceException() {
         doThrow(mock(DataAccessException.class)).when(timelineDao).findAll();
 
         LocalDate fromDate = LocalDate.of(1900, 1, 1);
@@ -226,19 +226,19 @@ public class TimelineServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void getById_givenValidId_returnsTimeline() {
+    public void findById_givenValidId_returnsTimeline() {
         timelineService.findById(123L);
         verify(timelineDao).findById(123L);
     }
 
     @Test
-    public void getById_givenNullId_throws() {
+    public void findById_givenNullId_throws() {
         assertThatExceptionOfType(IllegalArgumentException.class)
             .isThrownBy(() -> timelineService.findById(null));
     }
 
     @Test
-    public void getById_givenFailingDatabase_throwsServiceException() {
+    public void findById_givenFailingDatabase_throwsServiceException() {
         doThrow(mock(DataAccessException.class)).when(timelineDao).findById(anyLong());
         assertThatExceptionOfType(ServiceException.class)
                 .isThrownBy(() -> timelineService.findById(123L))
@@ -246,19 +246,19 @@ public class TimelineServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void getByName_givenValidName_returnsTimeline() {
+    public void findByName_givenValidName_returnsTimeline() {
         timelineService.findByName("some name");
         verify(timelineDao).findByName("some name");
     }
 
     @Test
-    public void getByName_givenNullName_throws() {
+    public void findByName_givenNullName_throws() {
         assertThatExceptionOfType(IllegalArgumentException.class)
             .isThrownBy(() -> timelineService.findByName(null));
     }
 
     @Test
-    public void getByName_givenFailingDatabase_throwsServiceException() {
+    public void findByName_givenFailingDatabase_throwsServiceException() {
         doThrow(mock(DataAccessException.class)).when(timelineDao).findByName(anyString());
         assertThatExceptionOfType(ServiceException.class)
                 .isThrownBy(() -> timelineService.findByName("myName"))

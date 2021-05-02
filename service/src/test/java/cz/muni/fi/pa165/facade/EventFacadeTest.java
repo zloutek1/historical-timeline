@@ -9,7 +9,6 @@ import cz.muni.fi.pa165.entity.Timeline;
 import cz.muni.fi.pa165.service.BeanMappingService;
 import cz.muni.fi.pa165.service.EventService;
 import cz.muni.fi.pa165.service.TimelineService;
-import org.dozer.classmap.CopyByReference;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -24,13 +23,14 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyCollection;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/**
+ * @author Eva Krajíková
+ */
 
 @ContextConfiguration(classes = ServiceConfiguration.class)
 public class EventFacadeTest extends AbstractTestNGSpringContextTests {

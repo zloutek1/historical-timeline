@@ -7,7 +7,7 @@ import cz.muni.fi.pa165.exceptions.ServiceException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.dao.RecoverableDataAccessException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.AfterMethod;
@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertThrows;
@@ -56,7 +57,7 @@ public class CommentServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void create_givenInvalidComment_throws() {
-        doThrow(RecoverableDataAccessException.class).when(commentDao).create(commentInvalid);
+        doThrow(mock(DataAccessException.class)).when(commentDao).create(commentInvalid);
         assertThrows(ServiceException.class, () -> commentService.create(commentInvalid));
     }
 

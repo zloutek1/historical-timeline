@@ -39,7 +39,7 @@ public class TimelineFacadeImpl implements TimelineFacade {
     private BeanMappingService beanMappingService;
 
     @Override
-    public Long create(TimelineCreateDTO timeline) {
+    public Long createTimeline(TimelineCreateDTO timeline) {
         StudyGroup studyGroup = studyGroupService.findById(timeline.getStudyGroupId())
                 .orElseThrow(() ->
                         new ServiceException("Study group with id " + timeline.getStudyGroupId() + " does not exist"));
@@ -51,7 +51,7 @@ public class TimelineFacadeImpl implements TimelineFacade {
     }
 
     @Override
-    public void update(TimelineUpdateDTO timelineDto) {
+    public void updateTimeline(TimelineUpdateDTO timelineDto) {
         Timeline timeline = timelineService.findById(timelineDto.getId())
                 .orElseThrow(() -> new ServiceException("No timeline with id " + timelineDto.getId() + " found."));
         if (timelineDto.getName() != null) {
@@ -66,26 +66,10 @@ public class TimelineFacadeImpl implements TimelineFacade {
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteTimeline(Long id) {
         Timeline timeline = timelineService.findById(id)
                 .orElseThrow(() -> new ServiceException("No timeline with id " + id + " found."));
         timelineService.delete(timeline);
-    }
-
-    @Override
-    public void setStudyGroup(Long timelineId, Long studyGroupId) {
-        Timeline timeline = timelineService.findById(timelineId)
-                .orElseThrow(() -> new ServiceException("No timeline with id " + timelineId + " found."));
-        StudyGroup studyGroup = studyGroupService.findById(timelineId)
-                .orElseThrow(() -> new ServiceException("No study group with id " + studyGroupId + " found."));
-        timeline.setStudyGroup(studyGroup);
-    }
-
-    @Override
-    public void removeStudyGroup(Long timelineId) {
-        Timeline timeline = timelineService.findById(timelineId)
-                .orElseThrow(() -> new ServiceException("No timeline with id " + timelineId + " found."));
-        timeline.setStudyGroup(null);
     }
 
     @Override

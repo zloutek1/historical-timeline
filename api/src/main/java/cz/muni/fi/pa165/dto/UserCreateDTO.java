@@ -22,8 +22,4 @@ public class UserCreateDTO {
     @NotNull
     @Size(min = 3, max = 50)
     private String lastName;
-
-    @NotNull
-    @Size(min = 40, max = 512)
-    private String passwordHash;
 }

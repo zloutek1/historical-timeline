@@ -81,6 +81,10 @@ public class UserFacadeImpl implements UserFacade {
     @Override
     public Optional<UserDTO> findUserByID(Long id) {
         Optional<User> user = userService.findUserByID(id);
+        if (user.isEmpty()) {
+            return Optional.empty();
+        }
+
         UserDTO mappedUser = beanMappingService.mapTo(user.get(), UserDTO.class);
         return Optional.of(mappedUser);
     }
@@ -88,6 +92,9 @@ public class UserFacadeImpl implements UserFacade {
     @Override
     public Optional<UserDTO> findUserByEmail(String email) {
         Optional<User> user = userService.findUserByEmail(email);
+        if (user.isEmpty()) {
+            return Optional.empty();
+        }
         UserDTO mappedUser = beanMappingService.mapTo(user.get(), UserDTO.class);
         return Optional.of(mappedUser);
     }

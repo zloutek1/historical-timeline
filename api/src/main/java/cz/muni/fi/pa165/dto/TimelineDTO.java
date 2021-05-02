@@ -1,13 +1,11 @@
 package cz.muni.fi.pa165.dto;
 
-import jdk.jfr.Event;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.stream.events.Comment;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -28,9 +26,9 @@ public class TimelineDTO {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<Comment> comments;
+    private List<CommentDTO> comments;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<Event> events;
+    private List<EventDTO> events;
 }

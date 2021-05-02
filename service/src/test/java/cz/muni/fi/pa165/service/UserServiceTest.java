@@ -58,7 +58,7 @@ public class UserServiceTest extends AbstractTestNGSpringContextTests {
     private User user3;
     private final List<User> users = new ArrayList<>();
     private StudyGroup studyGroup;
-
+    
     @BeforeMethod
     public void setup() {
         closeable = MockitoAnnotations.openMocks(this);
@@ -134,6 +134,31 @@ public class UserServiceTest extends AbstractTestNGSpringContextTests {
                 "$argon2id$v=19$m=4096,t=3,p=1$aQyc9w0FI4gtY8+iGWOA2g$hAWvXNwkMeCHESg7kTyt8hratocHX55GRHW5v1PTQgQ",
                 UserRole.STUDENT);
         assertFalse(userService.authenticate(user, "wrong_password"));
+    }
+
+    @Test
+    public void changePassword_givenValidPassword_CallsUpdate() {
+
+        when(userDao.findById(user1.getId())).thenReturn(ofNullable(user1));
+        when(studyGroupDao.findById(studyGroup.getId())).thenReturn(ofNullable(studyGroup));
+
+        userService.changeUserPassword(user1.getId(),"some_new_password");
+
+        verify(userDao).update(user1);
+    }
+
+
+    @Test
+    public void update_givenProperParams_callsUpdate() {
+        var updateUser = new User();
+        var newName = "Ladislav";
+        updateUser.setFirstName(newName);
+
+        when(userDao.findById(user1.getId())).thenReturn(ofNullable(user1));
+
+        userService.updateUser(user1.getId(), updateUser);
+
+        verify(userDao).update(user1);
     }
 
     @Test

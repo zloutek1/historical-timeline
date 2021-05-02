@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Facade for work with comments
+ * Facade for work with user
  *
  * @author David Sevcik
  */

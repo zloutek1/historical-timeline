@@ -1,11 +1,8 @@
 package cz.muni.fi.pa165.dto;
 
 import lombok.Data;
-import lombok.ToString;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Eva Krajíková
@@ -19,6 +16,4 @@ public class EventDTO {
     private String location;
     private String description;
     private String imageIdentifier;
-    @ToString.Exclude
-    private final List<TimelineDTO> timelines = new ArrayList<>();
 }

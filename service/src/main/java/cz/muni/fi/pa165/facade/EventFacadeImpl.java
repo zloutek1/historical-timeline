@@ -8,7 +8,6 @@ import cz.muni.fi.pa165.entity.Timeline;
 import cz.muni.fi.pa165.service.BeanMappingService;
 import cz.muni.fi.pa165.service.EventService;
 import cz.muni.fi.pa165.service.TimelineService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -16,7 +15,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author Eva Krajíková
@@ -31,38 +29,30 @@ public class EventFacadeImpl implements EventFacade{
     @Inject
     private TimelineService timelineService;
 
-    @Autowired
+    @Inject
     private BeanMappingService beanMappingService;
 
     @Override
-    public void createEvent(EventCreateDTO event) {
+    public Long createEvent(EventCreateDTO event) {
         Event mappedEvent = beanMappingService.mapTo(event, Event.class);
         eventService.create(mappedEvent);
+        return mappedEvent.getId();
     }
 
     @Override
-    public void setName(Long eventId, EventCreateDTO name) {
-        getEvent(eventId).setName(name.getName());
+    public void updateEvent(EventDTO updatedEvent) {
+        Event event = getEvent(updatedEvent.getId());
+
+        event.setName(updatedEvent.getName());
+        event.setDate(updatedEvent.getDate());
+        event.setLocation(updatedEvent.getLocation());
+        event.setDescription(updatedEvent.getDescription());
+        event.setImageIdentifier(updatedEvent.getImageIdentifier());
     }
 
     @Override
-    public void setDate(Long eventId, LocalDate date) {
-        getEvent(eventId).setDate(date);
-    }
-
-    @Override
-    public void setLocation(Long eventId, String location) {
-        getEvent(eventId).setLocation(location);
-    }
-
-    @Override
-    public void setDescription(Long eventId, String description) {
-        getEvent(eventId).setDescription(description);
-    }
-
-    @Override
-    public void setImageIdentifier(Long eventId, String imageIdentifier) {
-        getEvent(eventId).setImageIdentifier(imageIdentifier);
+    public void deleteEvent(Long eventId){
+        eventService.delete(getEvent(eventId));
     }
 
     @Override
@@ -72,11 +62,11 @@ public class EventFacadeImpl implements EventFacade{
 
     @Override
     public void removeTimeline(Long eventId, Long timelineId) {
-        throw new UnsupportedOperationException();
+        getEvent(eventId).removeTimeline(getTimeline(timelineId));
     }
 
     private Event getEvent(Long eventId){
-        Optional<Event> event = eventService.getById(eventId);
+        Optional<Event> event = eventService.findById(eventId);
 
         if (event.isEmpty()){
             throw new IllegalArgumentException("Could not find Event by ID: " + eventId);
@@ -96,8 +86,8 @@ public class EventFacadeImpl implements EventFacade{
     }
 
     @Override
-    public Optional<EventDTO> getById(Long eventId) {
-        Optional<Event> event = eventService.getById(eventId);
+    public Optional<EventDTO> findById(Long eventId) {
+        Optional<Event> event = eventService.findById(eventId);
 
         if (event.isEmpty()) {
             return Optional.empty();
@@ -108,8 +98,8 @@ public class EventFacadeImpl implements EventFacade{
     }
 
     @Override
-    public Optional<EventDTO> getByName(String name) {
-        Optional<Event> event = eventService.getByName(name);
+    public Optional<EventDTO> findByName(String name) {
+        Optional<Event> event = eventService.findByName(name);
 
         if (event.isEmpty()) {
             return Optional.empty();
@@ -121,54 +111,33 @@ public class EventFacadeImpl implements EventFacade{
     }
 
     @Override
-    public List<EventDTO> getAllEvents() {
-        return eventService
-                .getAllEvents()
-                .stream()
-                .map(event -> beanMappingService.mapTo(event, EventDTO.class))
-                .collect(Collectors.toList());
+    public List<EventDTO> findAllInRange(LocalDate since, LocalDate to) {
+        return beanMappingService.mapTo(eventService.findAllInRange(since, to), EventDTO.class);
     }
 
     @Override
-    public List<EventDTO> getAllInRange(LocalDate since, LocalDate to) {
-        return eventService
-                .getAllInRange(since, to)
-                .stream()
-                .map(event -> beanMappingService.mapTo(event, EventDTO.class))
-                .collect(Collectors.toList());
+    public List<EventDTO> findByLocation(String location) {
+        return beanMappingService.mapTo(eventService.findByLocation(location), EventDTO.class);
     }
 
     @Override
-    public List<EventDTO> getByLocation(String location) {
-        return eventService
-                .getByLocation(location)
-                .stream()
-                .map(event -> beanMappingService.mapTo(event, EventDTO.class))
-                .collect(Collectors.toList());
+    public List<EventDTO> findByDescription(String description) {
+        return beanMappingService.mapTo(eventService.findByDescription(description), EventDTO.class);
     }
 
     @Override
-    public List<EventDTO> getByDescription(String description) {
-        return eventService
-                .getByDescription(description)
-                .stream()
-                .map(event -> beanMappingService.mapTo(event, EventDTO.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TimelineDTO> getTimelines(Long eventId) {
-        Optional<Event> event = eventService.getById(eventId);
+    public List<TimelineDTO> findTimelines(Long eventId) {
+        Optional<Event> event = eventService.findById(eventId);
 
         if (event.isEmpty()){
             return new ArrayList<>();
         }
 
-        return event
-                .get()
-                .getTimelines()
-                .stream()
-                .map(timeline -> beanMappingService.mapTo(timeline, TimelineDTO.class))
-                .collect(Collectors.toList());
+        return beanMappingService.mapTo(event.get().getTimelines(), TimelineDTO.class);
+    }
+
+    @Override
+    public List<EventDTO> findAllEvents() {
+        return beanMappingService.mapTo(eventService.findAllEvents(), EventDTO.class);
     }
 }

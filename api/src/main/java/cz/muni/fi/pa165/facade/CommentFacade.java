@@ -7,11 +7,34 @@ import cz.muni.fi.pa165.dto.CommentUpdateDTO;
 import java.util.Optional;
 
 /**
+ * Facade for working with comments
+ *
  * @author Ondřej Machala
  */
 public interface CommentFacade {
-    Long createComment(CommentCreateDTO comment);
-    void updateComment(CommentUpdateDTO comment);
+    /**
+     * Stores a comment
+     * @param commentCreate information regarding comment creation
+     * @return id of new comment
+     */
+    Long createComment(CommentCreateDTO commentCreate);
+
+    /**
+     * Updates a comment
+     * @param commentUpdate information regarding comment update
+     */
+    void updateComment(CommentUpdateDTO commentUpdate);
+
+    /**
+     * Deletes a comment
+     * @param id of comment to delete
+     */
     void deleteComment(Long id);
+
+    /**
+     * Fetches comment by it's id
+     * @param id of comment
+     * @return comment if stored, else empty value
+     */
     Optional<CommentDTO> findById(Long id);
 }

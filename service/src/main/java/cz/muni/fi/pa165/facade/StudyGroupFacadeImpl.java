@@ -13,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import java.util.Optional;
 
+/**
+ * @author Ondřej Machala
+ */
 @Service
 @Transactional
 public class StudyGroupFacadeImpl implements StudyGroupFacade {

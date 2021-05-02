@@ -118,7 +118,6 @@ public class CommentFacadeTest extends AbstractTestNGSpringContextTests {
         commentUpdateDTO.setText("Update");
         when(commentService.findById(commentEntity.getId())).thenReturn(Optional.of(commentEntity));
         commentFacade.updateComment(commentUpdateDTO);
-        verify(commentService).update(commentEntity);
         assertThat(commentEntity.getText()).isEqualTo("Update");
     }
 

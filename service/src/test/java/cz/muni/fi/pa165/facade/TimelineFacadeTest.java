@@ -49,7 +49,7 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
     private BeanMappingService beanMappingService;
 
     @InjectMocks
-    private TimelineFacadeImpl timelineFacade = new TimelineFacadeImpl();
+    private final TimelineFacadeImpl timelineFacade = new TimelineFacadeImpl();
 
     private AutoCloseable closeable;
 
@@ -80,16 +80,26 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void create_givenValidDTO_callsCreateAndReturnsValidId() {
+    public void create_givenValidDTO_createsTimeline() {
+        var studyGroup = new StudyGroup("Study group name");
+        studyGroup.setId(555L);
+
         var createDTO = new TimelineCreateDTO();
         createDTO.setName("Timeline name");
         createDTO.setFromDate(LocalDate.of(2020, 2, 10));
         createDTO.setToDate(LocalDate.of(2020, 3, 15));
+        createDTO.setStudyGroupId(studyGroup.getId());
 
+        when(studyGroupService.findById(555L)).thenReturn(Optional.of(studyGroup));
         when(beanMappingService.mapTo(createDTO, Timeline.class)).thenReturn(timeline);
 
         timelineFacade.create(createDTO);
+
+        timeline.setStudyGroup(studyGroup);
         verify(timelineService).create(timeline);
+
+        assertThat(studyGroup.getTimelines()).containsExactly(timeline);
+
     }
 
     @Test
@@ -123,12 +133,6 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
         when(timelineService.findById(anyLong())).thenReturn(Optional.of(timeline));
         when(studyGroupService.findById(anyLong())).thenReturn(Optional.of(studyGroup));
 
-        var expected = new Timeline(
-                "Timeline name",
-                LocalDate.of(2020, 2, 10),
-                LocalDate.of(2020, 3, 15),
-                studyGroup
-        );
         timelineFacade.setStudyGroup(timeline.getId(), studyGroup.getId());
         assertThat(timeline.getStudyGroup()).isEqualTo(studyGroup);
     }

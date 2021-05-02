@@ -40,7 +40,12 @@ public class TimelineFacadeImpl implements TimelineFacade {
 
     @Override
     public Long create(TimelineCreateDTO timeline) {
+        StudyGroup studyGroup = studyGroupService.findById(timeline.getStudyGroupId())
+                .orElseThrow(() ->
+                        new ServiceException("Study group with id " + timeline.getStudyGroupId() + " does not exist"));
         Timeline mappedTimeline = beanMappingService.mapTo(timeline, Timeline.class);
+        mappedTimeline.setStudyGroup(studyGroup);
+        studyGroup.addTimeline(mappedTimeline);
         timelineService.create(mappedTimeline);
         return mappedTimeline.getId();
     }

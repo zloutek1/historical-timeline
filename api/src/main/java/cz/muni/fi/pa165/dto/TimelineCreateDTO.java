@@ -16,4 +16,5 @@ public class TimelineCreateDTO {
     private String name;
     private LocalDate fromDate;
     private LocalDate toDate;
+    private Long studyGroupId;
 }

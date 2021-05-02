@@ -7,7 +7,7 @@ import cz.muni.fi.pa165.exceptions.ServiceException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.dao.RecoverableDataAccessException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.AfterMethod;
@@ -19,6 +19,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertThrows;
@@ -55,7 +56,7 @@ public class StudyGroupServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void create_givenDaoFails_throwsServiceException() {
-        doThrow(RecoverableDataAccessException.class).when(studyGroupDao).create(studyGroup);
+        doThrow(mock(DataAccessException.class)).when(studyGroupDao).create(studyGroup);
         assertThrows(ServiceException.class, () -> studyGroupService.create(studyGroup));
     }
 

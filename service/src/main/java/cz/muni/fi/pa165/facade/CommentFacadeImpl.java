@@ -11,6 +11,7 @@ import cz.muni.fi.pa165.service.BeanMappingService;
 import cz.muni.fi.pa165.service.CommentService;
 import cz.muni.fi.pa165.service.TimelineService;
 import cz.muni.fi.pa165.service.UserService;
+import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -38,40 +39,36 @@ public class CommentFacadeImpl implements CommentFacade {
     private BeanMappingService beanMappingService;
 
     @Override
-    public Long createComment(CommentCreateDTO comment) {
-        Optional<User> user = userService.findUserByID(comment.getUserId());
-        if (user.isEmpty())
-            throw new ServiceException("User with id " + comment.getUserId() + " does not exist");
-        Optional<Timeline> timeline = timelineService.findById(comment.getTimelineId());
-        if (timeline.isEmpty())
-            throw new ServiceException("Timeline with id " + comment.getTimelineId() + " does not exist");
-        Comment newComment = new Comment(comment.getText(), LocalDateTime.now());
-        newComment.setAuthor(user.get());
-        newComment.setTimeline(timeline.get());
-        commentService.create(newComment);
-        return newComment.getId();
+    public Long createComment(@NonNull CommentCreateDTO commentCreate) {
+        User user = userService.findUserByID(commentCreate.getUserId())
+                .orElseThrow(() ->
+                        new ServiceException("User with id " + commentCreate.getUserId() + " does not exist"));
+        Timeline timeline = timelineService.findById(commentCreate.getTimelineId())
+                .orElseThrow(() ->
+                        new ServiceException("Timeline with id " + commentCreate.getTimelineId() + " does not exist"));
+        Comment comment = new Comment(commentCreate.getText(), LocalDateTime.now());
+        comment.setAuthor(user);
+        comment.setTimeline(timeline);
+        commentService.create(comment);
+        return comment.getId();
     }
 
     @Override
-    public void updateComment(CommentUpdateDTO comment) {
-        Optional<Comment> optionalComment = commentService.findById(comment.getId());
-        if (optionalComment.isEmpty())
-            throw new ServiceException("Comment with id " + comment.getId() + " does not exist");
-        Comment commentEntity = optionalComment.get();
-        commentEntity.setText(comment.getText());
-        commentService.update(commentEntity);
+    public void updateComment(@NonNull CommentUpdateDTO commentUpdate) {
+        Comment comment= commentService.findById(commentUpdate.getId())
+                .orElseThrow(() -> new ServiceException("Comment with id " + commentUpdate.getId() + " does not exist"));
+        comment.setText(commentUpdate.getText());
     }
 
     @Override
-    public void deleteComment(Long id) {
-        Optional<Comment> comment = commentService.findById(id);
-        if (comment.isEmpty())
-            throw new ServiceException("Comment with id " + id + " does not exist");
-        commentService.delete(comment.get());
+    public void deleteComment(@NonNull Long id) {
+        Comment comment = commentService.findById(id)
+                .orElseThrow(() -> new ServiceException("Comment with id " + id + " does not exist"));
+        commentService.delete(comment);
     }
 
     @Override
-    public Optional<CommentDTO> findById(Long id) {
+    public Optional<CommentDTO> findById(@NonNull Long id) {
         var comment = commentService.findById(id);
         if (comment.isEmpty()) return Optional.empty();
         var commentDto = beanMappingService.mapTo(comment.get(), CommentDTO.class);

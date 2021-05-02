@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Ondřej Machala
+ */
 @Service
 public class StudyGroupServiceImpl implements StudyGroupService {
 

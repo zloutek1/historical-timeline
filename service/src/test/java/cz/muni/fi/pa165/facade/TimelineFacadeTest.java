@@ -161,7 +161,7 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
                 null);
 
         when(timelineService.findById(anyLong())).thenReturn(Optional.of(timeline));
-        when(eventService.getById(anyLong())).thenReturn(Optional.of(event));
+        when(eventService.findById(anyLong())).thenReturn(Optional.of(event));
 
         timelineFacade.addEvent(timeline.getId(), event.getId());
         assertThat(timeline.getEvents()).contains(event);
@@ -187,7 +187,7 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
         timelineWithEvent.addEvent(event);
 
         when(timelineService.findById(anyLong())).thenReturn(Optional.of(timelineWithEvent));
-        when(eventService.getById(anyLong())).thenReturn(Optional.of(event));
+        when(eventService.findById(anyLong())).thenReturn(Optional.of(event));
 
         timelineFacade.removeEvent(timelineWithEvent.getId(), event.getId());
         assertThat(timelineWithEvent.getEvents()).doesNotContain(event);

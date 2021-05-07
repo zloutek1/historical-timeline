@@ -27,6 +27,7 @@
         <module>persistence</module>
         <module>api</module>
         <module>service</module>
+        <module>rest</module>
     </modules>
 
     <dependencyManagement>
@@ -116,6 +117,23 @@
                             </goals>
                         </execution>
                     </executions>
+                </plugin>
+
+                <!-- embedded Tomcat 9 -->
+                <plugin>
+                    <groupId>org.codehaus.cargo</groupId>
+                    <artifactId>cargo-maven3-plugin</artifactId>
+                    <version>1.9.1</version>
+                    <configuration>
+                        <container>
+                            <containerId>tomcat9x</containerId>
+                            <artifactInstaller>
+                                <groupId>org.apache.tomcat</groupId>
+                                <artifactId>tomcat</artifactId>
+                                <version>${tomcat.version}</version>
+                            </artifactInstaller>
+                        </container>
+                    </configuration>
                 </plugin>
 
                 <!-- checkstyle -->

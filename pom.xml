@@ -27,8 +27,10 @@
         <module>persistence</module>
         <module>api</module>
         <module>service</module>
+        <module>data-population</module>
         <module>rest</module>
         <module>spring-mvc</module>
+        <module>data-population</module>
     </modules>
 
     <dependencyManagement>

@@ -1,8 +1,6 @@
 package cz.muni.fi.pa165.mvc.config;
 
 import cz.muni.fi.pa165.config.ServiceConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

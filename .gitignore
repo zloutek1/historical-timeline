@@ -1,5 +1,5 @@
 *.iml
 /.idea/
-*/target/*
+**/target/*
 .attach_pid*
 *.log

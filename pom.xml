@@ -27,6 +27,8 @@
         <module>persistence</module>
         <module>api</module>
         <module>service</module>
+        <module>rest</module>
+        <module>spring-mvc</module>
     </modules>
 
     <dependencyManagement>
@@ -69,6 +71,17 @@
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-core</artifactId>
                 <version>2.14.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.taglibs</groupId>
+                <artifactId>taglibs-standard-impl</artifactId>
+                <version>1.2.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.taglibs</groupId>
+                <artifactId>taglibs-standard-spec</artifactId>
+                <version>1.2.5</version>
             </dependency>
 
             <dependency>
@@ -116,6 +129,23 @@
                             </goals>
                         </execution>
                     </executions>
+                </plugin>
+
+                <!-- embedded Tomcat 9 -->
+                <plugin>
+                    <groupId>org.codehaus.cargo</groupId>
+                    <artifactId>cargo-maven3-plugin</artifactId>
+                    <version>1.9.1</version>
+                    <configuration>
+                        <container>
+                            <containerId>tomcat9x</containerId>
+                            <artifactInstaller>
+                                <groupId>org.apache.tomcat</groupId>
+                                <artifactId>tomcat</artifactId>
+                                <version>${tomcat.version}</version>
+                            </artifactInstaller>
+                        </container>
+                    </configuration>
                 </plugin>
 
                 <!-- checkstyle -->

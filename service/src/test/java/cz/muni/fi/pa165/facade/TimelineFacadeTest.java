@@ -104,7 +104,7 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
     @Test
     public void update_givenValidDTO_setsNonNullParametersAndCallsUpdate() {
         var updateDTO = new TimelineUpdateDTO();
-        updateDTO.setId(1L);
+        updateDTO.setId(timeline.getId());
         updateDTO.setName("New timeline name");
         updateDTO.setFromDate(LocalDate.of(2011, 5, 13));
 
@@ -113,10 +113,11 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
                 LocalDate.of(2011, 5, 13),
                 LocalDate.of(2020, 3, 15),
                 null);
+        expected.setId(timeline.getId());
 
-        when(timelineService.findById(1L)).thenReturn(Optional.of(timeline));
+        when(timelineService.findById(timeline.getId())).thenReturn(Optional.of(timeline));
         timelineFacade.updateTimeline(updateDTO);
-        assertThat(timeline).isEqualTo(expected);
+        assertThat(timeline).usingRecursiveComparison().isEqualTo(expected);
     }
 
     @Test

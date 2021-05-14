@@ -8,6 +8,7 @@ import cz.fi.muni.pa165.RootWebContext;
 import cz.muni.fi.pa165.dto.TimelineCreateDTO;
 import cz.muni.fi.pa165.dto.TimelineDTO;
 import cz.muni.fi.pa165.dto.TimelineUpdateDTO;
+import cz.muni.fi.pa165.exceptions.ServiceException;
 import cz.muni.fi.pa165.facade.TimelineFacade;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -27,11 +28,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -74,11 +75,14 @@ public class TimelineControllerTest extends AbstractTestNGSpringContextTests {
     @Test
     public void create_valid_creates() throws Exception {
         TimelineCreateDTO timeline = new TimelineCreateDTO();
-        timeline.setName("T");
+        timeline.setName("T1");
         timeline.setFromDate(LocalDate.of(2000,5,28));
         timeline.setToDate(LocalDate.of(2000,6,29));
 
-        doReturn(1L).when(timelineFacade).createTimeline(any(TimelineCreateDTO.class));
+        doReturn(1L)
+                .when(timelineFacade).createTimeline(any(TimelineCreateDTO.class));
+        doReturn(Optional.of(twoTimelines().get(0)))
+                .when(timelineFacade).findById(1L);
 
         String json = convertToJson(timeline);
 
@@ -86,13 +90,25 @@ public class TimelineControllerTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
+    public void create_invalid_throws() throws Exception {
+        doThrow(new ServiceException("Resource already exists"))
+                .when(timelineFacade).createTimeline(any(TimelineCreateDTO.class));
+
+        mockMvc.perform(post("/timelines/create")).andExpect(status().isUnsupportedMediaType());
+    }
+
+    @Test
     public void update_valid_updates() throws Exception {
         TimelineUpdateDTO uTimeline = new TimelineUpdateDTO();
-        uTimeline.setName("T");
+        uTimeline.setName("T1");
         uTimeline.setFromDate(LocalDate.of(2000,5,28));
         uTimeline.setToDate(LocalDate.of(2000,6,29));
+        uTimeline.setId(1L);
 
-        doNothing().when(timelineFacade).updateTimeline(any(TimelineUpdateDTO.class));
+        doNothing()
+                .when(timelineFacade).updateTimeline(any(TimelineUpdateDTO.class));
+        doReturn(Optional.of(twoTimelines().get(0)))
+                .when(timelineFacade).findById(1L);
 
         String json = convertToJson(uTimeline);
 
@@ -100,15 +116,33 @@ public class TimelineControllerTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
+    public void update_invalid_throws() throws Exception {
+        doThrow(new ServiceException("Resource not modified"))
+                .when(timelineFacade).updateTimeline(any(TimelineUpdateDTO.class));
+
+        mockMvc.perform(put("/timelines/update")).andExpect(status().isUnsupportedMediaType());
+    }
+
+    @Test
     public void delete_valid_deletes() throws Exception {
-        doNothing().when(timelineFacade).deleteTimeline(anyLong());
+        doNothing()
+                .when(timelineFacade).deleteTimeline(anyLong());
 
         mockMvc.perform(delete("/timelines/1")).andExpect(status().isOk());
     }
 
     @Test
+    public void delete_invalid_throws() throws Exception {
+        doThrow(new ServiceException("Resource not found"))
+                .when(timelineFacade).deleteTimeline(anyLong());
+
+        mockMvc.perform(delete("/timelines/1")).andExpect(status().isNotFound());
+    }
+
+    @Test
     public void findAll_findsAll() throws Exception {
-        doReturn(twoTimelines()).when(timelineFacade).findAll();
+        doReturn(twoTimelines())
+                .when(timelineFacade).findAll();
 
         mockMvc.perform(get("/timelines"))
                .andExpect(status().isOk())
@@ -146,6 +180,15 @@ public class TimelineControllerTest extends AbstractTestNGSpringContextTests {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.name").value("T2"));
+    }
+
+    @Test
+    public void findById_invalidId_findsTimeline() throws Exception {
+        doReturn(Optional.empty())
+                .when(timelineFacade).findById(1L);
+
+        mockMvc.perform(get("/timelines/1"))
+                .andExpect(status().is4xxClientError());
     }
 
     @Test

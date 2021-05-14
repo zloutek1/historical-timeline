@@ -1,9 +1,14 @@
 package cz.fi.muni.pa165.rest.controllers;
 
+import cz.fi.muni.pa165.rest.exceptions.InvalidParameterException;
+import cz.fi.muni.pa165.rest.exceptions.ResourceAlreadyExistingException;
+import cz.fi.muni.pa165.rest.exceptions.ResourceNotFoundException;
+import cz.fi.muni.pa165.rest.exceptions.ResourceNotModifiedException;
 import cz.muni.fi.pa165.dto.EventDTO;
 import cz.muni.fi.pa165.dto.TimelineCreateDTO;
 import cz.muni.fi.pa165.dto.TimelineDTO;
 import cz.muni.fi.pa165.dto.TimelineUpdateDTO;
+import cz.muni.fi.pa165.exceptions.ServiceException;
 import cz.muni.fi.pa165.facade.TimelineFacade;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
@@ -28,31 +33,51 @@ public class TimelineController {
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public final TimelineDTO createTimeline(@RequestBody TimelineCreateDTO timeline){
-        Long id = timelineFacade.createTimeline(timeline);
-        return timelineFacade.findById(id).orElse(null);
+        try {
+            Long id = timelineFacade.createTimeline(timeline);
+            return timelineFacade.findById(id).orElseThrow(ResourceNotFoundException::new);
+        } catch (ServiceException e){
+            throw new ResourceAlreadyExistingException();
+        }
     }
 
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public final TimelineDTO updateTimeline(@RequestBody TimelineUpdateDTO timeline){
-        timelineFacade.updateTimeline(timeline);
-        return timelineFacade.findById(timeline.getId()).orElse(null);
+        try {
+            timelineFacade.updateTimeline(timeline);
+            return timelineFacade.findById(timeline.getId()).orElseThrow(ResourceNotFoundException::new);
+        } catch (ServiceException e){
+            throw new ResourceNotModifiedException();
+        }
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public final void deleteTimeline(@PathVariable Long id){
-        timelineFacade.deleteTimeline(id);
+        try {
+            timelineFacade.deleteTimeline(id);
+        } catch (ServiceException e){
+            throw new ResourceNotFoundException();
+        }
     }
 
     @PostMapping(value = "/{timelineId}/event", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public final TimelineDTO addEvent(@PathVariable Long timelineId, @RequestBody EventDTO event){
-        timelineFacade.addEvent(timelineId, event.getId());
-        return timelineFacade.findById(timelineId).orElse(null);
+        try {
+            timelineFacade.addEvent(timelineId, event.getId());
+            return timelineFacade.findById(timelineId).orElseThrow(ResourceNotFoundException::new);
+        } catch (ServiceException e){
+            throw new InvalidParameterException();
+        }
     }
 
     @DeleteMapping(value = "/{timelineId}/event/{eventId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public final TimelineDTO removeEvent(@PathVariable Long timelineId, @PathVariable Long eventId){
-        timelineFacade.removeEvent(timelineId, eventId);
-        return timelineFacade.findById(timelineId).orElse(null);
+        try {
+            timelineFacade.removeEvent(timelineId, eventId);
+            return timelineFacade.findById(timelineId).orElseThrow(ResourceNotFoundException::new);
+        } catch (ServiceException e){
+            throw new InvalidParameterException();
+        }
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -67,12 +92,12 @@ public class TimelineController {
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public final TimelineDTO findById(@PathVariable Long id){
-        return timelineFacade.findById(id).orElse(null);
+        return timelineFacade.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
     @GetMapping(value = "/named/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
     public final TimelineDTO findByName(@PathVariable("name") String name){
-        return timelineFacade.findByName(name).orElse(null);
+        return timelineFacade.findByName(name).orElseThrow(ResourceNotFoundException::new);
     }
 
 

@@ -48,11 +48,8 @@ public class PopulationFacadeTest extends AbstractTestNGSpringContextTests {
         assertThat(studyGroupDao.findAll()).hasSize(2);
         assertThat(timelineDao.findAll()).hasSize(7);
         assertThat(commentDao.findAll()).hasSize(0);
-        assertThat(eventDao.findAll()).hasSize(18);
-    }
+        assertThat(eventDao.findAll()).hasSize(17);
 
-    @Test
-    public void populate_insertsOneAdministrator() {
         var users = userService.findAllUsers();
         var admins = users.stream().filter(u -> u.getRole() == UserRole.ADMINISTRATOR).collect(Collectors.toList());
         assertThat(admins).hasSize(1);

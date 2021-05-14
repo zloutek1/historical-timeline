@@ -6,12 +6,12 @@ import cz.muni.fi.pa165.entity.StudyGroup;
 import cz.muni.fi.pa165.entity.User;
 import cz.muni.fi.pa165.exceptions.ServiceException;
 import lombok.NonNull;
-import org.dozer.inject.Inject;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 

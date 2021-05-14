@@ -6,10 +6,10 @@ import cz.muni.fi.pa165.entity.Event;
 import cz.muni.fi.pa165.entity.Timeline;
 import cz.muni.fi.pa165.exceptions.ServiceException;
 import lombok.NonNull;
-import org.dozer.inject.Inject;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;

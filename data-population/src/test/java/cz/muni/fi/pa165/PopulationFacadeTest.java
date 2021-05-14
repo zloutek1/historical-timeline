@@ -6,13 +6,13 @@ import cz.muni.fi.pa165.dao.StudyGroupDao;
 import cz.muni.fi.pa165.dao.TimelineDao;
 import cz.muni.fi.pa165.dto.UserRole;
 import cz.muni.fi.pa165.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.testng.annotations.Test;
 
+import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.stream.Collectors;
 
@@ -24,23 +24,20 @@ import static org.testng.Assert.assertTrue;
 @Transactional
 public class PopulationFacadeTest extends AbstractTestNGSpringContextTests {
 
-    @Autowired
+    @Inject
     private UserService userService;
 
-    @Autowired
+    @Inject
     private StudyGroupDao studyGroupDao;
 
-    @Autowired
+    @Inject
     private TimelineDao timelineDao;
 
-    @Autowired
+    @Inject
     private CommentDao commentDao;
 
-    @Autowired
+    @Inject
     private EventDao eventDao;
-
-    @Autowired
-    public PopulationFacade populationFacade;
 
     @Test
     public void populate_insertsCorrectSizes() {

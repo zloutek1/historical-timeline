@@ -11,9 +11,9 @@ import cz.muni.fi.pa165.service.EventService;
 import cz.muni.fi.pa165.service.StudyGroupService;
 import cz.muni.fi.pa165.service.TimelineService;
 import cz.muni.fi.pa165.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,19 +22,19 @@ import java.time.LocalDateTime;
 @Transactional
 public class PopulationFacadeImpl implements PopulationFacade {
 
-    @Autowired
+    @Inject
     private UserService userService;
 
-    @Autowired
+    @Inject
     private StudyGroupService studyGroupService;
 
-    @Autowired
+    @Inject
     private TimelineService timelineService;
 
-    @Autowired
+    @Inject
     private CommentService commentService;
 
-    @Autowired
+    @Inject
     private EventService eventService;
 
     @Override

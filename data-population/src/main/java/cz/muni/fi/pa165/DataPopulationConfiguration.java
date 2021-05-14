@@ -1,3 +1,5 @@
+package cz.muni.fi.pa165;
+
 import cz.muni.fi.pa165.config.ServiceConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;

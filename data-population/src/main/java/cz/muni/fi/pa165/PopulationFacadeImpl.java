@@ -1,3 +1,5 @@
+package cz.muni.fi.pa165;
+
 import cz.muni.fi.pa165.dto.UserRole;
 import cz.muni.fi.pa165.entity.Comment;
 import cz.muni.fi.pa165.entity.Event;

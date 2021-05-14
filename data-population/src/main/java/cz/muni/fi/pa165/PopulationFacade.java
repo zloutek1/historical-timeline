@@ -1,4 +1,4 @@
-
+package cz.muni.fi.pa165;
 
 /**
  * @author Tomáš Ljutenko

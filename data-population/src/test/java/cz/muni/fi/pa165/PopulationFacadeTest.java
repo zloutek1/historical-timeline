@@ -1,3 +1,5 @@
+package cz.muni.fi.pa165;
+
 import cz.muni.fi.pa165.dao.CommentDao;
 import cz.muni.fi.pa165.dao.EventDao;
 import cz.muni.fi.pa165.dao.StudyGroupDao;
@@ -12,7 +14,6 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 import org.testng.annotations.Test;
 
 import javax.transaction.Transactional;
-
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;

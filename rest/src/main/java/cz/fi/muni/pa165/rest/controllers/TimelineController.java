@@ -1,10 +1,8 @@
 package cz.fi.muni.pa165.rest.controllers;
 
-import cz.fi.muni.pa165.rest.exceptions.InvalidParameterException;
 import cz.fi.muni.pa165.rest.exceptions.ResourceAlreadyExistingException;
 import cz.fi.muni.pa165.rest.exceptions.ResourceNotFoundException;
 import cz.fi.muni.pa165.rest.exceptions.ResourceNotModifiedException;
-import cz.muni.fi.pa165.dto.EventDTO;
 import cz.muni.fi.pa165.dto.TimelineCreateDTO;
 import cz.muni.fi.pa165.dto.TimelineDTO;
 import cz.muni.fi.pa165.dto.TimelineUpdateDTO;
@@ -57,26 +55,6 @@ public class TimelineController {
             timelineFacade.deleteTimeline(id);
         } catch (ServiceException e){
             throw new ResourceNotFoundException();
-        }
-    }
-
-    @PostMapping(value = "/{timelineId}/event", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final TimelineDTO addEvent(@PathVariable Long timelineId, @RequestBody EventDTO event){
-        try {
-            timelineFacade.addEvent(timelineId, event.getId());
-            return timelineFacade.findById(timelineId).orElseThrow(ResourceNotFoundException::new);
-        } catch (ServiceException e){
-            throw new InvalidParameterException();
-        }
-    }
-
-    @DeleteMapping(value = "/{timelineId}/event/{eventId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final TimelineDTO removeEvent(@PathVariable Long timelineId, @PathVariable Long eventId){
-        try {
-            timelineFacade.removeEvent(timelineId, eventId);
-            return timelineFacade.findById(timelineId).orElseThrow(ResourceNotFoundException::new);
-        } catch (ServiceException e){
-            throw new InvalidParameterException();
         }
     }
 

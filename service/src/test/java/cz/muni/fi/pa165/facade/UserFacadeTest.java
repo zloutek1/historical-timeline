@@ -102,9 +102,10 @@ public class UserFacadeTest extends AbstractTestNGSpringContextTests {
     @Test
     public void authenticate_givenValidPassword_callsAuthenticateAndReturnsTrue() {
         var authenticateDTO = new UserAuthenticateDTO();
+        authenticateDTO.setEmail("email");
         authenticateDTO.setPassword(unencryptedPassword);
 
-        when(beanMappingService.mapTo(authenticateDTO, User.class)).thenReturn(user);
+        when(userService.findUserByEmail("email")).thenReturn(Optional.of(user));
         when(userService.authenticate(user, unencryptedPassword)).thenReturn(true);
 
         var status = userFacade.authenticate(authenticateDTO);
@@ -116,9 +117,10 @@ public class UserFacadeTest extends AbstractTestNGSpringContextTests {
     @Test
     public void authenticate_givenInvalidPassword_callsAuthenticateAndReturnsFalse() {
         var authenticateDTO = new UserAuthenticateDTO();
+        authenticateDTO.setEmail("email");
         authenticateDTO.setPassword(unencryptedPassword);
 
-        when(beanMappingService.mapTo(authenticateDTO, User.class)).thenReturn(user);
+        when(userService.findUserByEmail("email")).thenReturn(Optional.of(user));
         when(userService.authenticate(user, unencryptedPassword)).thenReturn(false);
 
         var status = userFacade.authenticate(authenticateDTO);

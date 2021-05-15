@@ -37,8 +37,8 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public Boolean authenticate(UserAuthenticateDTO user) {
-        User mappedUser = beanMappingService.mapTo(user, User.class);
-        return userService.authenticate(mappedUser, user.getPassword());
+        Optional<User> userEntity = userService.findUserByEmail(user.getEmail());
+        return userService.authenticate(userEntity.get(), user.getPassword());
     }
 
     @Override

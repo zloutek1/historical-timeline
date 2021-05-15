@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/home")
 public class HomeController {
-    private static final Logger log = LoggerFactory.getLogger(HomeController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HomeController.class);
 
     @GetMapping
     public String home(Model model) {
-        log.debug("home");
+        LOG.debug("home");
         return "home";
     }
 

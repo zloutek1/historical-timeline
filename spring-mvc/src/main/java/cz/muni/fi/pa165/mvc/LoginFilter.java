@@ -18,18 +18,18 @@ import java.io.IOException;
 
 @WebFilter(urlPatterns = {"/home/*"})
 public class LoginFilter implements Filter {
-    private static final Logger log = LoggerFactory.getLogger(LoginFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LoginFilter.class);
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        log.debug("login filter");
+        LOG.debug("login filter");
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpSession session = request.getSession();
         UserDTO authUser = (UserDTO)session.getAttribute("authUser");
         if (authUser == null) {
             String redirectURL = request.getContextPath() + "/auth/login";
-            log.debug("login filter - not authenticated - redirecting to {}", redirectURL);
+            LOG.debug("login filter - not authenticated - redirecting to {}", redirectURL);
             response.setStatus(HttpStatus.TEMPORARY_REDIRECT.value());
             response.setHeader("Location", redirectURL);
         }

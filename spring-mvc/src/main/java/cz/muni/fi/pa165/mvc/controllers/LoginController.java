@@ -22,16 +22,16 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/auth")
 public class LoginController {
-    private static final Logger log = LoggerFactory.getLogger(LoginController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LoginController.class);
 
     @Inject
     private UserFacade userFacade;
 
     @GetMapping(value = "login")
     public String getLogin(Model model, HttpSession session) {
-        log.debug("get login");
+        LOG.debug("get login");
         if (session.getAttribute("authUser") != null) {
-            log.debug("get login - already logged in -> redirecting");
+            LOG.debug("get login - already logged in -> redirecting");
             return "redirect:/home";
         }
         model.addAttribute("user", new UserAuthenticateDTO());
@@ -42,24 +42,24 @@ public class LoginController {
     public String postLogin(Model model, HttpSession session,
                             @Valid @ModelAttribute("user") UserAuthenticateDTO user,
                             BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        log.debug("post login");
+        LOG.debug("post login");
         if (bindingResult.hasErrors()) {
             return "auth/login";
         }
         Optional<UserDTO> optUser = userFacade.findUserByEmail(user.getEmail());
         if (optUser.isEmpty()) {
-            log.debug("post login - user not in database");
+            LOG.debug("post login - user not in database");
             redirectAttributes.addFlashAttribute("login_failure", "User does not exist");
             return "redirect:/auth/login";
         }
         UserDTO userDTO = optUser.get();
         if (!userFacade.authenticate(user)) {
-            log.debug("post login - invalid password");
+            LOG.debug("post login - invalid password");
             redirectAttributes.addFlashAttribute("login_failure", "Invalid password");
             return "redirect:/auth/login";
         }
         session.setAttribute("authUser", userDTO);
-        log.debug("post login - Successfully logged in user {}", userDTO);
+        LOG.debug("post login - Successfully logged in user {}", userDTO);
         return "redirect:/home";
     }
 

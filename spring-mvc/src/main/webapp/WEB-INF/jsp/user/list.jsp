@@ -31,5 +31,10 @@
              </tbody>
            </table>
         </div>
+        <div class="row">
+         <div class="col-sm-3">
+           <a href="${pageContext.request.contextPath}/user/new" class="btn btn-primary">Add user</a>
+         </div>
+        </div>
     </jsp:attribute>
 </my:maintemplate>

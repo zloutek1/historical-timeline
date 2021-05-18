@@ -28,9 +28,11 @@
             <li class="nav-item">
               <a class="nav-link" href="/pa165/home">Home</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/pa165/user">Users</a>
-            </li>
+            <c:if test="${authUser.role eq 'ADMINISTRATOR'}">
+                <li class="nav-item">
+                  <a class="nav-link" href="/pa165/user">Users</a>
+                </li>
+            </c:if>
           </ul>
           <span class="text-light mr-3">
             <c:out value="${authUser.firstName} ${authUser.lastName} <${authUser.email}>"/>

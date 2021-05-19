@@ -62,9 +62,25 @@ public class UserController {
     }
 
     @PostMapping(value = "delete/{id}")
-    public String delete(@PathVariable long id, Model model) {
+    public String delete(@PathVariable long id, Model model,
+                         HttpSession session, RedirectAttributes redirectAttributes) {
         LOG.debug("user delete {}", id);
-        userFacade.deleteUser(id);
+        var optUser = userFacade.findUserByID(id);
+        if (optUser.isEmpty()) {
+            redirectAttributes.addFlashAttribute("alert_danger", "No user with id " + id);
+            return "redirect:/user";
+        }
+        UserDTO user = optUser.get();
+        UserDTO authUser = (UserDTO)session.getAttribute("authUser");
+        if (user.getId() == authUser.getId()) {
+            LOG.debug("user delete - user with " + user.getId() + " attempted to delete himself");
+            redirectAttributes.addFlashAttribute("alert_danger", "Can't delete yourself");
+        } else  {
+            userFacade.deleteUser(user.getId());
+            LOG.debug("user delete - user with " + user.getId() + " attempted to delete himself");
+            redirectAttributes.addFlashAttribute("alert_success",
+                    "Successfully deleted user " + user.getEmail());
+        }
         return "redirect:/user";
     }
 

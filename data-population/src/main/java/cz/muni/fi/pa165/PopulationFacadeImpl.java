@@ -40,11 +40,11 @@ public class PopulationFacadeImpl implements PopulationFacade {
     @Override
     @SuppressWarnings("unused")
     public void populate() {
-        User john = user("jcaraher2@home.pl", "John", "Caraher", "sunshine", UserRole.STUDENT);
-        User eloise = user("eshuryv@t.co", "Eloise", "Shury", "11111", UserRole.STUDENT);
-        User even = user("emacvean7@mozilla.com", "Even", "MacVean", "monkey", UserRole.STUDENT);
-        User nissa = user("nkeelyp@vkontakte.ru", "Nissa", "Keely", "12345678910", UserRole.TEACHER);
-        User dean = user("droggerss@wikimedia.org", "Dean", "Roggers", "AVeryStr0ngPa55word", UserRole.ADMINISTRATOR);
+        User john = user("jcaraher2@home.pl", "John", "Caraher", "password", UserRole.STUDENT);
+        User eloise = user("eshuryv@t.co", "Eloise", "Shury", "password", UserRole.STUDENT);
+        User even = user("emacvean7@mozilla.com", "Even", "MacVean", "password", UserRole.STUDENT);
+        User nissa = user("nkeelyp@vkontakte.ru", "Nissa", "Keely", "password", UserRole.TEACHER);
+        User dean = user("droggerss@wikimedia.org", "Dean", "Roggers", "password", UserRole.ADMINISTRATOR);
 
         StudyGroup history = studyGroup("History");
         StudyGroup literature = studyGroup("Literature");

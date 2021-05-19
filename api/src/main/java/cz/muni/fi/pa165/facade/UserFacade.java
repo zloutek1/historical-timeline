@@ -44,6 +44,12 @@ public interface UserFacade {
     void updateUser(Long userID, UserUpdateDTO userUpdate);
 
     /**
+     * Deletes user with given id
+     * @param userID ID of the user
+     * */
+    void deleteUser(Long userID);
+
+    /**
      * Register given user to given study group
      * @param userID ID of the user
      * @param studyGroupID ID of the study group

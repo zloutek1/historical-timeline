@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
     crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     <jsp:invoke fragment="head"/>
 </head>
 <body>
@@ -28,6 +29,11 @@
             <li class="nav-item">
               <a class="nav-link" href="/pa165/home">Home</a>
             </li>
+            <c:if test="${authUser.role eq 'ADMINISTRATOR'}">
+                <li class="nav-item">
+                  <a class="nav-link" href="/pa165/user">Users</a>
+                </li>
+            </c:if>
           </ul>
           <span class="text-light mr-3">
             <c:out value="${authUser.firstName} ${authUser.lastName} <${authUser.email}>"/>
@@ -36,6 +42,21 @@
         </div>
     </nav>
     <div class="container mt-5">
+        <c:if test="${not empty alert_danger}">
+            <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <c:out value="${alert_danger}"/></div>
+        </c:if>
+        <c:if test="${not empty alert_info}">
+            <div class="alert alert-info" role="alert"><c:out value="${alert_info}"/></div>
+        </c:if>
+        <c:if test="${not empty alert_success}">
+            <div class="alert alert-success" role="alert"><c:out value="${alert_success}"/></div>
+        </c:if>
+        <c:if test="${not empty alert_warning}">
+            <div class="alert alert-warning" role="alert"><c:out value="${alert_warning}"/></div>
+        </c:if>
+
         <jsp:invoke fragment="body"/>
     </div>
 </body>

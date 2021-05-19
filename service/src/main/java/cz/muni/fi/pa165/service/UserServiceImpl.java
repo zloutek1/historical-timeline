@@ -89,6 +89,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deleteUser(User user) {
+        try {
+            userDao.delete(user);
+        } catch (DataAccessException e) {
+            throw new ServiceException("Cannot delete user. ", e);
+        }
+    }
+
+    @Override
     public void registerToStudyGroup(@NonNull Long userID, @NonNull Long studyGroupID) {
         try {
             Optional<StudyGroup> studyGroup = studyGroupDao.findById(studyGroupID);

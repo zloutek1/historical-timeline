@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Ondřej Machala
@@ -54,5 +56,13 @@ public class StudyGroupFacadeImpl implements StudyGroupFacade {
         if (studyGroup.isEmpty()) return Optional.empty();
         var studyGroupDto = beanMappingService.mapTo(studyGroup.get(), StudyGroupDTO.class);
         return Optional.of(studyGroupDto);
+    }
+
+    @Override
+    public List<StudyGroupDTO> findAllStudyGroups() {
+        return studyGroupService.findAll()
+                .stream()
+                .map(studyGroup -> beanMappingService.mapTo(studyGroup, StudyGroupDTO.class))
+                .collect(Collectors.toList());
     }
 }

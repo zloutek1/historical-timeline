@@ -6,6 +6,7 @@ import cz.muni.fi.pa165.dto.UserDTO;
 import cz.muni.fi.pa165.dto.StudyGroupDTO;
 import cz.muni.fi.pa165.dto.UserUpdateDTO;
 import cz.muni.fi.pa165.entity.User;
+import cz.muni.fi.pa165.exceptions.ServiceException;
 import cz.muni.fi.pa165.service.BeanMappingService;
 import cz.muni.fi.pa165.service.UserService;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,13 @@ public class UserFacadeImpl implements UserFacade {
     public void updateUser(Long userID, UserUpdateDTO userUpdate) {
         User mappedUser = beanMappingService.mapTo(userUpdate, User.class);
         userService.updateUser(userID, mappedUser);
+    }
+
+    @Override
+    public void deleteUser(Long userID) {
+        var optUser = userService.findUserByID(userID)
+                .orElseThrow(() -> new ServiceException("No user with id " + userID + " found."));
+        userService.deleteUser(optUser);
     }
 
     @Override

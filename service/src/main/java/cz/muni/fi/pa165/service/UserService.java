@@ -41,6 +41,12 @@ public interface UserService {
     void updateUser(Long userID, User userUpdate);
 
     /**
+     * Delete user
+     * @param user user object
+     * */
+    void deleteUser(User user);
+
+    /**
      * Register given user to given study group
      * @param userID id of user
      * @param studyGroupID id of study goup

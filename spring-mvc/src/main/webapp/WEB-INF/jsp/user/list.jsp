@@ -25,7 +25,15 @@
                      <td><c:out value="${user.lastName}"/></td>
                      <td><c:out value="${user.email}"/></td>
                      <td><c:out value="${user.role}"/></td>
-                     <td></td>
+                     <td>
+                     <form:form method="post" action="${pageContext.request.contextPath}/user/delete/${user.id}">
+                        <button type="submit" class="btn btn-outline-danger" title="Delete"
+                        onclick="return confirm('Do you really want to delete user ${user.firstName}  ${user.lastName}?')">
+                            <i class="fas fa-trash" title="Delete"></i>
+                        </button>
+                     </form:form>
+
+                     </td>
                    </tr>
                 </c:forEach>
              </tbody>

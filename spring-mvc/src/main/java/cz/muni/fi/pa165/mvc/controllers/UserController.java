@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -57,6 +58,13 @@ public class UserController {
         }
         userFacade.registerUser(user, "password");
         LOG.debug("post user new - Successfully added new user {}", user);
+        return "redirect:/user";
+    }
+
+    @PostMapping(value = "delete/{id}")
+    public String delete(@PathVariable long id, Model model) {
+        LOG.debug("user delete {}", id);
+        userFacade.deleteUser(id);
         return "redirect:/user";
     }
 

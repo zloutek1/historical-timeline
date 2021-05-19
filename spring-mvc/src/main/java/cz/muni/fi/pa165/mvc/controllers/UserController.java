@@ -58,6 +58,9 @@ public class UserController {
         }
         userFacade.registerUser(user, "password");
         LOG.debug("post user new - Successfully added new user {}", user);
+        redirectAttributes.addFlashAttribute("alert_success",
+                "Added user " + user.getFirstName() + " " +
+                user.getLastName() + " <" + user.getEmail() + ">");
         return "redirect:/user";
     }
 
@@ -72,14 +75,14 @@ public class UserController {
         }
         UserDTO user = optUser.get();
         UserDTO authUser = (UserDTO)session.getAttribute("authUser");
-        if (user.getId() == authUser.getId()) {
+        if (user.getId().equals(authUser.getId())) {
             LOG.debug("user delete - user with " + user.getId() + " attempted to delete himself");
             redirectAttributes.addFlashAttribute("alert_danger", "Can't delete yourself");
         } else  {
             userFacade.deleteUser(user.getId());
             LOG.debug("user delete - user with " + user.getId() + " attempted to delete himself");
             redirectAttributes.addFlashAttribute("alert_success",
-                    "Successfully deleted user " + user.getEmail());
+                    "Deleted user " + user.getEmail());
         }
         return "redirect:/user";
     }

@@ -11,9 +11,9 @@ import cz.muni.fi.pa165.service.BeanMappingService;
 import cz.muni.fi.pa165.service.EventService;
 import cz.muni.fi.pa165.service.StudyGroupService;
 import cz.muni.fi.pa165.service.TimelineService;
-import org.dozer.inject.Inject;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;

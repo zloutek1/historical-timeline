@@ -125,6 +125,7 @@ public class PopulationFacadeImpl implements PopulationFacade {
 
     private Event event(String name, LocalDate date, String location, String description, String imageIdentifier, Timeline timeline) {
         Event e = new Event(name, date, location, description, imageIdentifier);
+        e.addTimeline(timeline);
         timeline.addEvent(e);
         eventService.create(e);
         return e;

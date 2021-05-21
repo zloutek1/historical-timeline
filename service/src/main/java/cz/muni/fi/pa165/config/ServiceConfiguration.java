@@ -10,6 +10,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import java.util.Collections;
+
 @Configuration
 @Import(PersistenceApplicationContext.class)
 @ComponentScan(basePackageClasses={StudyGroupServiceImpl.class, StudyGroupFacadeImpl.class})
@@ -17,6 +19,8 @@ public class ServiceConfiguration {
 
     @Bean
     public Mapper dozer(){
-        return new DozerBeanMapper();
+        DozerBeanMapper beanMapper = new DozerBeanMapper();
+        beanMapper.setMappingFiles(Collections.singletonList("dozerJdk8Converters.xml"));
+        return beanMapper;
     }
 }

@@ -40,11 +40,7 @@ public class TimelineController {
             return "redirect:/home";
         }
 
-        TimelineDTO timeline = timelineOpt.get();
-        timeline.setEvents(events());
-        timeline.setComments(comments());
-
-        model.addAttribute("timeline", timeline);
+        model.addAttribute("timeline", timelineOpt.get());
         model.addAttribute("comment", new CommentDTO());
         return "timeline/view";
     }

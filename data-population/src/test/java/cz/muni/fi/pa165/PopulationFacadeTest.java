@@ -44,7 +44,7 @@ public class PopulationFacadeTest extends AbstractTestNGSpringContextTests {
         assertThat(userService.findAllUsers()).hasSize(8);
         assertThat(studyGroupDao.findAll()).hasSize(2);
         assertThat(timelineDao.findAll()).hasSize(7);
-        assertThat(commentDao.findAll()).hasSize(0);
+        assertThat(commentDao.findAll()).hasSize(2);
         assertThat(eventDao.findAll()).hasSize(17);
 
         var users = userService.findAllUsers();

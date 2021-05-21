@@ -39,10 +39,4 @@ public interface StudyGroupFacade {
      * @return study group if stored, else empty value
      */
     Optional<StudyGroupDTO> findByName(String name);
-
-    /**
-     * Fetches all study groups that are present in db
-     * @return List of studygroups
-     */
-    List<StudyGroupDTO> findAllStudyGroups();
 }

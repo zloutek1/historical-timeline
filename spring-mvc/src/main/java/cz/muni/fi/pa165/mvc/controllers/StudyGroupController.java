@@ -27,13 +27,6 @@ public class StudyGroupController {
     @Inject
     private StudyGroupFacade studyGroupFacade;
 
-    @GetMapping
-    public String list(Model model) {
-        LOG.debug("studygroup list");
-        model.addAttribute("studygroups", studyGroupFacade.findAllStudyGroups());
-        return "studygroup/list";
-    }
-
     @GetMapping(value = "new")
     public String getNew(Model model) {
         LOG.debug("get studygroup new");
@@ -60,7 +53,7 @@ public class StudyGroupController {
         LOG.debug("post studygroup new - Successfully added new studygroup {}", studyGroup);
         redirectAttributes.addFlashAttribute("alert_success",
                 "Added user " + studyGroup.getName());
-        return "redirect:/studygroup";
+        return "redirect:/home";
     }
 
 }

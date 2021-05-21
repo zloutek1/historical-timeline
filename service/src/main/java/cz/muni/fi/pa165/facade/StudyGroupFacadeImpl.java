@@ -57,12 +57,4 @@ public class StudyGroupFacadeImpl implements StudyGroupFacade {
         var studyGroupDto = beanMappingService.mapTo(studyGroup.get(), StudyGroupDTO.class);
         return Optional.of(studyGroupDto);
     }
-
-    @Override
-    public List<StudyGroupDTO> findAllStudyGroups() {
-        return studyGroupService.findAll()
-                .stream()
-                .map(studyGroup -> beanMappingService.mapTo(studyGroup, StudyGroupDTO.class))
-                .collect(Collectors.toList());
-    }
 }

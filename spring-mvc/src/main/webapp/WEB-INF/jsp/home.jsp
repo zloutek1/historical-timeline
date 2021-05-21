@@ -8,13 +8,15 @@
 <my:maintemplate title="Home">
     <jsp:attribute name="body">
         <div class="jumbotron text-center">
-            <h1>Home page</h1>
-            <p>List of available study groups</p>
+            <h2>List of available study groups:</h2>
         </div>
 
         <div class="container">
-            <div class="row">
             <c:forEach items="${studyGroups}" var="studygroup" varStatus="ic">
+                    <c:if test="${ic.count % 4 == 1}">
+                        <div class="row">
+                    </c:if>
+
                     <div class="col-sm-6">
                         <h3> <c:out value="${ic.count}"/>. <c:out value="${studygroup.name}"/></h3>
 
@@ -74,15 +76,17 @@
                         </c:choose>
 
                         <c:if test="${authUser.role eq 'STUDENT'}">
-                        <div class="col-sm-3">
-                            <a href="${pageContext.request.contextPath}/todo/path" class="btn btn-primary">Register to study group</a>
-                        </div>
+                            <a href="${pageContext.request.contextPath}/todo/path" class="btn btn-primary">See more</a>
                         </c:if>
 
                     </div>
+
+                    <c:if test="${ic.count % 4 == 1}">
+                        </div>
+                    </c:if>
     </c:forEach>
 
-        </div>
+
         <div class="row">
                 <c:if test="${authUser.role eq 'TEACHER'}">
                 <div class="col-sm-3">

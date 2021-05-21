@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Component
 @Transactional
@@ -52,6 +53,10 @@ public class PopulationFacadeImpl implements PopulationFacade {
         StudyGroup history = studyGroup("History");
         StudyGroup literature = studyGroup("Literature");
 
+        history.addMember(john);
+        history.addMember(eloise);
+        literature.addMember(sampleUser);
+
         Timeline ww2 = timeline("World War 2", LocalDate.of(1939, 9, 1), LocalDate.of(1945, 9, 2), history);
         Timeline ww1 = timeline("World War 1", LocalDate.of(1914, 7, 28), LocalDate.of(1918, 11, 11), history);
         Timeline victorian_era = timeline("Victorian era", LocalDate.of(1837, 6, 20), LocalDate.of(1901, 1, 22), history);
@@ -83,6 +88,9 @@ public class PopulationFacadeImpl implements PopulationFacade {
         event("Alice in Wonderland", LocalDate.of(1865, 5, 6), "United Kingdom", "Lewis Carroll publishes Alice’s Adventures in Wonderland.", "No image", victorian_lit);
         event("War and Peace", LocalDate.of(1869, 8, 5), "Russia", "In Russia, Leo Tolstoy publishes the text War and Peace. This novel is the study of early 19th-century Russian society and is regarded as one of the world's greatest novels.", "No image", victorian_lit);
         event("Sherlock Holmes", LocalDate.of(1887, 2, 17), "United Kingdom", "Arthur Conan Doyle writes A Study in Scarlet, introducing Sherlock Holmes to the readers.", "No image", victorian_lit);
+
+        comment("Hello there", LocalDateTime.of(LocalDate.of(2012, 11, 8), LocalTime.of(11, 44)), trojan_war, john);
+        comment("Welcome, I hope that you find this fascinating", LocalDateTime.of(LocalDate.of(2012, 11, 10), LocalTime.of(15, 8)), trojan_war, nissa);
     }
 
     private LocalDate year(int y) {

@@ -45,6 +45,9 @@ public class PopulationFacadeImpl implements PopulationFacade {
         User even = user("emacvean7@mozilla.com", "Even", "MacVean", "password", UserRole.STUDENT);
         User nissa = user("nkeelyp@vkontakte.ru", "Nissa", "Keely", "password", UserRole.TEACHER);
         User dean = user("droggerss@wikimedia.org", "Dean", "Roggers", "password", UserRole.ADMINISTRATOR);
+        User sampleUser = user("user@secret.com", "User", "Name", "password", UserRole.STUDENT);
+        User sampleTeacher = user("teacher@secret.com", "Teacher", "Name", "password", UserRole.TEACHER);
+        User sampleAdmin = user("admin@secret.com", "Admin", "Name", "password", UserRole.ADMINISTRATOR);
 
         StudyGroup history = studyGroup("History");
         StudyGroup literature = studyGroup("Literature");

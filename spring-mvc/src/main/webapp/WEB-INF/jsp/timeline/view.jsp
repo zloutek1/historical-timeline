@@ -29,6 +29,10 @@
                 border-radius: 100%;
                 background-color: white;
             }
+
+            .comment .date {
+                color: gray;
+            }
         </style>
     </jsp:attribute>
     <jsp:attribute name="body">
@@ -66,15 +70,15 @@
                     <form:textarea path="text" cssClass="form-control p-1 border bg-light"/>
                     <form:errors path="text" cssClass="help-block"/>
                 </div>
-                <button class="btn btn-primary ml-3" type="submit"><i class="fas fa-paper-plane"></i></button>
+                <button class="btn btn-primary" type="submit"><i class="fas fa-paper-plane"></i></button>
             </form:form>
 
-            <div class="comments container">
+            <div class="comments container mt-2">
                 <c:forEach items="${timeline.comments}" var="comment">
-                    <div class="comment container">
-                        <div class="row">
-                            <b class="mr-1"><c:out value="${comment.author.firstName} ${comment.author.lastName}" /></b>
-                            <p><c:out value="${comment.time}" /></p>
+                    <div class="comment container mr-1">
+                        <div class="row align-items-end">
+                            <h4 class="m-0"><c:out value="${comment.author.firstName} ${comment.author.lastName}" /></h4>
+                            <p class="date m-0 ml-2"><c:out value="${comment.time}" /></p>
                         </div>
                         <div class="row">
                             <p><c:out value="${comment.text}" /></p>

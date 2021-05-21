@@ -6,28 +6,83 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <my:maintemplate title="Timeline">
+    <jsp:attribute name="head">
+        <style type="text/css">
+            .timeline .date {
+                padding-top: .75rem;
+                color: gray;
+            }
+
+            .timeline .event {
+                border-left: 3px solid royalblue;
+                background-color: aliceblue;
+            }
+
+            .timeline .event::after {
+                content: '';
+                position: absolute;
+                top: 1rem;
+                left: -.5rem;
+                width: 1rem;
+                height: 1rem;
+                border: 3px solid royalblue;
+                border-radius: 100%;
+                background-color: white;
+            }
+        </style>
+    </jsp:attribute>
     <jsp:attribute name="body">
-        <div class="container">
-            <h1><c:out value="${timeline.name}" /></h1>
-            <p><c:out value="${timeline.fromDate} - ${timeline.toDate}" /></p>
+        <div class="timeline container">
+            <div class="text-center">
+                <h1><c:out value="${timeline.name}" /></h1>
+                <p><c:out value="${timeline.fromDate} - ${timeline.toDate}" /></p>
+            </div>
+
             <c:choose>
             <c:when test="${empty timeline.events}">
-                <p> There are no events yet!</p>
+                <p class="text-center"> There are no events yet!</p>
             </c:when>
 
             <c:otherwise>
                 <c:forEach items="${timeline.events}" var="event">
                     <div class="row">
-                        <div class="col">
+                        <div class="date pr-3 w-25 text-right">
                             <c:out value="${event.date}" />
                         </div>
-                        <div class="col">
-                            <c:out value="${event.name}" />
+                        <div class="event py-2 col">
+                            <h3><c:out value="${event.name}" /></h3>
+                            <p><c:out value="${event.description}" /></p>
                         </div>
                     </div>
                 </c:forEach>
             </c:otherwise>
             </c:choose>
+
+            <h2 class="mt-5">Comments</h2>
+            <form:form method="post" action="${pageContext.request.contextPath}/comment/new"
+                       modelAttribute="comment"
+                       cssClass="form-horizontal">
+                <div class="form-group">
+                    <form:textarea path="text" cssClass="form-control p-1 border bg-light"/>
+                    <form:errors path="text" cssClass="help-block"/>
+                </div>
+                <button class="btn btn-primary ml-3" type="submit"><i class="fas fa-paper-plane"></i></button>
+            </form:form>
+
+            <div class="comments container">
+                <c:forEach items="${timeline.comments}" var="comment">
+                    <div class="comment container">
+                        <div class="row">
+                            <b class="mr-1"><c:out value="${comment.author.firstName} ${comment.author.lastName}" /></b>
+                            <p><c:out value="${comment.time}" /></p>
+                        </div>
+                        <div class="row">
+                            <p><c:out value="${comment.text}" /></p>
+                        </div>
+                    </div>
+                </c:forEach>
+            </div>
+
         </div>
     </jsp:attribute>
 </my:maintemplate>

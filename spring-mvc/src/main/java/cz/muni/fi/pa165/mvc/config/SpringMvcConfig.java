@@ -3,12 +3,10 @@ package cz.muni.fi.pa165.mvc.config;
 import cz.muni.fi.pa165.DataPopulationConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.ViewResolver;
@@ -26,15 +24,12 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 
     private static final Logger LOG = LoggerFactory.getLogger(SpringMvcConfig.class);
 
-    private static final String TEXTS = "Texts";
-
     /**
      * Maps the main page to a specific view.
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        LOG.debug("mapping URL / to home view");
-        registry.addViewController("/").setViewName("home");
+        registry.addRedirectViewController("/", "/home");
     }
 
 
@@ -57,17 +52,6 @@ public class SpringMvcConfig implements WebMvcConfigurer {
         viewResolver.setPrefix("/WEB-INF/jsp/");
         viewResolver.setSuffix(".jsp");
         return viewResolver;
-    }
-
-    /**
-     * Provides localized messages.
-     */
-    @Bean
-    public MessageSource messageSource() {
-        LOG.debug("registering ResourceBundle 'Texts' for messages");
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename(TEXTS);
-        return messageSource;
     }
 
     /**

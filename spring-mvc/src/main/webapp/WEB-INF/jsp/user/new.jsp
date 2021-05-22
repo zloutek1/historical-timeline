@@ -34,6 +34,13 @@
                             <form:errors path="email" cssClass="help-block"/>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <form:label path="password" cssClass="col-sm-2 control-label">Password</form:label>
+                        <div class="col-sm-10">
+                            <form:input path="password" type="password" cssClass="form-control"/>
+                            <form:errors path="password" cssClass="help-block"/>
+                        </div>
+                    </div>
                    <div class="form-group row">
                        <form:label path="role" cssClass="col-sm-2 control-label">Role</form:label>
                        <div class="col-sm-10">

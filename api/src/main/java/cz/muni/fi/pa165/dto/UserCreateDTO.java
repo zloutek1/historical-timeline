@@ -24,5 +24,9 @@ public class UserCreateDTO {
     private String lastName;
 
     @NotNull
+    @Size(min = 6, max = 30)
+    private String password;
+
+    @NotNull
     private UserRole role;
 }

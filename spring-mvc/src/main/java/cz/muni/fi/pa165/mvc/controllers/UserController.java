@@ -56,7 +56,7 @@ public class UserController {
             model.addAttribute("new_user_failure", "User already exists");
             return "user/new";
         }
-        userFacade.registerUser(user, "password");
+        userFacade.registerUser(user);
         LOG.debug("post user new - Successfully added new user {}", user);
         redirectAttributes.addFlashAttribute("alert_success",
                 "Added user " + user.getFirstName() + " " +

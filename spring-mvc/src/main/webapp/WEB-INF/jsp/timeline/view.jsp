@@ -12,8 +12,6 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
         <style>
-            .text-royal { color: royalblue; }
-
             .timeline .date {
                 padding-top: .75rem;
                 color: gray;
@@ -67,9 +65,9 @@
                             <div class="event py-2 col container">
                                 <div class="row">
                                     <h3 class="col d-inline"><c:out value="${event.name}" /></h3>
-                                    <div class="dropdown text-center col-1">
-                                        <a type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
-                                        <div class="dropdown-menu dropdown-primary" aria-labelledby="dropdownMenuButton">
+                                    <div class="dropdown text-right col-1">
+                                        <a type="button" id="eventDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
+                                        <div class="dropdown-menu dropdown-primary" aria-labelledby="eventDropdownMenuButton">
                                             <a class="dropdown-item" href="/pa165/event/edit/${event.id}">Edit</a>
                                             <button type="button" class="dropdown-item btn btn-link text-danger" data-toggle="modal" data-target="#removeModal" data-event-id="${event.id}">Remove</button>
                                         </div>
@@ -84,32 +82,50 @@
             </div>
 
             <div class="comments container mt-4">
-                <h2 class="mt-5">Comments</h2>
-                <form:form method="post" action="${pageContext.request.contextPath}/comment/new"
-                           modelAttribute="comment"
-                           cssClass="form-horizontal mb-4">
-                    <div class="input-group">
-                        <form:input path="text" cssClass="form-control"/>
-                        <form:errors path="text" cssClass="help-block"/>
-                        <div class="input-group-append">
-                            <div class="align-self-end">
-                                <button class="btn btn-primary" type="submit"><i class="fas fa-paper-plane"></i></button>
+                <div class="row">
+                    <div class="w-25">
+                        <!-- padding -->
+                    </div>
+                    <div class="col container">
+                        <h2 class="mt-5">Comments</h2>
+                        <form:form method="post" action="${pageContext.request.contextPath}/comment/new"
+                                   modelAttribute="comment"
+                                   cssClass="form-horizontal mb-4">
+                            <div class="input-group">
+                                <form:input path="text" cssClass="form-control"/>
+                                <form:errors path="text" cssClass="help-block"/>
+                                <div class="input-group-append">
+                                    <div class="align-self-end">
+                                        <button class="btn btn-primary" type="submit"><i class="fas fa-paper-plane"></i></button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </form:form>
+                        </form:form>
 
-                <c:forEach items="${timeline.comments}" var="comment">
-                    <div class="comment container">
-                        <div class="row align-items-end">
-                            <h4 class="m-0"><c:out value="${comment.author.firstName} ${comment.author.lastName}" /></h4>
-                            <p class="date m-0 ml-2"><my:localdatetime value = "${comment.time}" /></p>
-                        </div>
-                        <div class="row">
-                            <p class="mb-1"><c:out value="${comment.text}" /></p>
-                        </div>
+                        <c:forEach items="${timeline.comments}" var="comment">
+                            <div class="comment container">
+                                <div class="row">
+                                    <div class="row col align-items-end">
+                                        <h4 class="m-0"><c:out value="${comment.author.firstName} ${comment.author.lastName}" /></h4>
+                                        <p class="date m-0 ml-2"><my:localdatetime value = "${comment.time}" /></p>
+                                    </div>
+                                    <div class="dropdown text-right col-1">
+                                        <a type="button" id="commentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
+                                        <div class="dropdown-menu dropdown-primary" aria-labelledby="commentDropdownMenuButton">
+                                            <a class="dropdown-item" href="${pageContext.request.contextPath}/comment/edit/${comment.id}">Edit</a>
+                                            <form:form action="${pageContext.request.contextPath}/comment/delete/${comment.id}" method="post" cssClass="submit">
+                                                <button type="submit" class="dropdown-item btn btn-link text-danger">Delete</button>
+                                            </form:form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <p class="mb-1"><c:out value="${comment.text}" /></p>
+                                </div>
+                            </div>
+                        </c:forEach>
                     </div>
-                </c:forEach>
+                </div>
             </div>
 
             <div class="modal fade" id="addEventModal" tabindex="-1" role="dialog" aria-labelledby="addEventModalLabel" aria-hidden="true">

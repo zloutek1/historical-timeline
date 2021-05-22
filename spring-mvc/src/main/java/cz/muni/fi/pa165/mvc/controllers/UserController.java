@@ -6,7 +6,6 @@ import cz.muni.fi.pa165.dto.UserDTO;
 import cz.muni.fi.pa165.dto.UserUpdateDTO;
 import cz.muni.fi.pa165.facade.UserFacade;
 import cz.muni.fi.pa165.mvc.model.ChangePasswordModel;
-import lombok.extern.java.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;

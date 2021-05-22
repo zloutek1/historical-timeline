@@ -22,6 +22,9 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 import java.util.Optional;
 
+/**
+ * @author Tomáš Ljutenko
+ */
 @Controller
 @RequestMapping("/timeline")
 public class TimelineController {

@@ -8,7 +8,16 @@ import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Enumerated;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,12 +1,14 @@
 package cz.muni.fi.pa165.mvc.config;
 
 import cz.muni.fi.pa165.DataPopulationConfiguration;
+import cz.muni.fi.pa165.mvc.formatters.LocalDateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.ViewResolver;
@@ -61,5 +63,13 @@ public class SpringMvcConfig implements WebMvcConfigurer {
     public Validator validator() {
         LOG.debug("registering JSR-303 validator");
         return new LocalValidatorFactoryBean();
+    }
+
+    /**
+     * adds additional formatters for url input
+     */
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addFormatter(new LocalDateTimeFormatter("dd.MM.yyyy"));
     }
 }

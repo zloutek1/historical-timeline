@@ -36,9 +36,6 @@
                            <form:errors path="role" cssClass="help-block"/>
                        </div>
                    </div>
-                  <c:if test="${not empty new_user_failure}">
-                      <div class="alert alert-danger" role="alert"><c:out value="${new_user_failure}"/></div>
-                  </c:if>
                    <div class="row">
                        <a href="${pageContext.request.contextPath}/user"
                         class="btn btn-secondary ml-3">Back</a>

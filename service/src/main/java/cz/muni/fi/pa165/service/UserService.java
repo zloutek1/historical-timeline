@@ -61,10 +61,30 @@ public interface UserService {
     void unregisterFromStudyGroup(Long userID, Long studyGroupID);
 
     /**
+     * Register given user to given study group as a Leader
+     * @param userID id of user
+     * @param studyGroupID id of study goup
+     * */
+    void registerToStudyGroupAsLeader(Long userID, Long studyGroupID);
+
+    /**
+     * Unregister given user from given studygroup as a Leader
+     * @param userID ID of the user
+     * @param studyGroupID ID of the study group
+     * */
+    void unregisterFromStudyGroupAsLeader(Long userID, Long studyGroupID);
+
+    /**
      * Finds all study groups, which is given user registered in
      * @param userID ID of the user
      * */
     List<StudyGroup> findUserStudyGroups(Long userID);
+
+    /**
+     * Finds all study groups, which is given user registered in as a leader
+     * @param userID ID of the user
+     * */
+    List<StudyGroup> findLeadersStudyGroups(Long userID);
 
     /**
      * Return list containing all of the users

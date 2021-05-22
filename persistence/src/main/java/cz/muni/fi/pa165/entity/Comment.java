@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,11 +42,13 @@ public class Comment {
 
     @ManyToOne(optional = false)
     @NotNull
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ToString.Exclude
     private Timeline timeline;
 
     @ManyToOne(optional = false)
     @NotNull
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ToString.Exclude
     private User author;
 

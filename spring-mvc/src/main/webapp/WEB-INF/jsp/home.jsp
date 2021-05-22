@@ -79,6 +79,12 @@
                             <a href="${pageContext.request.contextPath}/todo/path" class="btn btn-primary">See more</a>
                         </c:if>
 
+                        <c:if test="${authUser.role eq 'TEACHER'}">
+                            <form method="POST" action="${pageContext.request.contextPath}/studygroup/delete/${studygroup.id}">
+                                <button class="btn btn-danger ml-3" type="submit">delete</button>
+                            </form>
+                        </c:if>
+
                     </div>
 
                     <c:if test="${ic.count % 4 == 1}">
@@ -87,7 +93,10 @@
     </c:forEach>
 
 
-        <div class="row">
+
+            </div>
+
+        <div class="container">
                 <c:if test="${authUser.role eq 'TEACHER'}">
                 <div class="col-sm-3">
                     <a href="${pageContext.request.contextPath}/studygroup/new" class="btn btn-primary">Create new study group</a>
@@ -95,8 +104,6 @@
                 </c:if>
 
         </div>
-
-            </div>
 
     </jsp:attribute>
 </my:maintemplate>

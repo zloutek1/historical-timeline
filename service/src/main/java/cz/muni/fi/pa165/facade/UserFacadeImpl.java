@@ -71,8 +71,26 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override
+    public void registerToStudyGroupAsLeader(Long userID, Long studyGroupID) {
+        userService.registerToStudyGroupAsLeader(userID, studyGroupID);
+    }
+
+    @Override
+    public void unregisterFromStudyGroupAsLeader(Long userID, Long studyGroupID) {
+        userService.unregisterFromStudyGroupAsLeader(userID, studyGroupID);
+    }
+
+    @Override
     public List<StudyGroupDTO> findUserStudyGroups(Long userID) {
         return userService.findUserStudyGroups(userID)
+                .stream()
+                .map(studygroup -> beanMappingService.mapTo(studygroup, StudyGroupDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StudyGroupDTO> findLeadersStudyGroups(Long userID) {
+        return userService.findLeadersStudyGroups(userID)
                 .stream()
                 .map(studygroup -> beanMappingService.mapTo(studygroup, StudyGroupDTO.class))
                 .collect(Collectors.toList());

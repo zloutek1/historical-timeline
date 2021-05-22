@@ -5,16 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,12 +52,19 @@ public class User {
     private UserRole role;
 
     @OneToMany(mappedBy = "author")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ToString.Exclude
     private final List<Comment> comments = new ArrayList<>();
 
     @ManyToMany
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ToString.Exclude
     private final List<StudyGroup> studyGroups = new ArrayList<>();
+
+    @OneToMany(mappedBy = "leader")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ToString.Exclude
+    private final List<StudyGroup> leadedStudyGroups = new ArrayList<>();
 
     public User(@NotNull String email, @NotNull String firstName, @NotNull String lastName, @NotNull String passwordHash, @NotNull UserRole role) {
         this.email = email;
@@ -86,6 +87,23 @@ public class User {
     public List<Comment> getComments()
     {
         return Collections.unmodifiableList(comments);
+    }
+
+    public void addLeadedStudyGroups(StudyGroup studyGroup)
+    {
+        leadedStudyGroups.add(studyGroup);
+        studyGroup.setLeader(this);
+    }
+
+    public void removeLeadedStudyGroup(StudyGroup studyGroup)
+    {
+        leadedStudyGroups.remove(studyGroup);
+        studyGroup.setLeader(null);
+    }
+
+    public List<StudyGroup> getLeadedStudyGroups()
+    {
+        return Collections.unmodifiableList(leadedStudyGroups);
     }
 
     public void addStudyGroup(StudyGroup group)

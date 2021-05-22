@@ -2,6 +2,7 @@ package cz.muni.fi.pa165.mvc.controllers;
 
 import cz.muni.fi.pa165.dto.StudyGroupDTO;
 import cz.muni.fi.pa165.dto.UserDTO;
+import cz.muni.fi.pa165.dto.UserRole;
 import cz.muni.fi.pa165.facade.UserFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,9 @@ public class HomeController {
         List<StudyGroupDTO> userStudyGroups = new ArrayList<>();
 
         if (authUser != null) {
-            userStudyGroups = userFacade.findUserStudyGroups(authUser.getId());
+            userStudyGroups = (authUser.getRole() == UserRole.TEACHER)
+                    ? userFacade.findLeadersStudyGroups(authUser.getId())
+                    : userFacade.findUserStudyGroups(authUser.getId());
         }
 
         model.addAttribute("studyGroups", userStudyGroups);

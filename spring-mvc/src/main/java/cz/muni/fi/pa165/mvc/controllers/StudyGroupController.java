@@ -2,6 +2,8 @@ package cz.muni.fi.pa165.mvc.controllers;
 
 import cz.muni.fi.pa165.dto.StudyGroupCreateDTO;
 import cz.muni.fi.pa165.dto.StudyGroupDTO;
+import cz.muni.fi.pa165.dto.UserDTO;
+import cz.muni.fi.pa165.dto.UserRole;
 import cz.muni.fi.pa165.facade.StudyGroupFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -52,7 +55,18 @@ public class StudyGroupController {
         studyGroupFacade.createStudyGroup(studyGroup);
         LOG.debug("post studygroup new - Successfully added new studygroup {}", studyGroup);
         redirectAttributes.addFlashAttribute("alert_success",
-                "Added user " + studyGroup.getName());
+                "Added Study group " + studyGroup.getName());
+        return "redirect:/home";
+    }
+
+    @PostMapping(value = "delete/{id}")
+    public String postRegisterAsLeader(@PathVariable long id, Model model, HttpSession session) {
+        UserDTO authUser = (UserDTO)session.getAttribute("authUser");
+        if (authUser != null) {
+            if (authUser.getRole() == UserRole.TEACHER) {
+                studyGroupFacade.deleteStudyGroup(id);
+            }
+        }
         return "redirect:/home";
     }
 

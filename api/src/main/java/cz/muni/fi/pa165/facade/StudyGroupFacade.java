@@ -3,7 +3,6 @@ package cz.muni.fi.pa165.facade;
 import cz.muni.fi.pa165.dto.StudyGroupCreateDTO;
 import cz.muni.fi.pa165.dto.StudyGroupDTO;
 
-import java.util.List;
 import java.util.Optional;
 
 /**

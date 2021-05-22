@@ -64,10 +64,30 @@ public interface UserFacade {
     void unregisterFromStudyGroup(Long userID, Long studyGroupID);
 
     /**
+     * Register given user to given study group as a leader. User has to be teacher
+     * @param userID ID of the user
+     * @param studyGroupID ID of the study group
+     * */
+    void registerToStudyGroupAsLeader(Long userID, Long studyGroupID);
+
+    /**
+     * Unregister given user from given study group, User has to be teacher
+     * @param userID ID of the user
+     * @param studyGroupID ID of the study group
+     * */
+    void unregisterFromStudyGroupAsLeader(Long userID, Long studyGroupID);
+
+    /**
      * Find Study groups which is user regstered in
      * @param userID ID of the user
      * */
     List<StudyGroupDTO> findUserStudyGroups(Long userID);
+
+    /**
+     * Find Study groups which is user regstered as a leader in
+     * @param userID ID of the user
+     * */
+    List<StudyGroupDTO> findLeadersStudyGroups(Long userID);
 
     /**
      * Finds all of the users

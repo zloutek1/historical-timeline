@@ -17,4 +17,5 @@ public class UserDTO {
     private String passwordHash;
     private UserRole role;
     private final List<StudyGroupDTO> studyGroups = new ArrayList<>();
+    private final List <UserDTO> leadedStudyGroups = new ArrayList<>();
 }

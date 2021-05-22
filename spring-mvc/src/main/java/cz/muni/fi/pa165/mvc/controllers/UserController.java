@@ -2,7 +2,9 @@ package cz.muni.fi.pa165.mvc.controllers;
 
 import cz.muni.fi.pa165.dto.UserCreateDTO;
 import cz.muni.fi.pa165.dto.UserDTO;
+import cz.muni.fi.pa165.dto.UserUpdateDTO;
 import cz.muni.fi.pa165.facade.UserFacade;
+import lombok.extern.java.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -61,6 +63,41 @@ public class UserController {
         redirectAttributes.addFlashAttribute("alert_success",
                 "Added user " + user.getFirstName() + " " +
                 user.getLastName() + " <" + user.getEmail() + ">");
+        return "redirect:/user";
+    }
+
+    @GetMapping(value = "edit/{id}")
+    public String getEdit(@PathVariable long id, Model model) {
+        LOG.debug("get user edit - " + id);
+        var user = userFacade.findUserByID(id)
+                .orElseThrow(() -> new IllegalArgumentException("User with id " + id + " not found"));
+        var userUpdate = new UserUpdateDTO();
+        userUpdate.setFirstName(user.getFirstName());
+        userUpdate.setLastName(user.getLastName());
+        userUpdate.setRole(user.getRole());
+        model.addAttribute("id", id);
+        model.addAttribute("user", userUpdate);
+        return "user/edit";
+    }
+
+    @PostMapping(value = "edit/{id}")
+    public String postEdit(@PathVariable long id, Model model, HttpSession session,
+                           @Valid @ModelAttribute("user") UserUpdateDTO user,
+                           BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        LOG.debug("post user edit - " + id);
+        if (bindingResult.hasErrors()) {
+            return "user/edit";
+        }
+        Optional<UserDTO> optUser = userFacade.findUserByID(id);
+        if (optUser.isEmpty()) {
+            LOG.warn("post user edit - " + id + "- user not in database");
+            throw new IllegalStateException("Can't find user with id " + id);
+        }
+        userFacade.updateUser(id, user);
+        LOG.debug("post user edit - Successfully edited user with id {}", id);
+        redirectAttributes.addFlashAttribute("alert_success",
+                "Edited user " + user.getFirstName() + " " +
+                        user.getLastName());
         return "redirect:/user";
     }
 

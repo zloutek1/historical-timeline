@@ -81,9 +81,9 @@
                             <a href="${pageContext.request.contextPath}/todo/path" class="btn btn-primary">See more</a>
                         </c:if>
 
-                        <c:if test="${authUser.role eq 'TEACHER'}">
+                        <c:if test="${authUser.id eq studygroup.leader.id}">
                             <form method="POST" action="${pageContext.request.contextPath}/studygroup/delete/${studygroup.id}">
-                                <button class="btn btn-danger ml-3" type="submit">delete</button>
+                                <button class="btn btn-danger ml-3" type="submit">Delete study group</button>
                             </form>
                         </c:if>
 

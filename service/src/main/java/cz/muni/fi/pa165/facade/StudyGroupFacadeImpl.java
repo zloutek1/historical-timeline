@@ -3,6 +3,7 @@ package cz.muni.fi.pa165.facade;
 import cz.muni.fi.pa165.dto.StudyGroupCreateDTO;
 import cz.muni.fi.pa165.dto.StudyGroupDTO;
 import cz.muni.fi.pa165.entity.StudyGroup;
+import cz.muni.fi.pa165.entity.User;
 import cz.muni.fi.pa165.exceptions.ServiceException;
 import cz.muni.fi.pa165.service.BeanMappingService;
 import cz.muni.fi.pa165.service.StudyGroupService;
@@ -29,6 +30,11 @@ public class StudyGroupFacadeImpl implements StudyGroupFacade {
     @Override
     public Long createStudyGroup(@NonNull StudyGroupCreateDTO studyGroup) {
         StudyGroup studyGroupEntity = new StudyGroup(studyGroup.getName());
+        if (studyGroup.getLeader() != null) {
+            User mappedUser = beanMappingService.mapTo(studyGroup.getLeader(), User.class);
+            studyGroupEntity.setLeader(mappedUser);
+
+        }
         studyGroupService.create(studyGroupEntity);
         return studyGroupEntity.getId();
     }

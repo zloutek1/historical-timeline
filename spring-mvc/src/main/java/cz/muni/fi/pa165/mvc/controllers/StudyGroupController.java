@@ -66,7 +66,9 @@ public class StudyGroupController {
         }
 
         var authUser = (UserDTO)session.getAttribute("authUser");
+
         studyGroup.setLeader(authUser);
+
         var studyGroupID = studyGroupFacade.createStudyGroup(studyGroup);
         userFacade.registerToStudyGroup(authUser.getId(), studyGroupID);
 

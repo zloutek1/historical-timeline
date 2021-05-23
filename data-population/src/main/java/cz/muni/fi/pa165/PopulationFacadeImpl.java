@@ -80,21 +80,21 @@ public class PopulationFacadeImpl implements PopulationFacade {
         event("WW1 ends.", LocalDate.of(1918, 11, 11), "Germany", "German's ran out of soldiers, food and war material. Not only this but support for the Germans was disappearing.", null, ww1);
 
 
-        event("Victoria becomes Queen", LocalDate.of(1837, 2, 27), "England", "Victoria is named Queen of Great Britain and Ireland.", "No Image", victorianEra);
-        event("US Civil War begins", LocalDate.of(1861, 2, 1), "United States", "The US Civil War begins. Also in this year, the Russian serfs were emancipated and Prince Albert died of typhoid.", "No image", victorianEra);
-        event("Queen Victoria Dies", LocalDate.of(1901, 2, 1), "United Kingdom", "No description", "No image", victorianEra);
+        event("Victoria becomes Queen", LocalDate.of(1837, 2, 27), "England", "Victoria is named Queen of Great Britain and Ireland.", null, victorianEra);
+        event("US Civil War begins", LocalDate.of(1861, 2, 1), "United States", "The US Civil War begins. Also in this year, the Russian serfs were emancipated and Prince Albert died of typhoid.", null, victorianEra);
+        event("Queen Victoria Dies", LocalDate.of(1901, 2, 1), "United Kingdom", "No description", null, victorianEra);
 
-        event("Trojan War Begins", LocalDate.of(-1000, 1, 7), "Troy, Turkey", "No Description", "No Image", trojanWar);
-        event("Gods begin to take sides", LocalDate.of(-1000, 1, 11), "Troy, Turkey", "Zeus favors the Trojans. He sends a lying dream to Agamemnon that said that he would win if he attacked.", "No Image", trojanWar);
-        event("The Trojan Horse", LocalDate.of(-1000, 1, 16), "Troy, Turkey", "Odysseus creates a plan to build a giant wooden horse. He and some other Greeks hide inside of it.", "No Image", trojanWar);
-        event("The Greek Army Destroys Troy", LocalDate.of(-1000, 1, 19), "Troy, Turkey", "No Description", "No Image", trojanWar);
+        event("Trojan War Begins", LocalDate.of(-1000, 1, 7), "Troy, Turkey", "No Description", null, trojanWar);
+        event("Gods begin to take sides", LocalDate.of(-1000, 1, 11), "Troy, Turkey", "Zeus favors the Trojans. He sends a lying dream to Agamemnon that said that he would win if he attacked.", null, trojanWar);
+        event("The Trojan Horse", LocalDate.of(-1000, 1, 16), "Troy, Turkey", "Odysseus creates a plan to build a giant wooden horse. He and some other Greeks hide inside of it.", null, trojanWar);
+        event("The Greek Army Destroys Troy", LocalDate.of(-1000, 1, 19), "Troy, Turkey", "No Description", null, trojanWar);
 
-        event("Hamlet", LocalDate.of(1599, 10, 14), "United Kingdom", "It is believed Shakespeare began his work on Hamlet this year, which was considered to one of his greatest plays of all times.", "No Image", renaissanceLit);
+        event("Hamlet", LocalDate.of(1599, 10, 14), "United Kingdom", "It is believed Shakespeare began his work on Hamlet this year, which was considered to one of his greatest plays of all times.", null, renaissanceLit);
 
-        event("Oliver Twist", LocalDate.of(1837, 3, 28), "England", "Charles Dickens publishes Oliver Twist", "No Image", victorianLit);
-        event("Alice in Wonderland", LocalDate.of(1865, 5, 6), "United Kingdom", "Lewis Carroll publishes Alice’s Adventures in Wonderland.", "No image", victorianLit);
-        event("War and Peace", LocalDate.of(1869, 8, 5), "Russia", "In Russia, Leo Tolstoy publishes the text War and Peace. This novel is the study of early 19th-century Russian society and is regarded as one of the world's greatest novels.", "No image", victorianLit);
-        event("Sherlock Holmes", LocalDate.of(1887, 2, 17), "United Kingdom", "Arthur Conan Doyle writes A Study in Scarlet, introducing Sherlock Holmes to the readers.", "No image", victorianLit);
+        event("Oliver Twist", LocalDate.of(1837, 3, 28), "England", "Charles Dickens publishes Oliver Twist", null, victorianLit);
+        event("Alice in Wonderland", LocalDate.of(1865, 5, 6), "United Kingdom", "Lewis Carroll publishes Alice’s Adventures in Wonderland.", null, victorianLit);
+        event("War and Peace", LocalDate.of(1869, 8, 5), "Russia", "In Russia, Leo Tolstoy publishes the text War and Peace. This novel is the study of early 19th-century Russian society and is regarded as one of the world's greatest novels.", null, victorianLit);
+        event("Sherlock Holmes", LocalDate.of(1887, 2, 17), "United Kingdom", "Arthur Conan Doyle writes A Study in Scarlet, introducing Sherlock Holmes to the readers.", null, victorianLit);
 
         comment("Hello there", LocalDateTime.of(LocalDate.of(2012, 11, 8), LocalTime.of(11, 44)), trojanWar, john);
         comment("Welcome, I hope that you find this fascinating", LocalDateTime.of(LocalDate.of(2012, 11, 10), LocalTime.of(15, 8)), trojanWar, nissa);

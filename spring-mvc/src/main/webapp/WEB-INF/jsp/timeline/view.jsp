@@ -136,7 +136,34 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <a class="btn btn-primary" href="${pageContext.request.contextPath}/event/new?timelineId=${timeline.id}" role="button">Create new event</a>
+                            <ul class="nav nav-tabs" id="eventCreate" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">Load all</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="byTime-tab" data-bs-toggle="tab" data-bs-target="#byTime" type="button" role="tab" aria-controls="byTime" aria-selected="false">Filter by Timespan</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="new-tab" data-bs-toggle="tab" data-bs-target="#new" type="button" role="tab" aria-controls="new" aria-selected="false">Create new</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+                                    <div class="input-group mb-3">
+                                        <button class="btn btn-outline-secondary" type="button" id="button-search-by-name">Load all</button>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="byTime" role="tabpanel" aria-labelledby="byTime-tab">
+                                    <div class="input-group mb-3">
+                                        <input type="text" id="event-by-time-from-input" class="form-control datepicker" placeholder="From date" aria-label="From date" aria-describedby="button-search-by-time">
+                                        <input type="text" id="event-by-time-to-input" class="form-control datepicker" placeholder="To date" aria-label="To date" aria-describedby="button-search-by-time">
+                                        <button class="btn btn-outline-secondary" type="button" id="button-search-by-time">Search</button>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="new" role="tabpanel" aria-labelledby="new-tab">
+                                    <a class="btn btn-primary" href="${pageContext.request.contextPath}/event/new?timelineId=${timeline.id}" role="button">Create new event</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -177,6 +204,31 @@
 
                 $(document).on('show.bs.modal', '#addEventModal', function (event) {
                     let modal = $(this)
+                })
+
+                $(document).on('click', '#button-search-by-name', function (event) {
+                    $.ajax({
+                        type : "GET",
+                        url : "${pageContext.request.contextPath}/rest/events",
+                        data : {},
+                        success: function(data){
+                            console.log(data);
+                        }
+                    });
+                })
+
+                $(document).on('click', '#button-search-by-time', function (event) {
+                    $.ajax({
+                        type : "GET",
+                        url : "${pageContext.request.contextPath}/rest/events",
+                        data : {
+                            "from" : $('#event-by-time-from-input').val(),
+                            "to" : $('#event-by-time-to-input').val()
+                        },
+                        success: function(data){
+                            console.log(data);
+                        }
+                    });
                 })
             </script>
     </jsp:attribute>

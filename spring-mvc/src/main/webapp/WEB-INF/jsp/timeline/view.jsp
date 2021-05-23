@@ -87,6 +87,8 @@
                         <form:form method="post" action="${pageContext.request.contextPath}/comment/new"
                                    modelAttribute="comment"
                                    cssClass="form-horizontal mb-4">
+                            <form:hidden path="timelineId"/>
+                            <form:hidden path="userId" value="${authUser.id}"/>
                             <div class="input-group">
                                 <form:input path="text" cssClass="form-control"/>
                                 <form:errors path="text" cssClass="help-block"/>
@@ -108,8 +110,8 @@
                                     <div class="dropdown text-right col-1">
                                         <a type="button" id="commentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
                                         <div class="dropdown-menu dropdown-primary" aria-labelledby="commentDropdownMenuButton">
-                                            <a class="dropdown-item" href="${pageContext.request.contextPath}/comment/edit/${comment.id}">Edit</a>
-                                            <form:form action="${pageContext.request.contextPath}/comment/delete/${comment.id}" method="post" cssClass="submit">
+                                            <a class="dropdown-item" href="${pageContext.request.contextPath}/comment/update/${comment.id}?timelineId=${timeline.id}">Edit</a>
+                                            <form:form action="${pageContext.request.contextPath}/comment/delete/${comment.id}?timelineId=${timeline.id}" method="delete" cssClass="submit">
                                                 <button type="submit" class="dropdown-item btn btn-link text-danger">Delete</button>
                                             </form:form>
                                         </div>
@@ -134,7 +136,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <a class="btn btn-primary" href="${pageContext.request.contextPath}/event/new" role="button">Create new event</a>
+                            <a class="btn btn-primary" href="${pageContext.request.contextPath}/event/new?timelineId=${timeline.id}" role="button">Create new event</a>
                         </div>
                     </div>
                 </div>

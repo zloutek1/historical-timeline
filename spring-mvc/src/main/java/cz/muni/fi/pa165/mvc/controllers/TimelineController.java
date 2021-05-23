@@ -1,9 +1,10 @@
 package cz.muni.fi.pa165.mvc.controllers;
 
-import cz.muni.fi.pa165.dto.CommentDTO;
+import cz.muni.fi.pa165.dto.CommentCreateDTO;
 import cz.muni.fi.pa165.dto.TimelineCreateDTO;
 import cz.muni.fi.pa165.dto.TimelineDTO;
 import cz.muni.fi.pa165.dto.TimelineUpdateDTO;
+import cz.muni.fi.pa165.dto.UserDTO;
 import cz.muni.fi.pa165.facade.TimelineFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Optional;
 
@@ -34,7 +36,8 @@ public class TimelineController {
     private TimelineFacade timelineFacade;
 
     @GetMapping("{id}")
-    public String show(@PathVariable long id, Model model,
+    public String show(Model model, HttpSession session,
+                       @PathVariable long id,
                        RedirectAttributes redirectAttributes) {
         LOG.debug("show timeline");
         Optional<TimelineDTO> timelineOpt = timelineFacade.findById(id);
@@ -44,7 +47,14 @@ public class TimelineController {
         }
 
         model.addAttribute("timeline", timelineOpt.get());
-        model.addAttribute("comment", new CommentDTO());
+
+        var authUser = (UserDTO) session.getAttribute("authUser");
+        model.addAttribute("authUser", authUser);
+
+        var comment = new CommentCreateDTO();
+        comment.setTimelineId(id);
+        model.addAttribute("comment", comment);
+
         return "timeline/view";
     }
 
@@ -86,15 +96,23 @@ public class TimelineController {
         if(optTimeline.isEmpty()) {
             LOG.debug("get timeline update - timeline with id {} not found", id);
             model.addAttribute("update_timeline_failure", "Timeline not found");
-        } else {
-            model.addAttribute("timeline", optTimeline.get());
+            return "/timeline/update";
         }
+
+        var timeline = optTimeline.get();
+        var timelineUpdate = new TimelineUpdateDTO();
+        timelineUpdate.setId(timeline.getId());
+        timelineUpdate.setName(timeline.getName());
+        timelineUpdate.setFromDate(timeline.getFromDate());
+        timelineUpdate.setToDate(timeline.getToDate());
+
+        model.addAttribute("timeline", timelineUpdate);
+
         return "/timeline/update";
     }
 
-    @PostMapping ("/update/{id}")
+    @PostMapping ("/update")
     public String postNew(Model model,
-                          @PathVariable("id") Long id,
                           @Valid @ModelAttribute TimelineUpdateDTO timeline,
                           BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         LOG.debug("post timeline update");
@@ -102,7 +120,7 @@ public class TimelineController {
             return "/timeline/update";
         }
         timelineFacade.updateTimeline(timeline);
-        LOG.debug("post timeline update - Successfully updated timeline with id {} to {}", id, timeline);
+        LOG.debug("post timeline update - Successfully updated timeline with id {} to {}", timeline.getId(), timeline);
         redirectAttributes.addFlashAttribute("alert_success", "Updated timeline " + timeline.getName());
         return "redirect:/home";
     }

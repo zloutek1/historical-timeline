@@ -40,6 +40,16 @@
                                     <td>
                                         <a href="${pageContext.request.contextPath}/timeline/${timeline.id}"><c:out value="${ic.count}"/>. <c:out value="${timeline.name}" /></a>
                                     </td>
+                                    <td>
+                                        <c:if test="${(authUser.id eq studygroup.leader.id) or (authUser.role eq 'ADMINISTRATOR')}">
+                                            <form method="POST" action="${pageContext.request.contextPath}/timeline/delete/${timeline.id}">
+                                                <button class="btn btn-outline-danger" type="submit" title="Delete"
+                                                        onclick="return confirm('Do you really want to delete timeline ${timeline.name}?')">
+                                                    <i class="fas fa-trash" title="Delete"></i>
+                                                </button>
+                                            </form>
+                                        </c:if>
+                                    </td>
                                 </tr>
                                 </c:forEach>
                                 </tbody>
@@ -69,6 +79,16 @@
                                         <tr>
                                             <td>${member.firstName}</td>
                                             <td>${member.lastName}</td>
+                                            <td>
+                                            <c:if test="${(authUser.id eq studygroup.leader.id) or (authUser.role eq 'ADMINISTRATOR') or (authUser.id == member.id)}">
+                                                <form method="POST" action="${pageContext.request.contextPath}/studygroup/unregister/${studygroup.id}/${member.id}">
+                                                    <button class="btn btn-outline-danger" type="submit" title="Unregister"
+                                                            onclick="return confirm('Do you really want to unregister user ${member.firstName} ${member.lastName} from study group ${studygroup.name}?')">
+                                                        <i class="fas  fa-user-times" title="Delete"></i>
+                                                    </button>
+                                                </form>
+                                            </c:if>
+                                            </td>
                                         </tr>
                                         </c:forEach>
                                         </tbody>
@@ -79,7 +99,10 @@
 
                         <c:if test="${(authUser.id eq studygroup.leader.id) or (authUser.role eq 'ADMINISTRATOR')}">
                             <form method="POST" action="${pageContext.request.contextPath}/studygroup/delete/${studygroup.id}">
-                                <button class="btn btn-danger ml-3" type="submit">Delete study group</button>
+                                <button class="btn btn-danger ml-3" type="submit" title="Delete"
+                                        onclick="return confirm('Do you really want to delete study group ${studygroup.name}?')">
+                                    Delete study group
+                                </button>
                             </form>
                         </c:if>
 

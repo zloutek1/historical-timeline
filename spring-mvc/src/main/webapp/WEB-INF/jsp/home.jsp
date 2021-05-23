@@ -38,14 +38,6 @@
                                 <c:forEach items="${studygroup.timelines}" var="timeline">
                                     <li class="list-group-item">
                                         <a href="${pageContext.request.contextPath}/timeline/${timeline.id}"><c:out value="${timeline.name}" /></a>
-                                            <c:if test="${(authUser.id eq studygroup.leader.id) or (authUser.role eq 'ADMINISTRATOR')}">
-                                                <form method="POST" action="${pageContext.request.contextPath}/timeline/delete/${timeline.id}">
-                                                    <button class="btn btn-outline-danger float-right" type="submit" title="Delete"
-                                                            onclick="return confirm('Do you really want to delete timeline ${timeline.name}?')">
-                                                        <i class="fas fa-trash" title="Delete"></i>
-                                                    </button>
-                                                </form>
-                                            </c:if>
                                     </li>
                                 </c:forEach>
                                 <c:if test="${(authUser.id eq studygroup.leader.id) or (authUser.role eq 'ADMINISTRATOR')}">

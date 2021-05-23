@@ -144,14 +144,26 @@
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="addEvent-all">
                                     <div class="input-group mb-3">
-                                        <button class="btn btn-outline-secondary" type="button" id="button-search-by-name">Load all</button>
+                                        <div class="row">
+                                            <button class="btn btn-outline-secondary" type="button" id="button-search-by-name">Load all</button>
+                                        </div>
+                                        <div class="row">
+                                            <select id="addEvent-all-select"></select>
+                                            <button type="submit"></button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="addEvent-between">
                                     <div class="input-group mb-3">
-                                        <input type="text" id="event-by-time-from-input" class="form-control datepicker" placeholder="From date" aria-label="From date" aria-describedby="button-search-by-time">
-                                        <input type="text" id="event-by-time-to-input" class="form-control datepicker" placeholder="To date" aria-label="To date" aria-describedby="button-search-by-time">
-                                        <button class="btn btn-outline-secondary" type="button" id="button-search-by-time">Search</button>
+                                        <div class="row">
+                                            <input type="text" id="event-by-time-from-input" class="form-control datepicker" placeholder="From date" aria-label="From date" aria-describedby="button-search-by-time">
+                                            <input type="text" id="event-by-time-to-input" class="form-control datepicker" placeholder="To date" aria-label="To date" aria-describedby="button-search-by-time">
+                                            <button class="btn btn-outline-secondary" type="button" id="button-search-by-time">Search</button>
+                                        </div>
+                                        <div class="row">
+                                            <select id="addEvent-all-by-time-select"></select>
+                                            <button type="submit"></button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="addEvent-create">
@@ -188,6 +200,7 @@
     </jsp:attribute>
 
     <jsp:attribute name="scripts">
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
             <script type="application/javascript">
                 $(document).on('show.bs.modal', '#removeModal', function (event) {
                     let button = $(event.relatedTarget)
@@ -201,29 +214,33 @@
                 })
 
                 $(document).on('click', '#button-search-by-name', function (event) {
-                    $.ajax({
-                        type : "GET",
-                        url : "${pageContext.request.contextPath}/rest/events",
-                        data : {},
-                        success: function(data){
-                            console.log(data);
-                        }
-                    });
+                    $.getJSON("${pageContext.request.contextPath}/event", function (result) {
+                        const select = $('#addEvent-all-select')
+                        select.empty()
+                        $(result).each(function( index, value ) {
+                            select.append('<option value="'+value.id+'">'+value.name+'</option>')
+                        })
+                    })
                 })
 
                 $(document).on('click', '#button-search-by-time', function (event) {
-                    $.ajax({
-                        type : "GET",
-                        url : "${pageContext.request.contextPath}/rest/events",
-                        data : {
-                            "from" : $('#event-by-time-from-input').val(),
-                            "to" : $('#event-by-time-to-input').val()
-                        },
-                        success: function(data){
-                            console.log(data);
-                        }
+                    let fromDate = $('#event-by-time-from-input').val()
+                    let toDate =  $('#event-by-time-to-input').val()
+                    let url = "${pageContext.request.contextPath}/event?fromDate=" + fromDate + "&toDate=" + toDate
+                    $.getJSON(url, function (result) {
+                        const select = $('#addEvent-by-time-select')
+                        select.empty()
+                        $(result).each(function( index, value ) {
+                            select.append('<option value="'+value.id+'">'+value.name+'</option>')
+                        })
                     });
                 })
+
+                $( function() {
+                    $( ".datepicker" ).datepicker({
+                        dateFormat: "dd.mm.yy"
+                    });
+                } );
             </script>
     </jsp:attribute>
 </my:maintemplate>

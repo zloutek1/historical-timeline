@@ -133,7 +133,7 @@ public class TimelineController {
         return "redirect:/home";
     }
 
-    @PostMapping("/{timelineId}/addEvent/{eventId}")
+    @GetMapping("/{timelineId}/add/event/{eventId}")
     public String addEvent(Model model, @PathVariable Long timelineId, @PathVariable Long eventId) {
         LOG.debug("post timeline add event");
         timelineFacade.addEvent(timelineId, eventId);

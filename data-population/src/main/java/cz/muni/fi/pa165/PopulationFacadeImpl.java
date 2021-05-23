@@ -50,12 +50,14 @@ public class PopulationFacadeImpl implements PopulationFacade {
         User sampleTeacher = user("teacher@secret.com", "Teacher", "Name", "password", UserRole.TEACHER);
         User sampleAdmin = user("admin@secret.com", "Admin", "Name", "password", UserRole.ADMINISTRATOR);
 
-        StudyGroup history = studyGroup("History");
-        StudyGroup literature = studyGroup("Literature");
+        StudyGroup history = studyGroup("History", nissa);
+        StudyGroup literature = studyGroup("Literature", nissa);
 
         history.addMember(john);
         history.addMember(eloise);
+        history.addMember(nissa);
         literature.addMember(sampleUser);
+        literature.addMember(nissa);
 
         Timeline ww2 = timeline("World War 2", LocalDate.of(1939, 9, 1), LocalDate.of(1945, 9, 2), history);
         Timeline ww1 = timeline("World War 1", LocalDate.of(1914, 7, 28), LocalDate.of(1918, 11, 11), history);
@@ -103,8 +105,9 @@ public class PopulationFacadeImpl implements PopulationFacade {
         return u;
     }
 
-    private StudyGroup studyGroup(String name) {
+    private StudyGroup studyGroup(String name, User leader) {
         StudyGroup s = new StudyGroup(name);
+        s.setLeader(leader);
         studyGroupService.create(s);
         return s;
     }

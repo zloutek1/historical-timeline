@@ -8,13 +8,15 @@
 <my:maintemplate title="Home">
     <jsp:attribute name="body">
         <div class="jumbotron text-center">
-            <h1>Home page</h1>
-            <p>List of available study groups</p>
+            <h2>List of available study groups:</h2>
         </div>
 
         <div class="container">
-            <div class="row">
             <c:forEach items="${studyGroups}" var="studygroup" varStatus="ic">
+                    <c:if test="${ic.count % 4 == 1}">
+                        <div class="row">
+                    </c:if>
+
                     <div class="col-sm-6">
                         <h3> <c:out value="${ic.count}"/>. <c:out value="${studygroup.name}"/></h3>
 
@@ -35,7 +37,9 @@
                                 <tbody>
                                 <c:forEach items="${studygroup.timelines}" var="timeline" varStatus="ic">
                                 <tr>
-                                    <td><c:out value="${ic.count}"/>. <c:out value="${timeline.name}" /></td>
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/timeline/${timeline.id}"><c:out value="${ic.count}"/>. <c:out value="${timeline.name}" /></a>
+                                    </td>
                                 </tr>
                                 </c:forEach>
                                 </tbody>
@@ -73,17 +77,24 @@
                             </c:otherwise>
                         </c:choose>
 
-                        <c:if test="${authUser.role eq 'STUDENT'}">
-                        <div class="col-sm-3">
-                            <a href="${pageContext.request.contextPath}/todo/path" class="btn btn-primary">Register to study group</a>
-                        </div>
+                        <c:if test="${(authUser.id eq studygroup.leader.id) or (authUser.role eq 'ADMINISTRATOR')}">
+                            <form method="POST" action="${pageContext.request.contextPath}/studygroup/delete/${studygroup.id}">
+                                <button class="btn btn-danger ml-3" type="submit">Delete study group</button>
+                            </form>
                         </c:if>
 
                     </div>
+
+                    <c:if test="${ic.count % 4 == 1}">
+                        </div>
+                    </c:if>
     </c:forEach>
 
-        </div>
-        <div class="row">
+
+
+            </div>
+
+        <div class="container">
                 <c:if test="${authUser.role eq 'TEACHER'}">
                 <div class="col-sm-3">
                     <a href="${pageContext.request.contextPath}/studygroup/new" class="btn btn-primary">Create new study group</a>
@@ -91,8 +102,6 @@
                 </c:if>
 
         </div>
-
-            </div>
 
     </jsp:attribute>
 </my:maintemplate>

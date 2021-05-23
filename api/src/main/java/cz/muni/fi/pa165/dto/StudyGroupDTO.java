@@ -16,4 +16,5 @@ public class StudyGroupDTO {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<TimelineShortDTO> timelines;
+    private UserDTO leader;
 }

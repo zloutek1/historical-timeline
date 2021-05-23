@@ -2,6 +2,7 @@ package cz.muni.fi.pa165.service;
 
 import cz.muni.fi.pa165.dao.StudyGroupDao;
 import cz.muni.fi.pa165.dao.UserDao;
+import cz.muni.fi.pa165.dto.UserRole;
 import cz.muni.fi.pa165.entity.StudyGroup;
 import cz.muni.fi.pa165.entity.User;
 import cz.muni.fi.pa165.exceptions.ServiceException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author David Sevcik
@@ -110,7 +112,7 @@ public class UserServiceImpl implements UserService {
             userDao.update(user);
         }
         catch (DataAccessException e) {
-            throw new ServiceException("Could nor reguster user from studygroup. ", e);
+            throw new ServiceException("Could nor register user from studygroup. ", e);
         }
     }
 
@@ -138,6 +140,15 @@ public class UserServiceImpl implements UserService {
     {
         User user = findUserFromDaoIfExistsElseThrow(userID);
         return user.getStudyGroups();
+    }
+
+    @Override
+    public List<StudyGroup> findStudyGroupsLeadBy(Long userID) {
+        User user = findUserFromDaoIfExistsElseThrow(userID);
+        if (user.getRole() != UserRole.TEACHER) {
+            throw new ServiceException("User that is not teacher cannot lead any Study Group");
+        }
+        return user.getStudyGroups().stream().filter(s -> (s.getLeader() == user)).collect(Collectors.toList());
     }
 
     @Override

@@ -2,7 +2,12 @@ package cz.muni.fi.pa165.mvc.controllers;
 
 import cz.muni.fi.pa165.dto.StudyGroupCreateDTO;
 import cz.muni.fi.pa165.dto.StudyGroupDTO;
+import cz.muni.fi.pa165.dto.UserDTO;
+import cz.muni.fi.pa165.dto.UserRole;
+import cz.muni.fi.pa165.facade.EventFacade;
 import cz.muni.fi.pa165.facade.StudyGroupFacade;
+import cz.muni.fi.pa165.facade.TimelineFacade;
+import cz.muni.fi.pa165.facade.UserFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -10,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -22,17 +28,19 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/studygroup")
 public class StudyGroupController {
-    private static final Logger LOG = LoggerFactory.getLogger(LoginController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(StudyGroupController.class);
 
     @Inject
     private StudyGroupFacade studyGroupFacade;
 
-    @GetMapping
-    public String list(Model model) {
-        LOG.debug("studygroup list");
-        model.addAttribute("studygroups", studyGroupFacade.findAllStudyGroups());
-        return "studygroup/list";
-    }
+    @Inject
+    private UserFacade userFacade;
+
+    @Inject
+    private TimelineFacade timelineFacade;
+
+    @Inject
+    private EventFacade eventFacade;
 
     @GetMapping(value = "new")
     public String getNew(Model model) {
@@ -56,11 +64,51 @@ public class StudyGroupController {
             model.addAttribute("new_studygroup_failure", "Study group already exists");
             return "studygroup/new";
         }
-        studyGroupFacade.createStudyGroup(studyGroup);
+
+        var authUser = (UserDTO)session.getAttribute("authUser");
+
+        studyGroup.setLeader(authUser.getId());
+
+        var studyGroupID = studyGroupFacade.createStudyGroup(studyGroup);
+        userFacade.registerToStudyGroup(authUser.getId(), studyGroupID);
+
         LOG.debug("post studygroup new - Successfully added new studygroup {}", studyGroup);
         redirectAttributes.addFlashAttribute("alert_success",
-                "Added user " + studyGroup.getName());
-        return "redirect:/studygroup";
+                "Added Study group " + studyGroup.getName());
+        return "redirect:/home";
+    }
+
+    @PostMapping(value = "delete/{id}")
+    public String postDelete(@PathVariable long id, Model model, HttpSession session) {
+        UserDTO authUser = (UserDTO)session.getAttribute("authUser");
+        if (authUser != null) {
+            if ((authUser.getRole() == UserRole.TEACHER) || (authUser.getRole() == UserRole.ADMINISTRATOR)) {
+
+                var studyGroup = studyGroupFacade.findById(id);
+                if (studyGroup.isEmpty()) {
+                    return "redirect:/home";
+                }
+
+                var timelines = studyGroup.get().getTimelines();
+                for (var timeline: timelines
+                     ) {
+                    var events = timelineFacade.findById(timeline.getId()).get().getEvents();
+                    for (var event: events) {
+                        timelineFacade.removeEvent(timeline.getId(), event.getId());
+                        eventFacade.removeTimeline(event.getId(), timeline.getId());
+                    }
+                }
+
+                var members = studyGroup.get().getMembers();
+                for (var member: members
+                     ) {
+                    userFacade.unregisterFromStudyGroup(member.getId(), id);
+                }
+
+                studyGroupFacade.deleteStudyGroup(id);
+            }
+        }
+        return "redirect:/home";
     }
 
 }

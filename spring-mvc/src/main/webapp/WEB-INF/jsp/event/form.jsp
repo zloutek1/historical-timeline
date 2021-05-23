@@ -9,9 +9,10 @@
     <jsp:attribute name="body">
         <div class="row justify-content-center">
             <div class="col-sm-6">
-                <form:form method="post" action="#"
+                <form:form method="post"
                            modelAttribute="event"
-                           cssClass="form-horizontal mt-5 p-5 border bg-light">
+                           cssClass="form-horizontal mt-5 p-5 border bg-light"
+                           enctype="multipart/form-data">
                     <h1>Event</h1>
                     <div class="form-group row">
                         <form:label path="name" cssClass="col-sm-2 control-label">Name</form:label>
@@ -44,7 +45,6 @@
                     <div class="form-group row">
                         <form:label path="image" cssClass="col-sm-2 control-label">Image</form:label>
                         <div class="col-sm-10">
-                            <form:hidden path="image"/>
                             <input type="file" name="image" accept="image/png, image/jpeg" />
                             <form:errors path="image" cssClass="help-block"/>
                         </div>

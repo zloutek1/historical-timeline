@@ -135,32 +135,26 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body">
-                            <ul class="nav nav-tabs" id="eventCreate" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">Load all</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="byTime-tab" data-bs-toggle="tab" data-bs-target="#byTime" type="button" role="tab" aria-controls="byTime" aria-selected="false">Filter by Timespan</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="new-tab" data-bs-toggle="tab" data-bs-target="#new" type="button" role="tab" aria-controls="new" aria-selected="false">Create new</button>
-                                </li>
+                        <div class="modal-body container">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a class="nav-link" data-toggle="tab" href="#addEvent-all">Load all</a></li>
+                                <li><a class="nav-link" data-toggle="tab" href="#addEvent-between">Between dates</a></li>
+                                <li><a class="nav-link" data-toggle="tab" href="#addEvent-create">Create new</a></li>
                             </ul>
-                            <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="addEvent-all">
                                     <div class="input-group mb-3">
                                         <button class="btn btn-outline-secondary" type="button" id="button-search-by-name">Load all</button>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="byTime" role="tabpanel" aria-labelledby="byTime-tab">
+                                <div class="tab-pane fade" id="addEvent-between">
                                     <div class="input-group mb-3">
                                         <input type="text" id="event-by-time-from-input" class="form-control datepicker" placeholder="From date" aria-label="From date" aria-describedby="button-search-by-time">
                                         <input type="text" id="event-by-time-to-input" class="form-control datepicker" placeholder="To date" aria-label="To date" aria-describedby="button-search-by-time">
                                         <button class="btn btn-outline-secondary" type="button" id="button-search-by-time">Search</button>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="new" role="tabpanel" aria-labelledby="new-tab">
+                                <div class="tab-pane fade" id="addEvent-create">
                                     <a class="btn btn-primary" href="${pageContext.request.contextPath}/event/new?timelineId=${timeline.id}" role="button">Create new event</a>
                                 </div>
                             </div>

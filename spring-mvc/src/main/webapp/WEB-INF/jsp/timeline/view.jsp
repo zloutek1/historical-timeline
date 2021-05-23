@@ -135,8 +135,41 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body">
-                            <a class="btn btn-primary" href="${pageContext.request.contextPath}/event/new?timelineId=${timeline.id}" role="button">Create new event</a>
+                        <div class="modal-body container">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a class="nav-link" data-toggle="tab" href="#addEvent-all">Load all</a></li>
+                                <li><a class="nav-link" data-toggle="tab" href="#addEvent-between">Between dates</a></li>
+                                <li><a class="nav-link" data-toggle="tab" href="#addEvent-create">Create new</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="addEvent-all">
+                                    <div class="input-group mb-3">
+                                        <div class="row">
+                                            <button class="btn btn-outline-secondary" type="button" id="button-search-by-name">Load all</button>
+                                        </div>
+                                        <div class="row">
+                                            <select id="addEvent-all-select"></select>
+                                            <button class="btn btn-primary" type="button" id="addEvent-all-submit">Add event</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="addEvent-between">
+                                    <div class="input-group mb-3">
+                                        <div class="row">
+                                            <input type="text" id="event-by-time-from-input" class="form-control datepicker" placeholder="From date" aria-label="From date" aria-describedby="button-search-by-time">
+                                            <input type="text" id="event-by-time-to-input" class="form-control datepicker" placeholder="To date" aria-label="To date" aria-describedby="button-search-by-time">
+                                            <button class="btn btn-outline-secondary" type="button" id="button-search-by-time">Search</button>
+                                        </div>
+                                        <div class="row">
+                                            <select id="addEvent-all-by-time-select"></select>
+                                            <button class="btn btn-primary" type="button" id="addEvent-by-time-submit">Add event</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="addEvent-create">
+                                    <a class="btn btn-primary" href="${pageContext.request.contextPath}/event/new?timelineId=${timeline.id}" role="button">Create new event</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -167,6 +200,7 @@
     </jsp:attribute>
 
     <jsp:attribute name="scripts">
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
             <script type="application/javascript">
                 $(document).on('show.bs.modal', '#removeModal', function (event) {
                     let button = $(event.relatedTarget)
@@ -178,6 +212,35 @@
                 $(document).on('show.bs.modal', '#addEventModal', function (event) {
                     let modal = $(this)
                 })
+
+                $(document).on('click', '#button-search-by-name', function (event) {
+                    $.getJSON("${pageContext.request.contextPath}/event", function (result) {
+                        const select = $('#addEvent-all-select')
+                        select.empty()
+                        $(result).each(function( index, value ) {
+                            select.append('<option value="'+value.id+'">'+value.name+'</option>')
+                        })
+                    })
+                })
+
+                $(document).on('click', '#button-search-by-time', function (event) {
+                    let fromDate = $('#event-by-time-from-input').val()
+                    let toDate =  $('#event-by-time-to-input').val()
+                    let url = "${pageContext.request.contextPath}/event?fromDate=" + fromDate + "&toDate=" + toDate
+                    $.getJSON(url, function (result) {
+                        const select = $('#addEvent-by-time-select')
+                        select.empty()
+                        $(result).each(function( index, value ) {
+                            select.append('<option value="'+value.id+'">'+value.name+'</option>')
+                        })
+                    });
+                })
+
+                $( function() {
+                    $( ".datepicker" ).datepicker({
+                        dateFormat: "dd.mm.yy"
+                    });
+                } );
             </script>
     </jsp:attribute>
 </my:maintemplate>

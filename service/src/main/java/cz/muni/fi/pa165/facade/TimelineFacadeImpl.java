@@ -79,6 +79,7 @@ public class TimelineFacadeImpl implements TimelineFacade {
         Event event = eventService.findById(timelineId)
                 .orElseThrow(() -> new ServiceException("No event with id " + eventId + " found."));
         timeline.addEvent(event);
+        event.addTimeline(timeline);
     }
 
     @Override
@@ -88,6 +89,7 @@ public class TimelineFacadeImpl implements TimelineFacade {
         Event event = eventService.findById(timelineId)
                 .orElseThrow(() -> new ServiceException("No event with id " + eventId + " found."));
         timeline.removeEvent(event);
+        event.removeTimeline(timeline);
     }
 
     @Override

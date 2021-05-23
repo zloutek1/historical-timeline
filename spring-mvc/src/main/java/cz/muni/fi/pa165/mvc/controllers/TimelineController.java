@@ -39,9 +39,9 @@ public class TimelineController {
     @Inject
     private EventFacade eventFacade;
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public String show(Model model, HttpSession session,
-                       @PathVariable long id,
+                       @PathVariable Long id,
                        RedirectAttributes redirectAttributes) {
         LOG.debug("show timeline");
         Optional<TimelineDTO> timelineOpt = timelineFacade.findById(id);
@@ -146,5 +146,12 @@ public class TimelineController {
         timelineFacade.deleteTimeline(id);
         LOG.debug("post timeline delete - Successfully deleted timeline with id {}", id);
         return "redirect:/home";
+    }
+
+    @GetMapping("/{timelineId}/add/event/{eventId}")
+    public String addEvent(Model model, @PathVariable Long timelineId, @PathVariable Long eventId) {
+        LOG.debug("post timeline add event");
+        timelineFacade.addEvent(timelineId, eventId);
+        return "redirect:/timeline/" + timelineId;
     }
 }

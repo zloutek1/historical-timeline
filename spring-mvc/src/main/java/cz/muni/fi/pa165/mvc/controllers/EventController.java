@@ -5,6 +5,7 @@ import cz.muni.fi.pa165.dto.EventDTO;
 import cz.muni.fi.pa165.facade.EventFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 @RequestMapping("/event")
@@ -40,9 +44,9 @@ public class EventController {
             return "event/form";
         }
 
-        eventFacade.createEvent(event);
+        Long id = eventFacade.createEvent(event);
 
-        return redirect(timelineId);
+        return redirect(timelineId, id);
     }
 
     @GetMapping(value = "/update/{id}")
@@ -70,7 +74,7 @@ public class EventController {
 
         eventFacade.updateEvent(event);
 
-        return redirect(timelineId);
+        return redirect(timelineId, event.getId());
     }
 
     private Boolean isDuplicate(Model model, String eventName) {
@@ -98,15 +102,23 @@ public class EventController {
             eventFacade.deleteEvent(id);
         }
 
-        return redirect(timelineId);
+        return redirect(timelineId, id);
 
     }
 
-    private String redirect(Long timelineId){
+    private String redirect(Long timelineId, Long eventId){
         if (timelineId == null){
             return "redirect:/home";
         }
+        return "redirect:/timeline/" + timelineId + "/add/event/ " + eventId;
+    }
 
-        return "redirect:/timeline/" + timelineId;
+    @GetMapping(produces = "application/json; charset=UTF-8")
+    private @ResponseBody List<EventDTO> findAll(@RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate fromDate, @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate toDate) {
+        if (fromDate == null && toDate == null) {
+            return eventFacade.findAllEvents();
+        } else {
+            return eventFacade.findAllInRange(fromDate, toDate);
+        }
     }
 }

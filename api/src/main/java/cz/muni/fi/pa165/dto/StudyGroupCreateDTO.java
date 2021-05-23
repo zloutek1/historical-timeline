@@ -10,5 +10,5 @@ public class StudyGroupCreateDTO {
     @NotNull
     @Size(min = 3, max = 50)
     private String name;
-    private UserDTO leader;
+    private Long leader;
 }

@@ -67,10 +67,10 @@ public interface UserService {
     List<StudyGroup> findUserStudyGroups(Long userID);
 
     /**
-     * Finds all study groups, which is given user registered in as a leader
+     * Finds all study groups, which are lead by user
      * @param userID ID of the user
      * */
-    List<StudyGroup> findLeadersStudyGroups(Long userID);
+    List<StudyGroup> findStudyGroupsLeadBy(Long userID);
 
     /**
      * Return list containing all of the users

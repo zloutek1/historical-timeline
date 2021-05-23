@@ -37,10 +37,10 @@ public class StudyGroupController {
     private UserFacade userFacade;
 
     @Inject
-    TimelineFacade timelineFacade;
+    private TimelineFacade timelineFacade;
 
     @Inject
-    EventFacade eventFacade;
+    private EventFacade eventFacade;
 
     @GetMapping(value = "new")
     public String getNew(Model model) {
@@ -67,7 +67,7 @@ public class StudyGroupController {
 
         var authUser = (UserDTO)session.getAttribute("authUser");
 
-        studyGroup.setLeader(authUser);
+        studyGroup.setLeader(authUser.getId());
 
         var studyGroupID = studyGroupFacade.createStudyGroup(studyGroup);
         userFacade.registerToStudyGroup(authUser.getId(), studyGroupID);
@@ -82,7 +82,7 @@ public class StudyGroupController {
     public String postDelete(@PathVariable long id, Model model, HttpSession session) {
         UserDTO authUser = (UserDTO)session.getAttribute("authUser");
         if (authUser != null) {
-            if (authUser.getRole() == UserRole.TEACHER) {
+            if ((authUser.getRole() == UserRole.TEACHER) || (authUser.getRole() == UserRole.ADMINISTRATOR)) {
 
                 var studyGroup = studyGroupFacade.findById(id);
                 if (studyGroup.isEmpty()) {
@@ -92,7 +92,7 @@ public class StudyGroupController {
                 var timelines = studyGroup.get().getTimelines();
                 for (var timeline: timelines
                      ) {
-                    var events = timelineFacade.findEventsOfTimeline(timeline.getId());
+                    var events = timelineFacade.findById(timeline.getId()).get().getEvents();
                     for (var event: events) {
                         timelineFacade.removeEvent(timeline.getId(), event.getId());
                         eventFacade.removeTimeline(event.getId(), timeline.getId());

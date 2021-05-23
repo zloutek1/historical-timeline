@@ -69,10 +69,10 @@ public interface UserFacade {
     List<StudyGroupDTO> findUserStudyGroups(Long userID);
 
     /**
-     * Find Study groups which is user regstered as a leader in
+     * Finds all study groups, which are lead by user
      * @param userID ID of the user
      * */
-    List<StudyGroupDTO> findLeadersStudyGroups(Long userID);
+    List<StudyGroupDTO> findStudyGroupsLeadBy(Long userID);
 
     /**
      * Finds all of the users

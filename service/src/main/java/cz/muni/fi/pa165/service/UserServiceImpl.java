@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<StudyGroup> findLeadersStudyGroups(Long userID) {
+    public List<StudyGroup> findStudyGroupsLeadBy(Long userID) {
         User user = findUserFromDaoIfExistsElseThrow(userID);
         if (user.getRole() != UserRole.TEACHER) {
             throw new ServiceException("User that is not teacher cannot lead any Study Group");

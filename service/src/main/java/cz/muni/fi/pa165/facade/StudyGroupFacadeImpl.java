@@ -3,10 +3,10 @@ package cz.muni.fi.pa165.facade;
 import cz.muni.fi.pa165.dto.StudyGroupCreateDTO;
 import cz.muni.fi.pa165.dto.StudyGroupDTO;
 import cz.muni.fi.pa165.entity.StudyGroup;
-import cz.muni.fi.pa165.entity.User;
 import cz.muni.fi.pa165.exceptions.ServiceException;
 import cz.muni.fi.pa165.service.BeanMappingService;
 import cz.muni.fi.pa165.service.StudyGroupService;
+import cz.muni.fi.pa165.service.UserService;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,14 +27,13 @@ public class StudyGroupFacadeImpl implements StudyGroupFacade {
     @Inject
     private BeanMappingService beanMappingService;
 
+    @Inject
+    private UserService userService;
+
     @Override
     public Long createStudyGroup(@NonNull StudyGroupCreateDTO studyGroup) {
         StudyGroup studyGroupEntity = new StudyGroup(studyGroup.getName());
-        if (studyGroup.getLeader() != null) {
-            User mappedUser = beanMappingService.mapTo(studyGroup.getLeader(), User.class);
-            studyGroupEntity.setLeader(mappedUser);
-
-        }
+        studyGroupEntity.setLeader(userService.findUserByID(studyGroup.getLeader()).get());
         studyGroupService.create(studyGroupEntity);
         return studyGroupEntity.getId();
     }

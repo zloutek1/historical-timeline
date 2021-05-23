@@ -71,13 +71,6 @@ public interface TimelineService {
     List<Timeline> findAllBetweenDates(LocalDate from, LocalDate to);
 
     /**
-     * Fetches events related to timeline
-     * @param timelineId ID of timeline
-     * @return all timeline events
-     */
-    List<Event> findEventsOfTimeline(Long timelineId);
-
-    /**
      * @param id of the timeline
      * @return timeline if the timeline is found else return empty
      */

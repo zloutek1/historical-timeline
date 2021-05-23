@@ -1,6 +1,5 @@
 package cz.muni.fi.pa165.facade;
 
-import cz.muni.fi.pa165.dto.EventDTO;
 import cz.muni.fi.pa165.dto.TimelineCreateDTO;
 import cz.muni.fi.pa165.dto.TimelineDTO;
 import cz.muni.fi.pa165.dto.TimelineUpdateDTO;
@@ -57,13 +56,6 @@ public interface TimelineFacade {
      * @return all timelines between dates
      */
     List<TimelineDTO> findAllBetweenDates(LocalDate from, LocalDate to);
-
-    /**
-     * Fetches events related to timeline
-     * @param timelineId ID of timeline
-     * @return all timeline events
-     */
-    List<EventDTO> findEventsOfTimeline(Long timelineId);
 
     /**
      * @param id of the timeline

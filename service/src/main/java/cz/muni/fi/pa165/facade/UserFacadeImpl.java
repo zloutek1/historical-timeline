@@ -79,8 +79,8 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override
-    public List<StudyGroupDTO> findLeadersStudyGroups(Long userID) {
-        return userService.findLeadersStudyGroups(userID)
+    public List<StudyGroupDTO> findStudyGroupsLeadBy(Long userID) {
+        return userService.findStudyGroupsLeadBy(userID)
                 .stream()
                 .map(studygroup -> beanMappingService.mapTo(studygroup, StudyGroupDTO.class))
                 .collect(Collectors.toList());

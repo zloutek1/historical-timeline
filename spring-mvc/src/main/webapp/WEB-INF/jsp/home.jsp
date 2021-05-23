@@ -60,7 +60,7 @@
                         <c:otherwise>
                             <ul class="list-group list-group-flush mt-3 mb-3">
                                 <c:forEach items="${studygroup.members}" var="member" varStatus="ic">
-                                    <li class="list-group-item"><span>${member.firstName} ${member.lastName}</span>
+                                    <li class="list-group-item"><span><c:out value="${member.firstName} "> </c:out>  <c:out value="${member.lastName}"> </c:out></span>
                                         <c:if test="${(authUser.id eq studygroup.leader.id) or (authUser.role eq 'ADMINISTRATOR') or (authUser.id == member.id)}">
                                             <form method="POST" action="${pageContext.request.contextPath}/studygroup/unregister/${studygroup.id}/${member.id}">
                                                 <button class="btn btn-outline-danger float-right" type="submit" title="Unregister"

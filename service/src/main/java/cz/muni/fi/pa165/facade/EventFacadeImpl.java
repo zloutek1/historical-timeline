@@ -47,6 +47,7 @@ public class EventFacadeImpl implements EventFacade{
 
         setImage(mappedEvent, event.getImage());
 
+        eventService.create(mappedEvent);
         return mappedEvent.getId();
     }
 

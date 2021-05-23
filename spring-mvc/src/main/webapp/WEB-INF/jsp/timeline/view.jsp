@@ -7,7 +7,7 @@
 
 <my:maintemplate title="Timeline">
     <jsp:attribute name="head">
-        <style type="text/css">
+        <style>
             .timeline .date {
                 padding-top: .75rem;
                 color: gray;
@@ -39,54 +39,143 @@
         <div class="timeline container">
             <div class="text-center">
                 <h1><c:out value="${timeline.name}" /></h1>
-                <p><c:out value="${timeline.fromDate} - ${timeline.toDate}" /></p>
+                <p><my:localdate value = "${timeline.fromDate}" /> - <my:localdate value="${timeline.toDate}" /></p>
             </div>
 
-            <c:choose>
-            <c:when test="${empty timeline.events}">
-                <p class="text-center"> There are no events yet!</p>
-            </c:when>
-
-            <c:otherwise>
-                <c:forEach items="${timeline.events}" var="event">
-                    <div class="row">
-                        <div class="date pr-3 w-25 text-right">
-                            <c:out value="${event.date}" />
-                        </div>
-                        <div class="event py-2 col">
-                            <h3><c:out value="${event.name}" /></h3>
-                            <p><c:out value="${event.description}" /></p>
-                        </div>
-                    </div>
-                </c:forEach>
-            </c:otherwise>
-            </c:choose>
-
-            <h2 class="mt-5">Comments</h2>
-            <form:form method="post" action="${pageContext.request.contextPath}/comment/new"
-                       modelAttribute="comment"
-                       cssClass="form-horizontal">
-                <div class="form-group">
-                    <form:textarea path="text" cssClass="form-control p-1 border bg-light"/>
-                    <form:errors path="text" cssClass="help-block"/>
+            <div class="events container">
+                <div class="row justify-content-end mb-2">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addEventModal">Add event</button>
                 </div>
-                <button class="btn btn-primary" type="submit"><i class="fas fa-paper-plane"></i></button>
-            </form:form>
 
-            <div class="comments container mt-2">
-                <c:forEach items="${timeline.comments}" var="comment">
-                    <div class="comment container mr-1">
-                        <div class="row align-items-end">
-                            <h4 class="m-0"><c:out value="${comment.author.firstName} ${comment.author.lastName}" /></h4>
-                            <p class="date m-0 ml-2"><c:out value="${comment.time}" /></p>
-                        </div>
+                <c:choose>
+                <c:when test="${empty timeline.events}">
+                    <p class="text-center"> There are no events yet!</p>
+                </c:when>
+
+                <c:otherwise>
+                    <c:forEach items="${timeline.events}" var="event">
                         <div class="row">
-                            <p><c:out value="${comment.text}" /></p>
+                            <div class="date pr-3 w-25 text-right">
+                                <my:localdate value = "${event.date}" />
+                            </div>
+                            <div class="event py-2 col container">
+                                <div class="row">
+                                    <h3 class="col d-inline"><c:out value="${event.name}" /></h3>
+                                    <div class="dropdown text-right col-1">
+                                        <a type="button" id="eventDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
+                                        <div class="dropdown-menu dropdown-primary" aria-labelledby="eventDropdownMenuButton">
+                                            <a class="dropdown-item" href="/pa165/event/edit/${event.id}">Edit</a>
+                                            <button type="button" class="dropdown-item btn btn-link text-danger" data-toggle="modal" data-target="#removeModal" data-event-id="${event.id}">Remove</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p><c:out value="${event.description}" /></p>
+                            </div>
                         </div>
-                    </div>
-                </c:forEach>
+                    </c:forEach>
+                </c:otherwise>
+                </c:choose>
             </div>
 
+            <div class="comments container mt-4">
+                <div class="row">
+                    <div class="w-25">
+                        <!-- padding -->
+                    </div>
+                    <div class="col container">
+                        <h2 class="mt-5">Comments</h2>
+                        <form:form method="post" action="${pageContext.request.contextPath}/comment/new"
+                                   modelAttribute="comment"
+                                   cssClass="form-horizontal mb-4">
+                            <div class="input-group">
+                                <form:input path="text" cssClass="form-control"/>
+                                <form:errors path="text" cssClass="help-block"/>
+                                <div class="input-group-append">
+                                    <div class="align-self-end">
+                                        <button class="btn btn-primary" type="submit"><i class="fas fa-paper-plane"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form:form>
+
+                        <c:forEach items="${timeline.comments}" var="comment">
+                            <div class="comment container">
+                                <div class="row">
+                                    <div class="row col align-items-end">
+                                        <h4 class="m-0"><c:out value="${comment.author.firstName} ${comment.author.lastName}" /></h4>
+                                        <p class="date m-0 ml-2"><my:localdatetime value = "${comment.time}" /></p>
+                                    </div>
+                                    <div class="dropdown text-right col-1">
+                                        <a type="button" id="commentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
+                                        <div class="dropdown-menu dropdown-primary" aria-labelledby="commentDropdownMenuButton">
+                                            <a class="dropdown-item" href="${pageContext.request.contextPath}/comment/edit/${comment.id}">Edit</a>
+                                            <form:form action="${pageContext.request.contextPath}/comment/delete/${comment.id}" method="post" cssClass="submit">
+                                                <button type="submit" class="dropdown-item btn btn-link text-danger">Delete</button>
+                                            </form:form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <p class="mb-1"><c:out value="${comment.text}" /></p>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="addEventModal" tabindex="-1" role="dialog" aria-labelledby="addEventModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addEventModalLabel">Add event</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <a class="btn btn-primary" href="${pageContext.request.contextPath}/event/new" role="button">Create new event</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="removeModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="removeModalLabel">Remove event</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to remove this event?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <form:form action="#" method="post" cssClass="submit">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </jsp:attribute>
+
+    <jsp:attribute name="scripts">
+            <script type="application/javascript">
+                $(document).on('show.bs.modal', '#removeModal', function (event) {
+                    let button = $(event.relatedTarget)
+                    let eventId = button.data('event-id')
+                    let modal = $(this)
+                    modal.find('form.submit').attr('action', '${pageContext.request.contextPath}/event/delete/' + eventId);
+                })
+
+                $(document).on('show.bs.modal', '#addEventModal', function (event) {
+                    let modal = $(this)
+                })
+            </script>
     </jsp:attribute>
 </my:maintemplate>

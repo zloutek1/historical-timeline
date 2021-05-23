@@ -1,13 +1,17 @@
 package cz.muni.fi.pa165.mvc.controllers;
 
+import cz.muni.fi.pa165.dto.UserAuthenticateDTO;
 import cz.muni.fi.pa165.dto.UserCreateDTO;
 import cz.muni.fi.pa165.dto.UserDTO;
+import cz.muni.fi.pa165.dto.UserUpdateDTO;
 import cz.muni.fi.pa165.facade.UserFacade;
+import cz.muni.fi.pa165.mvc.model.ChangePasswordModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,12 +60,83 @@ public class UserController {
             model.addAttribute("new_user_failure", "User already exists");
             return "user/new";
         }
-        userFacade.registerUser(user, "password");
+        userFacade.registerUser(user);
         LOG.debug("post user new - Successfully added new user {}", user);
         redirectAttributes.addFlashAttribute("alert_success",
                 "Added user " + user.getFirstName() + " " +
                 user.getLastName() + " <" + user.getEmail() + ">");
         return "redirect:/user";
+    }
+
+    @GetMapping(value = "edit/{id}")
+    public String getEdit(@PathVariable long id, Model model) {
+        LOG.debug("get user edit - " + id);
+        var user = userFacade.findUserByID(id)
+                .orElseThrow(() -> new IllegalArgumentException("User with id " + id + " not found"));
+        var userUpdate = new UserUpdateDTO();
+        userUpdate.setFirstName(user.getFirstName());
+        userUpdate.setLastName(user.getLastName());
+        userUpdate.setRole(user.getRole());
+        model.addAttribute("id", id);
+        model.addAttribute("user", userUpdate);
+        return "user/edit";
+    }
+
+    @PostMapping(value = "edit/{id}")
+    public String postEdit(@PathVariable long id, Model model, HttpSession session,
+                           @Valid @ModelAttribute("user") UserUpdateDTO user,
+                           BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        LOG.debug("post user edit - " + id);
+        if (bindingResult.hasErrors()) {
+            return "user/edit";
+        }
+        Optional<UserDTO> optUser = userFacade.findUserByID(id);
+        if (optUser.isEmpty()) {
+            LOG.warn("post user edit - " + id + "- user not in database");
+            throw new IllegalStateException("Can't find user with id " + id);
+        }
+        userFacade.updateUser(id, user);
+        LOG.debug("post user edit - Successfully edited user with id {}", id);
+        redirectAttributes.addFlashAttribute("alert_success",
+                "Edited user " + user.getFirstName() + " " +
+                        user.getLastName());
+        return "redirect:/user";
+    }
+
+    @GetMapping(value = "password")
+    public String getChangePassword(Model model) {
+        LOG.debug("get user change password");
+        model.addAttribute("passwords", new ChangePasswordModel());
+        return "user/password";
+    }
+
+    @PostMapping(value = "password")
+    public String postChangePassword(Model model, HttpSession session,
+                                     @Valid @ModelAttribute("passwords") ChangePasswordModel passwords,
+                                     BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        LOG.debug("post user change password");
+        if (!passwords.getNewPassword().equals(passwords.getNewPasswordRepeated())) {
+            ObjectError error = new ObjectError("newPassword", "Passwords don't match");
+            bindingResult.addError(error);
+            model.addAttribute("password_failure", "Passwords don't match");
+        }
+        if (bindingResult.hasErrors()) {
+            return "user/password";
+        }
+        UserDTO authUser = (UserDTO)session.getAttribute("authUser");
+        var authenticate = new UserAuthenticateDTO();
+        authenticate.setEmail(authUser.getEmail());
+        authenticate.setPassword(passwords.getOldPassword());
+        if (!userFacade.authenticate(authenticate)) {
+            LOG.debug("post user change password - invalid password given");
+            model.addAttribute("password_failure", "Invalid password given");
+            return "user/password";
+        }
+        userFacade.changeUserPassword(authUser.getId(), passwords.getNewPassword());
+        LOG.debug("post user change password - Successfully changed password of user {}", authUser);
+        redirectAttributes.addFlashAttribute("alert_success",
+                "Successfully changed password");
+        return "redirect:/home";
     }
 
     @PostMapping(value = "delete/{id}")

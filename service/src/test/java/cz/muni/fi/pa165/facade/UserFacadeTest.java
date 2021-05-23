@@ -91,10 +91,11 @@ public class UserFacadeTest extends AbstractTestNGSpringContextTests {
         createDTO.setEmail(email);
         createDTO.setFirstName(firstName);
         createDTO.setLastName(lastName);
+        createDTO.setPassword(unencryptedPassword);
 
         when(beanMappingService.mapTo(createDTO, User.class)).thenReturn(user);
 
-        userFacade.registerUser(createDTO, unencryptedPassword);
+        userFacade.registerUser(createDTO);
 
         verify(userService).registerUser(user, unencryptedPassword);
     }

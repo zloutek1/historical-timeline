@@ -20,9 +20,8 @@ public interface UserFacade {
     /**
      * Computes password hash and stores user
      * @param user Information needed to create new user
-     * @param unencryptedPassword password of the user
      * */
-    Long registerUser(UserCreateDTO user, String unencryptedPassword);
+    Long registerUser(UserCreateDTO user);
 
     /** Computes password hash and checks if it matches with user's password hash
      * @param user Information needed to user authentication

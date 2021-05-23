@@ -40,7 +40,6 @@ public class StudyGroup {
     private String name;
 
     @ManyToMany(mappedBy = "studyGroups")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @ToString.Exclude
     private final List<User> members = new ArrayList<>();
 
@@ -50,7 +49,6 @@ public class StudyGroup {
     private final List<Timeline> timelines = new ArrayList<>();
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @ToString.Exclude
     private User leader;
 

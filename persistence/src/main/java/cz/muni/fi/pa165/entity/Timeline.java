@@ -51,7 +51,6 @@ public class Timeline {
 
     @NotNull
     @ManyToOne(optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private StudyGroup studyGroup;
 
     @ToString.Exclude
@@ -61,7 +60,6 @@ public class Timeline {
 
     @ToString.Exclude
     @ManyToMany(mappedBy = "timelines")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private final List<Event> events = new ArrayList<>();
 
     public void addComment(Comment comment) { comments.add(comment); }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author David Sevcik
@@ -111,7 +112,7 @@ public class UserServiceImpl implements UserService {
             userDao.update(user);
         }
         catch (DataAccessException e) {
-            throw new ServiceException("Could nor reguster user from studygroup. ", e);
+            throw new ServiceException("Could nor register user from studygroup. ", e);
         }
     }
 
@@ -135,49 +136,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void registerToStudyGroupAsLeader(Long userID, Long studyGroupID) {
-        try {
-            Optional<StudyGroup> studyGroup = studyGroupDao.findById(studyGroupID);
-
-            if (studyGroup.isEmpty()) {
-                throw new ServiceException("Could not register leader to StudyGroup.");
-            }
-
-            User user = findUserFromDaoIfExistsElseThrow(userID);
-            if (user.getRole() != UserRole.TEACHER) {
-                throw new ServiceException("Could not register leader to StudyGroup. Since user is not a teacher");
-            }
-
-            user.addLeadedStudyGroups(studyGroup.get());
-
-            userDao.update(user);
-        }
-        catch (DataAccessException e) {
-            throw new ServiceException("Could not register leader to StudyGroup. ", e);
-        }
-
-    }
-
-    @Override
-    public void unregisterFromStudyGroupAsLeader(Long userID, Long studyGroupID) {
-        try {
-            Optional<StudyGroup> studyGroup = studyGroupDao.findById(studyGroupID);
-
-
-            if (studyGroup.isEmpty()) {
-                throw new ServiceException("Could not unregister leader from StudyGroup.");
-            }
-            User user = findUserFromDaoIfExistsElseThrow(userID);
-            user.removeLeadedStudyGroup(studyGroup.get());
-
-            userDao.update(user);
-        }
-        catch (DataAccessException e) {
-            throw new ServiceException("Could not unregister leader from StudyGroup. ", e);
-        }
-    }
-
-    @Override
     public List<StudyGroup> findUserStudyGroups(@NonNull Long userID)
     {
         User user = findUserFromDaoIfExistsElseThrow(userID);
@@ -190,7 +148,7 @@ public class UserServiceImpl implements UserService {
         if (user.getRole() != UserRole.TEACHER) {
             throw new ServiceException("User that is not teacher cannot lead any Study Group");
         }
-        return user.getLeadedStudyGroups();
+        return user.getStudyGroups().stream().filter(s -> (s.getLeader() == user)).collect(Collectors.toList());
     }
 
     @Override

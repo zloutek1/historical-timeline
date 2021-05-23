@@ -7,92 +7,100 @@
 
 <my:maintemplate title="Home">
     <jsp:attribute name="body">
-        <div class="jumbotron text-center">
-            <h1>Home page</h1>
-            <p>List of available study groups</p>
+        <div class="row">
+          <div class="jumbotron text-center col-sm-12">
+            <h2>List of available study groups:</h2>
+          </div>
         </div>
-
-        <div class="container">
+        <c:if test="${authUser.role eq 'TEACHER'}">
             <div class="row">
-            <c:forEach items="${studyGroups}" var="studygroup" varStatus="ic">
-                    <div class="col-sm-6">
-                        <h3> <c:out value="${ic.count}"/>. <c:out value="${studygroup.name}"/></h3>
+              <div class="offset-md-9 col-col-sm-3">
+                  <a href="${pageContext.request.contextPath}/studygroup/new" class="btn btn-primary">New study group</a>
+              </div>
+            </div>
+        </c:if>
+        <c:forEach items="${studyGroups}" var="studygroup" varStatus="ic">
+            <c:if test="${ic.count % 4 == 1}">
+                <div class="row mt-3">
+            </c:if>
+            <div class="card col-sm-6 p-5">
+                <div class="card-body">
+                    <h3 class="card-title mb-5"><c:out value="${studygroup.name}"/></h3>
+                    <h5>Timelines:</h5>
 
-                        <h5>Timelines</h5>
-                        <c:choose>
+                    <c:choose>
                         <c:when test="${empty studygroup.timelines}">
-                                <p> There is no timeline yet!</p>
-                            </c:when>
-
+                            <p>There are no timelines</p>
+                        </c:when>
                         <c:otherwise>
-                        <div class="col-sm-6">
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach items="${studygroup.timelines}" var="timeline" varStatus="ic">
-                                <tr>
-                                    <td><c:out value="${ic.count}"/>. <c:out value="${timeline.name}" /></td>
-                                </tr>
+
+                            <ul class="list-group list-group-flush mt-3 mb-3">
+                                <c:forEach items="${studygroup.timelines}" var="timeline">
+                                    <li class="list-group-item">
+                                        <a href="${pageContext.request.contextPath}/timeline/${timeline.id}"><c:out value="${timeline.name}" /></a>
+                                    </li>
                                 </c:forEach>
-                                </tbody>
-                            </table>
-                        </div>
+                                <c:if test="${(authUser.id eq studygroup.leader.id) or (authUser.role eq 'ADMINISTRATOR')}">
+                                <li class="list-group-item">
+                                    <span>Add new timeline</span>
+                                        <a class="btn btn-outline-success float-right" href="${pageContext.request.contextPath}/timeline/new?studyGroupId=${studygroup.id}" title="New">
+                                            <i class="fas fa-plus" title="Add"></i>
+                                        </a>
+                                </li>
+                                </c:if>
+                            </ul>
                         </c:otherwise>
                         </c:choose>
 
 
-                        <h5>Members:</h5>
-                        <c:choose>
-                            <c:when test="${empty studygroup.members}">
-                                <p> There is no member yet!</p>
-                            </c:when>
+                    <h5>Members:</h5>
+                    <c:choose>
+                        <c:when test="${empty studygroup.members}">
+                            <p>There are no members</p>
+                        </c:when>
+                        <c:otherwise>
+                            <ul class="list-group list-group-flush mt-3 mb-3">
+                                <c:forEach items="${studygroup.members}" var="member" varStatus="ic">
+                                    <li class="list-group-item"><span><c:out value="${member.firstName} "> </c:out>  <c:out value="${member.lastName}"> </c:out></span>
+                                        <c:if test="${(authUser.id eq studygroup.leader.id) or (authUser.role eq 'ADMINISTRATOR') or (authUser.id == member.id)}">
+                                            <form method="POST" action="${pageContext.request.contextPath}/studygroup/unregister/${studygroup.id}/${member.id}">
+                                                <button class="btn btn-outline-danger float-right" type="submit" title="Unregister"
+                                                        onclick="return confirm('Do you really want to unregister user ${member.firstName} ${member.lastName} from study group ${studygroup.name}?')">
+                                                    <i class="fas  fa-user-times" title="Delete"></i>
+                                                </button>
+                                            </form>
+                                        </c:if>
+                                    </li>
+                                </c:forEach>
+                                <c:if test="${(authUser.id eq studygroup.leader.id) or (authUser.role eq 'ADMINISTRATOR')}">
+                                <li class="list-group-item">
+                                    <span>Add new member</span>
+                                    <form method="POST" action="${pageContext.request.contextPath}/timeline/new?studyGroupId=${studygroup.id}">
+                                        <button class="btn btn-outline-success float-right" type="submit" title="New">
+                                            <i class="fas fa-user-plus" title="Add"></i>
+                                        </button>
+                                    </form>
+                                </li>
+                                </c:if>
+                            </ul>
+                        </c:otherwise>
+                    </c:choose>
 
-                            <c:otherwise>
-                                <div class="col-sm-6">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>Firstname</th>
-                                            <th>Lastname</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <c:forEach items="${studygroup.members}" var="member" varStatus="ic">
-                                        <tr>
-                                            <td>${member.firstName}</td>
-                                            <td>${member.lastName}</td>
-                                        </tr>
-                                        </c:forEach>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </c:otherwise>
-                        </c:choose>
+                  <c:if test="${(authUser.id eq studygroup.leader.id) or (authUser.role eq 'ADMINISTRATOR')}">
+                            <form method="POST" action="${pageContext.request.contextPath}/studygroup/delete/${studygroup.id}">
+                                <button class="btn btn-danger ml-3" type="submit" title="Delete"
+                                        onclick="return confirm('Do you really want to delete study group ${studygroup.name}?')">
+                                    Delete study group
+                                </button>
+                            </form>
+                  </c:if>
 
-                        <c:if test="${authUser.role eq 'STUDENT'}">
-                        <div class="col-sm-3">
-                            <a href="${pageContext.request.contextPath}/todo/path" class="btn btn-primary">Register to study group</a>
-                        </div>
-                        </c:if>
-
-                    </div>
-    </c:forEach>
-
-        </div>
-        <div class="row">
-                <c:if test="${authUser.role eq 'TEACHER'}">
-                <div class="col-sm-3">
-                    <a href="${pageContext.request.contextPath}/studygroup/new" class="btn btn-primary">Create new study group</a>
                 </div>
-                </c:if>
-
-        </div>
-
             </div>
 
+            <c:if test="${ic.count % 4 == 1}">
+                </div>
+            </c:if>
+        </c:forEach>
     </jsp:attribute>
 </my:maintemplate>

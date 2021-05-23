@@ -49,7 +49,7 @@ public class PopulationFacadeTest extends AbstractTestNGSpringContextTests {
 
         var users = userService.findAllUsers();
         var admins = users.stream().filter(u -> u.getRole() == UserRole.ADMINISTRATOR).collect(Collectors.toList());
-        assertThat(admins).hasSize(2);
+        assertThat(admins).hasSize(1);
         var admin = admins.get(0);
         assertTrue(userService.authenticate(admin, "password"));
     }

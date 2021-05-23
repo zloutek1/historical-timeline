@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -41,17 +44,24 @@ public class StudyGroup {
     private final List<User> members = new ArrayList<>();
 
     @OneToMany(mappedBy = "studyGroup")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ToString.Exclude
     private final List<Timeline> timelines = new ArrayList<>();
+
+    @ManyToOne
+    @ToString.Exclude
+    private User leader;
 
     public void addMember(User member)
     {
         members.add(member);
+        member.addStudyGroup(this);
     }
 
     public void removeMember(User member)
     {
         members.remove(member);
+        member.removeStudyGroup(this);
     }
 
     public void addTimeline(Timeline timeline) {

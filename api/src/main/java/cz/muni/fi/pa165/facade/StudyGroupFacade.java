@@ -3,7 +3,6 @@ package cz.muni.fi.pa165.facade;
 import cz.muni.fi.pa165.dto.StudyGroupCreateDTO;
 import cz.muni.fi.pa165.dto.StudyGroupDTO;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -39,10 +38,4 @@ public interface StudyGroupFacade {
      * @return study group if stored, else empty value
      */
     Optional<StudyGroupDTO> findByName(String name);
-
-    /**
-     * Fetches all study groups that are present in db
-     * @return List of studygroups
-     */
-    List<StudyGroupDTO> findAllStudyGroups();
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.inject.Inject;
@@ -124,6 +125,32 @@ public class StudyGroupController {
             return "redirect:/home";
         }
         userFacade.unregisterFromStudyGroup(user_id, studygroup_id);
+        return "redirect:/home";
+    }
+
+    @PostMapping(value = "addmember")
+    public String addMember(@ModelAttribute("email") String email, @RequestParam("studyGroupId") long studyGroupId,
+                            RedirectAttributes redirectAttributes) {
+        LOG.debug("add member - " + studyGroupId + " - " + email);
+        var optUser = userFacade.findUserByEmail(email);
+        if (optUser.isEmpty()) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Could not find user with email " + email);
+            return "redirect:/home";
+        }
+        var optStudyGroup = studyGroupFacade.findById(studyGroupId);
+        if (optStudyGroup.isEmpty()) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Could not study group with id " + studyGroupId);
+            return "redirect:/home";
+        }
+        var user = optUser.get();
+        var studyGroup = optStudyGroup.get();
+        var userStudyGroups = userFacade.findUserStudyGroups(user.getId());
+        if (userStudyGroups.contains(studyGroup)) {
+            redirectAttributes.addFlashAttribute("alert_danger", "User already in study group");
+            return "redirect:/home";
+        }
+        userFacade.registerToStudyGroup(user.getId(), studyGroupId);
+        redirectAttributes.addFlashAttribute("alert_success", "Successfully added user to study group");
         return "redirect:/home";
     }
 

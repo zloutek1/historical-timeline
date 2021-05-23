@@ -72,28 +72,29 @@ public class PopulationFacadeImpl implements PopulationFacade {
         Timeline romanticLit = timeline("Romantic", year(1798), year(1870), literature);
         Timeline victorianLit = timeline("Victorian", year(1837), year(1901), literature);
 
-        event("Hitler becomes Chancellor", LocalDate.of(1933, 1, 30), "Germany", "Hitler was liked by the Germans so they elected him as Chancellor. He then became Chancellor and lead Germany into success.", "No Image", ww2);
-        event("Invasion of Poland", LocalDate.of(1939, 9, 1), "Poland", "German invaded Poland and this started World War 2. Germany invaded only a few days after signing the Non-Aggression Pact.", "No Image", ww2);
-        event("Atomic bombings of Japan", LocalDate.of(1945, 8, 6), "Japan", "Hiroshima and Nagasaki were bombed. The United States and the allies attacked Japan.", "No image", ww2);
+        event("Hitler becomes Chancellor", LocalDate.of(1933, 1, 30), "Germany", "Hitler was liked by the Germans so they elected him as Chancellor. He then became Chancellor and lead Germany into success.", null, ww2);
+        event("Invasion of Poland", LocalDate.of(1939, 9, 1), "Poland", "German invaded Poland and this started World War 2. Germany invaded only a few days after signing the Non-Aggression Pact.", null, ww2);
+        event("Atomic bombings of Japan", LocalDate.of(1945, 8, 6), "Japan", "Hiroshima and Nagasaki were bombed. The United States and the allies attacked Japan.", null, ww2);
 
-        event("Franz Ferdinand assassination", LocalDate.of(1914, 6, 28), "Austria", "WW1 was triggered from the assassination of Archduke Franz ferdinand and his pregnant wife Sophie by a Serbian terrorist group.", "No Image", ww1);
-        event("WW1 ends.", LocalDate.of(1918, 11, 11), "Germany", "German's ran out of soldiers, food and war material. Not only this but support for the Germans was disappearing.", "No Image", ww1);
+        event("Franz Ferdinand assassination", LocalDate.of(1914, 6, 28), "Austria", "WW1 was triggered from the assassination of Archduke Franz ferdinand and his pregnant wife Sophie by a Serbian terrorist group.", null, ww1);
+        event("WW1 ends.", LocalDate.of(1918, 11, 11), "Germany", "German's ran out of soldiers, food and war material. Not only this but support for the Germans was disappearing.", null, ww1);
 
-        event("Victoria becomes Queen", LocalDate.of(1837, 2, 27), "England", "Victoria is named Queen of Great Britain and Ireland.", "No Image", victorianEra);
-        event("US Civil War begins", LocalDate.of(1861, 2, 1), "United States", "The US Civil War begins. Also in this year, the Russian serfs were emancipated and Prince Albert died of typhoid.", "No image", victorianEra);
-        event("Queen Victoria Dies", LocalDate.of(1901, 2, 1), "United Kingdom", "No description", "No image", victorianEra);
 
-        event("Trojan War Begins", LocalDate.of(-1000, 1, 7), "Troy, Turkey", "No Description", "No Image", trojanWar);
-        event("Gods begin to take sides", LocalDate.of(-1000, 1, 11), "Troy, Turkey", "Zeus favors the Trojans. He sends a lying dream to Agamemnon that said that he would win if he attacked.", "No Image", trojanWar);
-        event("The Trojan Horse", LocalDate.of(-1000, 1, 16), "Troy, Turkey", "Odysseus creates a plan to build a giant wooden horse. He and some other Greeks hide inside of it.", "No Image", trojanWar);
-        event("The Greek Army Destroys Troy", LocalDate.of(-1000, 1, 19), "Troy, Turkey", "No Description", "No Image", trojanWar);
+        event("Victoria becomes Queen", LocalDate.of(1837, 2, 27), "England", "Victoria is named Queen of Great Britain and Ireland.", null, victorianEra);
+        event("US Civil War begins", LocalDate.of(1861, 2, 1), "United States", "The US Civil War begins. Also in this year, the Russian serfs were emancipated and Prince Albert died of typhoid.", null, victorianEra);
+        event("Queen Victoria Dies", LocalDate.of(1901, 2, 1), "United Kingdom", "No description", null, victorianEra);
 
-        event("Hamlet", LocalDate.of(1599, 10, 14), "United Kingdom", "It is believed Shakespeare began his work on Hamlet this year, which was considered to one of his greatest plays of all times.", "No Image", renaissanceLit);
+        event("Trojan War Begins", LocalDate.of(-1000, 1, 7), "Troy, Turkey", "No Description", null, trojanWar);
+        event("Gods begin to take sides", LocalDate.of(-1000, 1, 11), "Troy, Turkey", "Zeus favors the Trojans. He sends a lying dream to Agamemnon that said that he would win if he attacked.", null, trojanWar);
+        event("The Trojan Horse", LocalDate.of(-1000, 1, 16), "Troy, Turkey", "Odysseus creates a plan to build a giant wooden horse. He and some other Greeks hide inside of it.", null, trojanWar);
+        event("The Greek Army Destroys Troy", LocalDate.of(-1000, 1, 19), "Troy, Turkey", "No Description", null, trojanWar);
 
-        event("Oliver Twist", LocalDate.of(1837, 3, 28), "England", "Charles Dickens publishes Oliver Twist", "No Image", victorianLit);
-        event("Alice in Wonderland", LocalDate.of(1865, 5, 6), "United Kingdom", "Lewis Carroll publishes Alice’s Adventures in Wonderland.", "No image", victorianLit);
-        event("War and Peace", LocalDate.of(1869, 8, 5), "Russia", "In Russia, Leo Tolstoy publishes the text War and Peace. This novel is the study of early 19th-century Russian society and is regarded as one of the world's greatest novels.", "No image", victorianLit);
-        event("Sherlock Holmes", LocalDate.of(1887, 2, 17), "United Kingdom", "Arthur Conan Doyle writes A Study in Scarlet, introducing Sherlock Holmes to the readers.", "No image", victorianLit);
+        event("Hamlet", LocalDate.of(1599, 10, 14), "United Kingdom", "It is believed Shakespeare began his work on Hamlet this year, which was considered to one of his greatest plays of all times.", null, renaissanceLit);
+
+        event("Oliver Twist", LocalDate.of(1837, 3, 28), "England", "Charles Dickens publishes Oliver Twist", null, victorianLit);
+        event("Alice in Wonderland", LocalDate.of(1865, 5, 6), "United Kingdom", "Lewis Carroll publishes Alice’s Adventures in Wonderland.", null, victorianLit);
+        event("War and Peace", LocalDate.of(1869, 8, 5), "Russia", "In Russia, Leo Tolstoy publishes the text War and Peace. This novel is the study of early 19th-century Russian society and is regarded as one of the world's greatest novels.", null, victorianLit);
+        event("Sherlock Holmes", LocalDate.of(1887, 2, 17), "United Kingdom", "Arthur Conan Doyle writes A Study in Scarlet, introducing Sherlock Holmes to the readers.", null, victorianLit);
 
         comment("Hello there", LocalDateTime.of(LocalDate.of(2012, 11, 8), LocalTime.of(11, 44)), trojanWar, john);
         comment("Welcome, I hope that you find this fascinating", LocalDateTime.of(LocalDate.of(2012, 11, 10), LocalTime.of(15, 8)), trojanWar, nissa);
@@ -130,8 +131,8 @@ public class PopulationFacadeImpl implements PopulationFacade {
         return c;
     }
 
-    private Event event(String name, LocalDate date, String location, String description, String imageIdentifier, Timeline timeline) {
-        Event e = new Event(name, date, location, description, imageIdentifier);
+    private Event event(String name, LocalDate date, String location, String description, byte[] image, Timeline timeline) {
+        Event e = new Event(name, date, location, description, image);
         e.addTimeline(timeline);
         timeline.addEvent(e);
         eventService.create(e);

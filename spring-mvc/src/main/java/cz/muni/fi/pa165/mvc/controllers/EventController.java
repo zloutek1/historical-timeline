@@ -8,12 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -66,7 +64,7 @@ public class EventController {
         return "event/form";
     }
 
-    @PutMapping(value = "/update")
+    @PostMapping(value = "/update/{id}")
     public String putUpdate(Model model, @Valid @ModelAttribute("event") EventDTO event, @RequestParam(required = false) Long timelineId){
         LOG.debug("post Event");
 
@@ -89,7 +87,7 @@ public class EventController {
         return false;
     }
 
-    @DeleteMapping(value = "/delete/{id}")
+    @PostMapping(value = "/delete/{id}")
     public String delete(Model model, @PathVariable Long id, @RequestParam(required = false) Long timelineId){
         LOG.debug("delete Event");
 

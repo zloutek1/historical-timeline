@@ -79,13 +79,14 @@ public class StudyGroupController {
     }
 
     @PostMapping(value = "delete/{id}")
-    public String postDelete(@PathVariable long id, Model model, HttpSession session) {
+    public String postDelete(@PathVariable long id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         UserDTO authUser = (UserDTO)session.getAttribute("authUser");
         if (authUser != null) {
             if ((authUser.getRole() == UserRole.TEACHER) || (authUser.getRole() == UserRole.ADMINISTRATOR)) {
 
                 var studyGroup = studyGroupFacade.findById(id);
                 if (studyGroup.isEmpty()) {
+                    redirectAttributes.addFlashAttribute("alert_danger", "Failed to remove study group.");
                     return "redirect:/home";
                 }
 
@@ -108,6 +109,21 @@ public class StudyGroupController {
                 studyGroupFacade.deleteStudyGroup(id);
             }
         }
+        return "redirect:/home";
+    }
+
+    @PostMapping(value = "unregister/{studygroup_id}/{user_id}")
+    public String postUnregister(@PathVariable long studygroup_id, @PathVariable long user_id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        var studygroup = studyGroupFacade.findById(studygroup_id);
+        if (studygroup.isEmpty()) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Failed to remove user from study group.");
+            return "redirect:/home";
+        }
+        if (studygroup.get().getLeader().getId() == user_id) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Failed to remove user from study group, since the user is leader of the study group.");
+            return "redirect:/home";
+        }
+        userFacade.unregisterFromStudyGroup(user_id, studygroup_id);
         return "redirect:/home";
     }
 

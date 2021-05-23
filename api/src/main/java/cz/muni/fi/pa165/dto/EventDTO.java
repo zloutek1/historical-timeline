@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.dto;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -15,5 +16,5 @@ public class EventDTO {
     private LocalDate date;
     private String location;
     private String description;
-    private String imageIdentifier;
+    private MultipartFile image;
 }

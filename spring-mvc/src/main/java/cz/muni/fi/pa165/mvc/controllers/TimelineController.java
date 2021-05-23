@@ -5,6 +5,7 @@ import cz.muni.fi.pa165.dto.TimelineCreateDTO;
 import cz.muni.fi.pa165.dto.TimelineDTO;
 import cz.muni.fi.pa165.dto.TimelineUpdateDTO;
 import cz.muni.fi.pa165.dto.UserDTO;
+import cz.muni.fi.pa165.facade.EventFacade;
 import cz.muni.fi.pa165.facade.TimelineFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,9 @@ public class TimelineController {
 
     @Inject
     private TimelineFacade timelineFacade;
+
+    @Inject
+    private EventFacade eventFacade;
 
     @GetMapping("/{id}")
     public String show(Model model, HttpSession session,
@@ -126,8 +130,19 @@ public class TimelineController {
     }
 
     @PostMapping("/delete/{id}")
-    public String postDelete(Model model, @PathVariable Long id) {
+    public String postDelete(Model model, @PathVariable Long id, RedirectAttributes redirectAttributes) {
         LOG.debug("post timeline delete");
+        var timeline = timelineFacade.findById(id);
+        if (timeline.isEmpty()) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Failed to remove timeline.");
+            return "redirect:/home";
+        }
+        var events = timeline.get().getEvents();
+        for (var event: events) {
+            timelineFacade.removeEvent(id, event.getId());
+            eventFacade.removeTimeline(event.getId(), id);
+        }
+
         timelineFacade.deleteTimeline(id);
         LOG.debug("post timeline delete - Successfully deleted timeline with id {}", id);
         return "redirect:/home";

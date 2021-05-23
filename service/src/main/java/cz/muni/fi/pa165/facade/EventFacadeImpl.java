@@ -9,9 +9,11 @@ import cz.muni.fi.pa165.service.BeanMappingService;
 import cz.muni.fi.pa165.service.EventService;
 import cz.muni.fi.pa165.service.TimelineService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +38,15 @@ public class EventFacadeImpl implements EventFacade{
 
     @Override
     public Long createEvent(EventCreateDTO event) {
-        Event mappedEvent = beanMappingService.mapTo(event, Event.class);
+        Event mappedEvent = new Event();
+
+        mappedEvent.setName(event.getName());
+        mappedEvent.setDate(event.getDate());
+        mappedEvent.setLocation(event.getLocation());
+        mappedEvent.setDescription(event.getDescription());
+
+        setImage(mappedEvent, event.getImage());
+
         eventService.create(mappedEvent);
         return mappedEvent.getId();
     }
@@ -49,8 +59,23 @@ public class EventFacadeImpl implements EventFacade{
         event.setDate(updatedEvent.getDate());
         event.setLocation(updatedEvent.getLocation());
         event.setDescription(updatedEvent.getDescription());
-        event.setImageIdentifier(updatedEvent.getImageIdentifier());
+
+        setImage(event, updatedEvent.getImage());
     }
+
+    private void setImage(Event event, MultipartFile image){
+        if (image == null) {
+            event.setImage(null);
+            return;
+        }
+
+        try {
+            event.setImage(image.getBytes());
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
 
     @Override
     public void deleteEvent(Long eventId){

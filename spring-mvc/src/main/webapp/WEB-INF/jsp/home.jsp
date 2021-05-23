@@ -53,6 +53,7 @@
                         </c:choose>
 
 
+
                     <h5>Members:</h5>
                     <c:choose>
                         <c:when test="${empty studygroup.members}">
@@ -72,20 +73,16 @@
                                         </c:if>
                                     </li>
                                 </c:forEach>
-                                <c:if test="${(authUser.id eq studygroup.leader.id) or (authUser.role eq 'ADMINISTRATOR')}">
-                                <li class="list-group-item">
-                                    <span>Add new member</span>
-                                    <form method="POST" action="${pageContext.request.contextPath}/timeline/new?studyGroupId=${studygroup.id}">
-                                        <button class="btn btn-outline-success float-right" type="submit" title="New">
-                                            <i class="fas fa-user-plus" title="Add"></i>
-                                        </button>
-                                    </form>
-                                </li>
-                                </c:if>
+
                             </ul>
                         </c:otherwise>
                     </c:choose>
-
+                    <c:if test="${(authUser.id eq studygroup.leader.id) or (authUser.role eq 'ADMINISTRATOR')}">
+                        <form class="ui-widget row mb-2" method="POST" action="${pageContext.request.contextPath}/studygroup/addmember?studyGroupId=${studygroup.id}">
+                            <input name="email" class="tags mr-3">
+                            <button type="submit" class="btn btn-primary">Add member</button>
+                        </form>
+                    </c:if>
                   <c:if test="${(authUser.id eq studygroup.leader.id) or (authUser.role eq 'ADMINISTRATOR')}">
                             <form method="POST" action="${pageContext.request.contextPath}/studygroup/delete/${studygroup.id}">
                                 <button class="btn btn-danger ml-3" type="submit" title="Delete"
@@ -94,7 +91,6 @@
                                 </button>
                             </form>
                   </c:if>
-
                 </div>
             </div>
 
@@ -103,4 +99,22 @@
             </c:if>
         </c:forEach>
     </jsp:attribute>
+    <jsp:attribute name="scripts">
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+        $( function() {
+            $.ajax({
+                url: "${pageContext.request.contextPath}/user/search",
+                success: function (data) {
+                    let members = data.split(",");
+                    $( ".tags" ).autocomplete({
+                    source: members
+                    });
+                }
+            });
+          });
+        </script>
+    </jsp:attribute>
+
+
 </my:maintemplate>

@@ -17,12 +17,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -160,6 +164,13 @@ public class UserController {
                     "Deleted user " + user.getEmail());
         }
         return "redirect:/user";
+    }
+
+    @RequestMapping("search")
+    @ResponseBody
+    public String search() {
+        List<String> users = userFacade.findAllUsers().stream().map(u -> u.getEmail()).collect(Collectors.toList());
+        return String.join(",", users);
     }
 
 }

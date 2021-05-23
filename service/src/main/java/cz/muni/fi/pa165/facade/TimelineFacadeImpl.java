@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.facade;
 
+import cz.muni.fi.pa165.dto.EventDTO;
 import cz.muni.fi.pa165.dto.TimelineCreateDTO;
 import cz.muni.fi.pa165.dto.TimelineDTO;
 import cz.muni.fi.pa165.dto.TimelineUpdateDTO;
@@ -98,6 +99,11 @@ public class TimelineFacadeImpl implements TimelineFacade {
     @Override
     public List<TimelineDTO> findAllBetweenDates(LocalDate from, LocalDate to) {
         return beanMappingService.mapTo(timelineService.findAllBetweenDates(from, to), TimelineDTO.class);
+    }
+
+    @Override
+    public List<EventDTO> findEventsOfTimeline(Long timelineId) {
+        return beanMappingService.mapTo(timelineService.findEventsOfTimeline(timelineId), EventDTO.class);
     }
 
     @Override

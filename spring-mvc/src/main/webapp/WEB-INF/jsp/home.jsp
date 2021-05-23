@@ -37,7 +37,9 @@
                                 <tbody>
                                 <c:forEach items="${studygroup.timelines}" var="timeline" varStatus="ic">
                                 <tr>
-                                    <td><c:out value="${ic.count}"/>. <c:out value="${timeline.name}" /></td>
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/timeline/${timeline.id}"><c:out value="${ic.count}"/>. <c:out value="${timeline.name}" /></a>
+                                    </td>
                                 </tr>
                                 </c:forEach>
                                 </tbody>

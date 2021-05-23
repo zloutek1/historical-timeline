@@ -5,6 +5,7 @@ import cz.muni.fi.pa165.dto.StudyGroupDTO;
 import cz.muni.fi.pa165.dto.UserDTO;
 import cz.muni.fi.pa165.dto.UserRole;
 import cz.muni.fi.pa165.facade.StudyGroupFacade;
+import cz.muni.fi.pa165.facade.TimelineFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,9 @@ public class StudyGroupController {
 
     @Inject
     private StudyGroupFacade studyGroupFacade;
+
+    @Inject
+    TimelineFacade timelineFacade;
 
     @GetMapping(value = "new")
     public String getNew(Model model) {
@@ -60,10 +64,25 @@ public class StudyGroupController {
     }
 
     @PostMapping(value = "delete/{id}")
-    public String postRegisterAsLeader(@PathVariable long id, Model model, HttpSession session) {
+    public String postDelete(@PathVariable long id, Model model, HttpSession session) {
         UserDTO authUser = (UserDTO)session.getAttribute("authUser");
         if (authUser != null) {
             if (authUser.getRole() == UserRole.TEACHER) {
+
+                var studyGroup = studyGroupFacade.findById(id);
+                if (studyGroup.isEmpty()) {
+                    return "redirect:/home";
+                }
+
+                var timelines = studyGroup.get().getTimelines();
+                for (var timeline: timelines
+                     ) {
+                    var events = timelineFacade.findEventsOfTimeline(timeline.getId());
+                    for (var event: events) {
+                        timelineFacade.removeEvent(timeline.getId(), event.getId());
+                    }
+                }
+
                 studyGroupFacade.deleteStudyGroup(id);
             }
         }

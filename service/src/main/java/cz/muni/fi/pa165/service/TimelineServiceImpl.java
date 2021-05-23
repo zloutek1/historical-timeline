@@ -107,6 +107,20 @@ public class TimelineServiceImpl implements TimelineService {
     }
 
     @Override
+    public List<Event> findEventsOfTimeline(Long timelineId) {
+        try {
+            var timeline = timelineDao.findById(timelineId);
+            if (timeline.isPresent()) {
+                return timeline.get().getEvents();
+            }
+
+        } catch (DataAccessException ex) {
+            throw new ServiceException("Failed to get events of timeline with id " + timelineId, ex);
+        }
+        throw new ServiceException("Failed to get events of timeline with id " + timelineId);
+    }
+
+    @Override
     public Optional<Timeline> findById(@NonNull Long id) {
         try {
             return timelineDao.findById(id);

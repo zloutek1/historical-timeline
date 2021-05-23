@@ -9,9 +9,10 @@
     <jsp:attribute name="body">
         <div class="row justify-content-center">
             <div class="col-sm-6">
-                <form:form method="post" action="#"
+                <form:form method="post"
                            modelAttribute="event"
-                           cssClass="form-horizontal mt-5 p-5 border bg-light">
+                           cssClass="form-horizontal mt-5 p-5 border bg-light"
+                           enctype="multipart/form-data">
                     <h1>Event</h1>
                     <div class="form-group row">
                         <form:label path="name" cssClass="col-sm-2 control-label">Name</form:label>
@@ -41,15 +42,28 @@
                             <form:errors path="description" cssClass="help-block"/>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <form:label path="image" cssClass="col-sm-2 control-label">Image</form:label>
+                        <div class="col-sm-10">
+                            <input type="file" name="image" accept="image/png, image/jpeg" />
+                            <form:errors path="image" cssClass="help-block"/>
+                        </div>
+                    </div>
                    <div class="row">
                        <button class="btn btn-primary ml-3" type="submit">Submit</button>
                    </div>
                 </form:form>
             </div>
         </div>
+    </jsp:attribute>
+
+    <jsp:attribute name="scripts">
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script>
             $( function() {
-                $( ".datepicker" ).datepicker({dateFormat: "dd.mm.yy"});
+                $( ".datepicker" ).datepicker({
+                    dateFormat: "dd.mm.yy"
+                });
             } );
         </script>
     </jsp:attribute>

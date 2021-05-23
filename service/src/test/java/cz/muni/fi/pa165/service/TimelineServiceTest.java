@@ -124,14 +124,14 @@ public class TimelineServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void addEvent_givenNewEvent_adds() {
-        Event event = new Event("E1", LocalDate.of(2020, 4, 16), "Brno", "short description", "image.png");
+        Event event = new Event("E1", LocalDate.of(2020, 4, 16), "Brno", "short description", null);
         timelineService.addEvent(timeline, event);
         assertThat(timeline.getEvents()).containsExactlyInAnyOrder(event);
     }
 
     @Test
     public void addEvent_givenDuplicateEvent_throws() {
-        Event event = new Event("E1", LocalDate.of(2020, 4, 16), "Brno", "short description", "image.png");
+        Event event = new Event("E1", LocalDate.of(2020, 4, 16), "Brno", "short description", null);
         timelineService.addEvent(timeline, event);
         assertThatExceptionOfType(ServiceException.class)
                 .isThrownBy(() -> timelineService.addEvent(timeline, event));
@@ -145,7 +145,7 @@ public class TimelineServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void removeEvent_givenExistingEvent_removes() {
-        Event event = new Event("E1", LocalDate.of(2020, 4, 16), "Brno", "short description", "image.png");
+        Event event = new Event("E1", LocalDate.of(2020, 4, 16), "Brno", "short description", null);
         timelineService.addEvent(timeline, event);
         timelineService.removeEvent(timeline, event);
         assertThat(timeline.getEvents()).isEmpty();

@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -43,19 +44,20 @@ public class Event {
 
     private String description;
 
-    private String imageIdentifier;
+    @Lob
+    private byte[] image;
 
     @ManyToMany
     @ToString.Exclude
     private final List<Timeline> timelines = new ArrayList<>();
 
 
-    public Event(@NotNull String name, LocalDate date, String location, String description, String imageIdentifier) {
+    public Event(@NotNull String name, LocalDate date, String location, String description, byte[] image) {
         this.name = name;
         this.date = date;
         this.location = location;
         this.description = description;
-        this.imageIdentifier = imageIdentifier;
+        this.image = image;
     }
 
     public void addTimeline(Timeline timeline){

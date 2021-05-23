@@ -52,7 +52,7 @@ public class EventDaoTest extends AbstractTestNGSpringContextTests {
                 LocalDate.of(1066, 8, 14),
                 "England",
                 "between the Norman-French army of William, the Duke of Normandy, and an English army under the Anglo-Saxon King Harold",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Bayeux_Tapestry_scene57_Harold_death.jpg/300px-Bayeux_Tapestry_scene57_Harold_death.jpg");
+                null);
 
         eventDao.create(event);
         assertNotNull(event.getId());
@@ -63,8 +63,8 @@ public class EventDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void insert_givenMultipleValidEvents_persisted() {
-        Event a = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
-        Event b = new Event("B", LocalDate.of(2021, 8, 22), "Slovak republic", "Some other day of the week", "https://image.gif");
+        Event a = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", null);
+        Event b = new Event("B", LocalDate.of(2021, 8, 22), "Slovak republic", "Some other day of the week", null);
         Event c = new Event("C", LocalDate.of(2023, 9, 30), "England", "None provided", null);
 
         var events = new ArrayList<Event>();
@@ -84,8 +84,8 @@ public class EventDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test(expectedExceptions = DataAccessException.class)
     public void insert_withDuplicateName_throws() {
-        Event a1 = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
-        Event a2 = new Event("A", LocalDate.of(2020, 5, 15), "Czech republic", "another event with same name", "http://image.jpg");
+        Event a1 = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", null);
+        Event a2 = new Event("A", LocalDate.of(2020, 5, 15), "Czech republic", "another event with same name", null);
 
         eventDao.create(a1);
         eventDao.create(a2);
@@ -99,7 +99,7 @@ public class EventDaoTest extends AbstractTestNGSpringContextTests {
         Timeline timeline = new Timeline("Alphabet", LocalDate.of(2020, 1, 1), LocalDate.of(2020, 12, 31), studyGroup);
         em.persist(timeline);
 
-        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
+        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", null);
 
         event.addTimeline(timeline);
         timeline.addEvent(event);
@@ -112,7 +112,7 @@ public class EventDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void findById_givenValidId_returnsEvent() {
-        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
+        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", null);
 
         eventDao.create(event);
 
@@ -123,7 +123,7 @@ public class EventDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void findById_givenInvalidId_returnNull() {
-        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
+        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", null);
 
         eventDao.create(event);
 
@@ -138,7 +138,7 @@ public class EventDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void findByName_givenValidName_returnsEvent() {
-        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
+        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", null);
 
         eventDao.create(event);
 
@@ -149,7 +149,7 @@ public class EventDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void findByName_givenInvalidName_returnNull() {
-        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
+        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", null);
 
         eventDao.create(event);
 
@@ -165,7 +165,7 @@ public class EventDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void delete_singleValidEvent_isRemoved() {
-        Event event = new Event("Event", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
+        Event event = new Event("Event", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", null);
         eventDao.create(event);
         assertEquals(1, eventDao.findAll().size());
 
@@ -175,8 +175,8 @@ public class EventDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void delete_multipleValidEvents_areRemoved() {
-        Event a = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
-        Event b = new Event("B", LocalDate.of(2021, 8, 22), "Slovak republic", "Some other day of the week", "https://image.gif");
+        Event a = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", null);
+        Event b = new Event("B", LocalDate.of(2021, 8, 22), "Slovak republic", "Some other day of the week", null);
         Event c = new Event("C", LocalDate.of(2023, 9, 30), "England", "None provided", null);
         Event d = new Event("D", LocalDate.of(2023, 9, 30), "England", "None provided", null);
         Event e = new Event("E", LocalDate.of(2023, 9, 30), "England", "None provided", null);
@@ -206,13 +206,13 @@ public class EventDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void delete_nonExisting_throws() {
-        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
+        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", null);
         eventDao.delete(event);
     }
 
     @Test
     public void update_validEventWithNonUniqueField_updatedCorrectly() {
-        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", "http://image.jpg");
+        Event event = new Event("A", LocalDate.of(2020, 4, 15), "Czech republic", "some da of the year", null);
         eventDao.create(event);
 
         Optional<Event> foundEvent = eventDao.findById(event.getId());
@@ -220,7 +220,7 @@ public class EventDaoTest extends AbstractTestNGSpringContextTests {
         assertEquals(foundEvent.get(), event);
 
         event.setLocation("Slovak republic");
-        event.setImageIdentifier(null);
+        event.setImage(null);
 
         eventDao.create(event);
         Optional<Event> updatedEvent = eventDao.findById(event.getId());

@@ -72,12 +72,13 @@ public class PopulationFacadeImpl implements PopulationFacade {
         Timeline romanticLit = timeline("Romantic", year(1798), year(1870), literature);
         Timeline victorianLit = timeline("Victorian", year(1837), year(1901), literature);
 
-        event("Hitler becomes Chancellor", LocalDate.of(1933, 1, 30), "Germany", "Hitler was liked by the Germans so they elected him as Chancellor. He then became Chancellor and lead Germany into success.", "No Image", ww2);
-        event("Invasion of Poland", LocalDate.of(1939, 9, 1), "Poland", "German invaded Poland and this started World War 2. Germany invaded only a few days after signing the Non-Aggression Pact.", "No Image", ww2);
-        event("Atomic bombings of Japan", LocalDate.of(1945, 8, 6), "Japan", "Hiroshima and Nagasaki were bombed. The United States and the allies attacked Japan.", "No image", ww2);
+        event("Hitler becomes Chancellor", LocalDate.of(1933, 1, 30), "Germany", "Hitler was liked by the Germans so they elected him as Chancellor. He then became Chancellor and lead Germany into success.", null, ww2);
+        event("Invasion of Poland", LocalDate.of(1939, 9, 1), "Poland", "German invaded Poland and this started World War 2. Germany invaded only a few days after signing the Non-Aggression Pact.", null, ww2);
+        event("Atomic bombings of Japan", LocalDate.of(1945, 8, 6), "Japan", "Hiroshima and Nagasaki were bombed. The United States and the allies attacked Japan.", null, ww2);
 
-        event("Franz Ferdinand assassination", LocalDate.of(1914, 6, 28), "Austria", "WW1 was triggered from the assassination of Archduke Franz ferdinand and his pregnant wife Sophie by a Serbian terrorist group.", "No Image", ww1);
-        event("WW1 ends.", LocalDate.of(1918, 11, 11), "Germany", "German's ran out of soldiers, food and war material. Not only this but support for the Germans was disappearing.", "No Image", ww1);
+        event("Franz Ferdinand assassination", LocalDate.of(1914, 6, 28), "Austria", "WW1 was triggered from the assassination of Archduke Franz ferdinand and his pregnant wife Sophie by a Serbian terrorist group.", null, ww1);
+        event("WW1 ends.", LocalDate.of(1918, 11, 11), "Germany", "German's ran out of soldiers, food and war material. Not only this but support for the Germans was disappearing.", null, ww1);
+
 
         event("Victoria becomes Queen", LocalDate.of(1837, 2, 27), "England", "Victoria is named Queen of Great Britain and Ireland.", "No Image", victorianEra);
         event("US Civil War begins", LocalDate.of(1861, 2, 1), "United States", "The US Civil War begins. Also in this year, the Russian serfs were emancipated and Prince Albert died of typhoid.", "No image", victorianEra);
@@ -130,8 +131,8 @@ public class PopulationFacadeImpl implements PopulationFacade {
         return c;
     }
 
-    private Event event(String name, LocalDate date, String location, String description, String imageIdentifier, Timeline timeline) {
-        Event e = new Event(name, date, location, description, imageIdentifier);
+    private Event event(String name, LocalDate date, String location, String description, byte[] image, Timeline timeline) {
+        Event e = new Event(name, date, location, description, image);
         e.addTimeline(timeline);
         timeline.addEvent(e);
         eventService.create(e);

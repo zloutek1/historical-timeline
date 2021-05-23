@@ -95,13 +95,11 @@ public class User {
     public void addStudyGroup(StudyGroup group)
     {
         studyGroups.add(group);
-        group.addMember(this);
     }
 
     public void removeStudyGroup(StudyGroup group)
     {
         studyGroups.remove(group);
-        group.removeMember(this);
     }
 
     public List<StudyGroup> getStudyGroups()

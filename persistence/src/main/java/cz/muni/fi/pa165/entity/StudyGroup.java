@@ -55,11 +55,13 @@ public class StudyGroup {
     public void addMember(User member)
     {
         members.add(member);
+        member.addStudyGroup(this);
     }
 
     public void removeMember(User member)
     {
         members.remove(member);
+        member.removeStudyGroup(this);
     }
 
     public void addTimeline(Timeline timeline) {

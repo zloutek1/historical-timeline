@@ -149,7 +149,7 @@
                                         </div>
                                         <div class="row">
                                             <select id="addEvent-all-select"></select>
-                                            <button type="submit"></button>
+                                            <button class="btn btn-primary" type="button" id="addEvent-all-submit">Add event</button>
                                         </div>
                                     </div>
                                 </div>
@@ -162,7 +162,7 @@
                                         </div>
                                         <div class="row">
                                             <select id="addEvent-all-by-time-select"></select>
-                                            <button type="submit"></button>
+                                            <button class="btn btn-primary" type="button" id="addEvent-by-time-submit">Add event</button>
                                         </div>
                                     </div>
                                 </div>

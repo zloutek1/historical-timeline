@@ -7,17 +7,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/event")
@@ -35,13 +37,14 @@ public class EventController {
     }
 
     @PostMapping(value = "/new")
-    public String postCreate(Model model, @Valid @ModelAttribute("event") EventCreateDTO event, @RequestParam(required = false) Long timelineId){
+    public String postCreate(Model model, @Valid @ModelAttribute("event") EventCreateDTO event, @RequestParam(required = false) MultipartFile file, @RequestParam(required = false) Long timelineId){
         LOG.debug("post new Event");
 
         if (isDuplicate(model, event.getName())){
             return "event/form";
         }
 
+        event.setImage(file);
         eventFacade.createEvent(event);
 
         return redirect(timelineId);
@@ -62,14 +65,15 @@ public class EventController {
         return "event/form";
     }
 
-    @PutMapping(value = "/update")
-    public String putUpdate(Model model, @Valid @ModelAttribute("event") EventDTO event, @RequestParam(required = false) Long timelineId){
+    @PostMapping(value = "/update/{id}")
+    public String putUpdate(Model model, @Valid @ModelAttribute("event") EventDTO event, @RequestParam(required = false) MultipartFile file, @RequestParam(required = false) Long timelineId){
         LOG.debug("post Event");
 
         if (isDuplicate(model, event.getName())){
             return "event/form";
         }
 
+        event.setImage(file);
         eventFacade.updateEvent(event);
 
         return redirect(timelineId);
@@ -85,7 +89,7 @@ public class EventController {
         return false;
     }
 
-    @DeleteMapping(value = "/delete/{id}")
+    @PostMapping(value = "/delete/{id}")
     public String delete(Model model, @PathVariable Long id, @RequestParam(required = false) Long timelineId){
         LOG.debug("delete Event");
 

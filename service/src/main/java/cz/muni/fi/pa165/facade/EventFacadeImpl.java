@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,14 @@ public class EventFacadeImpl implements EventFacade{
         event.setDate(updatedEvent.getDate());
         event.setLocation(updatedEvent.getLocation());
         event.setDescription(updatedEvent.getDescription());
-        event.setImageIdentifier(updatedEvent.getImageIdentifier());
+
+        if (updatedEvent.getImage() != null) {
+            try {
+                event.setImage(updatedEvent.getImage().getBytes());
+            } catch (IOException e) {
+                throw new IllegalArgumentException(e);
+            }
+        }
     }
 
     @Override

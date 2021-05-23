@@ -41,15 +41,29 @@
                             <form:errors path="description" cssClass="help-block"/>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <form:label path="image" cssClass="col-sm-2 control-label">Image</form:label>
+                        <div class="col-sm-10">
+                            <form:hidden path="image"/>
+                            <input type="file" name="image" accept="image/png, image/jpeg" />
+                            <form:errors path="image" cssClass="help-block"/>
+                        </div>
+                    </div>
                    <div class="row">
                        <button class="btn btn-primary ml-3" type="submit">Submit</button>
                    </div>
                 </form:form>
             </div>
         </div>
+    </jsp:attribute>
+
+    <jsp:attribute name="scripts">
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script>
             $( function() {
-                $( ".datepicker" ).datepicker({dateFormat: "dd.mm.yy"});
+                $( ".datepicker" ).datepicker({
+                    dateFormat: "dd.mm.yy"
+                });
             } );
         </script>
     </jsp:attribute>

@@ -69,21 +69,21 @@ public class EventServiceTest extends AbstractTestNGSpringContextTests {
                 LocalDate.of(2020,1,28),
                 "Slovakia",
                 "",
-                "");
+                null);
 
         event2 = new Event(
                 "E2",
                 LocalDate.of(2020,2,2),
                 "Poland",
                 "5",
-                "");
+                null);
 
         event3 = new Event(
                 "E3",
                 LocalDate.of(2020,5,12),
                 "Slovakia",
                 "2 5 8",
-                "");
+                null);
 
         events.add(event1);
         events.add(event2);

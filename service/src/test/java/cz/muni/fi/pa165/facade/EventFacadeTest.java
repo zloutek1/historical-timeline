@@ -60,7 +60,7 @@ public class EventFacadeTest extends AbstractTestNGSpringContextTests {
                 LocalDate.of(2020,1,28),
                 "Slovakia",
                 "5",
-                "");
+                null);
         event.setId(1L);
 
         eventDTO = new EventDTO();
@@ -68,7 +68,7 @@ public class EventFacadeTest extends AbstractTestNGSpringContextTests {
         eventDTO.setDate(LocalDate.of(2020,1,28));
         eventDTO.setLocation("Slovakia");
         eventDTO.setDescription("5");
-        eventDTO.setImageIdentifier("");
+        eventDTO.setImage(null);
         eventDTO.setId(1L);
     }
 
@@ -98,7 +98,7 @@ public class EventFacadeTest extends AbstractTestNGSpringContextTests {
                 LocalDate.of(2020,2,28),
                 "Poland",
                 "2",
-                "");
+                null);
         updatedEvent.setId(event.getId());
 
         EventDTO updatedDTO = new EventDTO();
@@ -106,7 +106,7 @@ public class EventFacadeTest extends AbstractTestNGSpringContextTests {
         updatedDTO.setDate(LocalDate.of(2020,2,28));
         updatedDTO.setLocation("Poland");
         updatedDTO.setDescription("2");
-        updatedDTO.setImageIdentifier("");
+        updatedDTO.setImage(null);
         updatedDTO.setId(eventDTO.getId());
 
         assertThat(event).isNotEqualTo(updatedEvent);

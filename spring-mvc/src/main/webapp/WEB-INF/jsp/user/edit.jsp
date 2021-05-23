@@ -5,14 +5,14 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<my:maintemplate title="Add user">
+<my:maintemplate title="Edit user">
     <jsp:attribute name="body">
         <div class="row justify-content-center">
             <div class="col-sm-6">
-                <form:form method="post" action="${pageContext.request.contextPath}/user/new"
+                <form:form method="post" action="${pageContext.request.contextPath}/user/edit/${id}"
                            modelAttribute="user"
                            cssClass="form-horizontal mt-5 p-5 border bg-light">
-                    <h1>New user</h1>
+                    <h1>Edit user</h1>
                     <div class="form-group row">
                         <form:label path="firstName" cssClass="col-sm-2 control-label">First name</form:label>
                         <div class="col-sm-10">
@@ -27,20 +27,6 @@
                             <form:errors path="lastName" cssClass="help-block"/>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <form:label path="email" cssClass="col-sm-2 control-label">Email</form:label>
-                        <div class="col-sm-10">
-                            <form:input path="email" cssClass="form-control"/>
-                            <form:errors path="email" cssClass="help-block"/>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <form:label path="password" cssClass="col-sm-2 control-label">Password</form:label>
-                        <div class="col-sm-10">
-                            <form:input path="password" type="password" cssClass="form-control"/>
-                            <form:errors path="password" cssClass="help-block"/>
-                        </div>
-                    </div>
                    <div class="form-group row">
                        <form:label path="role" cssClass="col-sm-2 control-label">Role</form:label>
                        <div class="col-sm-10">
@@ -50,13 +36,10 @@
                            <form:errors path="role" cssClass="help-block"/>
                        </div>
                    </div>
-                  <c:if test="${not empty new_user_failure}">
-                      <div class="alert alert-danger" role="alert"><c:out value="${new_user_failure}"/></div>
-                  </c:if>
                    <div class="row">
                        <a href="${pageContext.request.contextPath}/user"
                         class="btn btn-secondary ml-3">Back</a>
-                    <button class="btn btn-primary ml-3" type="submit">Create</button>
+                    <button class="btn btn-primary ml-3" type="submit">Edit</button>
                    </div>
                 </form:form>
             </div>

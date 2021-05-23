@@ -11,6 +11,7 @@ import cz.muni.fi.pa165.service.TimelineService;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.Optional;
  */
 
 @Service
+@Transactional
 public class EventFacadeImpl implements EventFacade{
 
     @Inject

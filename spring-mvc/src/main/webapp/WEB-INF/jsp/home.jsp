@@ -26,7 +26,8 @@
             <div class="card col-sm-6 p-5">
                 <div class="card-body">
                     <h3 class="card-title mb-5"><c:out value="${studygroup.name}"/></h3>
-                    <h5>Timelines</h5>
+                    <h5>Timelines:</h5>
+
                     <c:choose>
                         <c:when test="${empty studygroup.timelines}">
                             <p>There are no timelines</p>
@@ -47,6 +48,14 @@
                                             </c:if>
                                     </li>
                                 </c:forEach>
+                                <c:if test="${(authUser.id eq studygroup.leader.id) or (authUser.role eq 'ADMINISTRATOR')}">
+                                <li class="list-group-item">
+                                    <span>Add new timeline</span>
+                                        <a class="btn btn-outline-success float-right" href="${pageContext.request.contextPath}/timeline/new?studyGroupId=${studygroup.id}" title="New">
+                                            <i class="fas fa-plus" title="Add"></i>
+                                        </a>
+                                </li>
+                                </c:if>
                             </ul>
                         </c:otherwise>
                         </c:choose>
@@ -71,6 +80,16 @@
                                         </c:if>
                                     </li>
                                 </c:forEach>
+                                <c:if test="${(authUser.id eq studygroup.leader.id) or (authUser.role eq 'ADMINISTRATOR')}">
+                                <li class="list-group-item">
+                                    <span>Add new member</span>
+                                    <form method="POST" action="${pageContext.request.contextPath}/timeline/new?studyGroupId=${studygroup.id}">
+                                        <button class="btn btn-outline-success float-right" type="submit" title="New">
+                                            <i class="fas fa-user-plus" title="Add"></i>
+                                        </button>
+                                    </form>
+                                </li>
+                                </c:if>
                             </ul>
                         </c:otherwise>
                     </c:choose>

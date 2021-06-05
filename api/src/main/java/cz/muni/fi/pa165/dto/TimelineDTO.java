@@ -21,7 +21,10 @@ public class TimelineDTO {
     @Size(min = 3, max = 50)
     private String name;
 
+    @NotNull
     private LocalDate fromDate;
+
+    @NotNull
     private LocalDate toDate;
 
     @ToString.Exclude

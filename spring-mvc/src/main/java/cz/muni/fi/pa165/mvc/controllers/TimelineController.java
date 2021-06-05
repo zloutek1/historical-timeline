@@ -71,12 +71,13 @@ public class TimelineController {
     }
 
     @PostMapping ("/new")
-    public String postNew(Model model,
-                          @Valid @ModelAttribute("timeline") TimelineCreateDTO timeline,
+    public String postNew(Model model, HttpSession session,
                           @RequestParam Long studyGroupId,
+                          @Valid @ModelAttribute("timeline") TimelineCreateDTO timeline,
                           BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         LOG.debug("post timeline new");
         if (bindingResult.hasErrors()) {
+            model.addAttribute("studyGroupId", studyGroupId);
             return "/timeline/new";
         }
         Optional<TimelineDTO> optTimeline = timelineFacade.findByName(timeline.getName());

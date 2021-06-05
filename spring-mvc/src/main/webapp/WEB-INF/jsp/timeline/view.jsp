@@ -64,7 +64,7 @@
                                     <div class="dropdown text-right col-1">
                                         <a type="button" id="eventDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
                                         <div class="dropdown-menu dropdown-primary" aria-labelledby="eventDropdownMenuButton">
-                                            <a class="dropdown-item" href="/pa165/event/edit/${event.id}">Edit</a>
+                                            <a class="dropdown-item" href="/pa165/event/update/${event.id}">Edit</a>
                                             <button type="button" class="dropdown-item btn btn-link text-danger" data-toggle="modal" data-target="#removeModal" data-event-id="${event.id}">Remove</button>
                                         </div>
                                     </div>

@@ -6,8 +6,8 @@ import javax.validation.constraints.NotNull;
 @Data
 public class TimelineAddEventDTO {
     @NotNull
-    public Long timelineId;
+    private Long timelineId;
 
     @NotNull
-    public Long eventId;
+    private Long eventId;
 }

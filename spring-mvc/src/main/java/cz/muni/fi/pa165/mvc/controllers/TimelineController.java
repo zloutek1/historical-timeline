@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -179,9 +178,9 @@ public class TimelineController {
     }
 
     @PostMapping("/add/event")
-    public String postEvent(Model model,
-                            @Valid @RequestBody TimelineAddEventDTO addEventDTO,
-                            BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String postAddEvent(Model model,
+                               @Valid @ModelAttribute("addEvent") TimelineAddEventDTO addEventDTO,
+                               BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         LOG.debug("post timeline add event");
 
         if (bindingResult.hasErrors()) {
@@ -190,6 +189,7 @@ public class TimelineController {
         }
 
         timelineFacade.addEvent(addEventDTO.getTimelineId(), addEventDTO.getEventId());
+
         redirectAttributes.addFlashAttribute("alert_success", "Added event " + addEventDTO.getEventId());
         return "redirect:/timeline/" + addEventDTO.getTimelineId();
     }

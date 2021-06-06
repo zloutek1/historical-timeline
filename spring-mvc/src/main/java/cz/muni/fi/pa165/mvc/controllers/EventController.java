@@ -2,24 +2,30 @@ package cz.muni.fi.pa165.mvc.controllers;
 
 import cz.muni.fi.pa165.dto.EventCreateDTO;
 import cz.muni.fi.pa165.dto.EventDTO;
+import cz.muni.fi.pa165.dto.TimelineDTO;
 import cz.muni.fi.pa165.facade.EventFacade;
+import cz.muni.fi.pa165.facade.TimelineFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 import javax.inject.Inject;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.util.List;
+import java.io.IOException;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/event")
@@ -29,6 +35,9 @@ public class EventController {
     @Inject
     private EventFacade eventFacade;
 
+    @Inject
+    private TimelineFacade timelineFacade;
+
     @GetMapping(value = "/new")
     public String getCreate(Model model){
         LOG.debug("get new Event");
@@ -37,16 +46,20 @@ public class EventController {
     }
 
     @PostMapping(value = "/new")
-    public String postCreate(Model model, @Valid @ModelAttribute("event") EventCreateDTO event, @RequestParam(required = false) Long timelineId){
+    public String postCreate(Model model,
+                             @Valid @ModelAttribute("event") EventCreateDTO event,
+                             BindingResult bindingResult,
+                             @RequestParam(required = false) Long timelineId){
         LOG.debug("post new Event");
 
-        if (isDuplicate(model, event.getName())){
+        if (bindingResult.hasErrors() || isDuplicate(model, event.getName())){
             return "event/form";
         }
 
         Long id = eventFacade.createEvent(event);
+        eventFacade.addTimeline(id, timelineId);
 
-        return redirect(timelineId, id);
+        return redirect(timelineId);
     }
 
     @GetMapping(value = "/update/{id}")
@@ -65,16 +78,22 @@ public class EventController {
     }
 
     @PostMapping(value = "/update/{id}")
-    public String putUpdate(Model model, @Valid @ModelAttribute("event") EventDTO event, @RequestParam(required = false) Long timelineId){
+    public String postUpdate(Model model,
+                             @Valid @ModelAttribute("event") EventDTO event,
+                             BindingResult bindingResult,
+                             @RequestParam(required = false) Long timelineId){
         LOG.debug("post Event");
 
-        if (isDuplicate(model, event.getName())){
+        if (bindingResult.hasErrors() || isDuplicate(model, event.getName())){
             return "event/form";
         }
 
         eventFacade.updateEvent(event);
 
-        return redirect(timelineId, event.getId());
+
+        timelineCheck(event, timelineId);
+
+        return redirect(timelineId);
     }
 
     private Boolean isDuplicate(Model model, String eventName) {
@@ -85,6 +104,22 @@ public class EventController {
             return true;
         }
         return false;
+    }
+
+    private void timelineCheck(EventDTO event, Long timelineId){
+        if (timelineId == null){
+            return;
+        }
+
+        var timeline = timelineFacade.findById(timelineId);
+
+        if (timeline.isPresent() && outOfBounds(event, timeline.get())){
+            eventFacade.removeTimeline(event.getId(), timelineId);
+        }
+    }
+
+    private Boolean outOfBounds(EventDTO event, TimelineDTO timeline){
+        return event.getDate().isAfter(timeline.getFromDate()) && event.getDate().isBefore(timeline.getToDate());
     }
 
     @PostMapping(value = "/delete/{id}")
@@ -102,23 +137,35 @@ public class EventController {
             eventFacade.deleteEvent(id);
         }
 
-        return redirect(timelineId, id);
-
+        return redirect(timelineId);
     }
 
-    private String redirect(Long timelineId, Long eventId){
+    private String redirect(Long timelineId){
         if (timelineId == null){
             return "redirect:/home";
         }
-        return "redirect:/timeline/" + timelineId + "/add/event/ " + eventId;
+        return "redirect:/timeline/" + timelineId;
     }
 
-    @GetMapping(produces = "application/json; charset=UTF-8")
-    private @ResponseBody List<EventDTO> findAll(@RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate fromDate, @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate toDate) {
-        if (fromDate == null && toDate == null) {
-            return eventFacade.findAllEvents();
-        } else {
-            return eventFacade.findAllInRange(fromDate, toDate);
+    @GetMapping("/{id}/image")
+    public void getImage(@PathVariable long id, HttpServletResponse response) throws IOException {
+        Optional<EventDTO> optEventDTO = eventFacade.findById(id);
+        if (optEventDTO.isEmpty()) {
+            return;
         }
+
+        EventDTO eventDTO = optEventDTO.get();
+
+        byte[] image = eventDTO.getImage();
+        if(image != null) {
+            ServletOutputStream out = response.getOutputStream();
+            out.write(image);
+            out.flush();
+        }
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder){
+        binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
     }
 }

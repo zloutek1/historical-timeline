@@ -59,12 +59,6 @@
 
     <jsp:attribute name="scripts">
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-        <script>
-            $( function() {
-                $( ".datepicker" ).datepicker({
-                    dateFormat: "dd.mm.yy"
-                });
-            } );
-        </script>
+        <script src="<c:url value="/resources/js/datepicker.js"/>"></script>>
     </jsp:attribute>
 </my:maintemplate>

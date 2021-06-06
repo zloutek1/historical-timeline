@@ -125,6 +125,8 @@ public class EventFacadeTest extends AbstractTestNGSpringContextTests {
     @Test void addTimeline_validTimelineId_addTimeline(){
         Timeline timeline = new Timeline();
         timeline.setId(2L);
+        timeline.setFromDate(LocalDate.of(2020,1,27));
+        timeline.setToDate(LocalDate.of(2020,1,29));
 
         when(eventService.findById(event.getId())).thenReturn(Optional.ofNullable(event));
         when(timelineService.findById(timeline.getId())).thenReturn(Optional.of(timeline));

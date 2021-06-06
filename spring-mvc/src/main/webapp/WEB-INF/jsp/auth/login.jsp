@@ -11,13 +11,27 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
     crossorigin="anonymous">
+    <style>
+    body {
+        height: "100vh";
+        background: linear-gradient(rgba(255, 255, 255, 0.6), rgba(224, 200, 150, 0.4)), url("${pageContext.request.contextPath}/img/login-background.jpg");
+        background-position: "center";
+        background-size: "cover";
+        background-repeat: "no-repeat";
+        overflow: "hidden";
+    }
+    .login-form {
+        border-radius: 1rem;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    }
+    </style>
 </head>
 <body>
     <div class="container vh-100">
         <div class="row justify-content-center">
             <form:form method="post" action="${pageContext.request.contextPath}/auth/login"
                        modelAttribute="user"
-                       cssClass="form-horizontal mt-5 p-5 border col-lg-6 col-md-9 bg-light">
+                       cssClass="form-horizontal mt-5 p-5 border col-lg-6 col-md-9 bg-light login-form">
                 <h1>Login</h1>
                 <div class="form-group">
                     <form:label path="email" cssClass="col-sm-2 control-label">Email</form:label>

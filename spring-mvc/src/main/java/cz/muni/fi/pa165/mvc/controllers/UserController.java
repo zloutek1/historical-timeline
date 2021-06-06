@@ -154,11 +154,18 @@ public class UserController {
         UserDTO user = optUser.get();
         UserDTO authUser = (UserDTO)session.getAttribute("authUser");
         if (user.getId().equals(authUser.getId())) {
-            LOG.debug("user delete - user with " + user.getId() + " attempted to delete himself");
+            LOG.debug("user delete - user with id " + user.getId() + " attempted to delete himself");
             redirectAttributes.addFlashAttribute("alert_danger", "Can't delete yourself");
-        } else  {
+            return "redirect:/user";
+        }
+        var studyGroups = userFacade.findUserStudyGroups(user.getId());
+        if (studyGroups.stream().anyMatch(c -> c.getLeader().getId().equals(user.getId()))) {
+            LOG.debug("user delete - user with id " + user.getId() + " deletion failed, because the user leads study groups");
+            redirectAttributes.addFlashAttribute("alert_danger", "Can't delete user who leads some study groups");
+        }
+        else  {
             userFacade.deleteUser(user.getId());
-            LOG.debug("user delete - user with " + user.getId() + " attempted to delete himself");
+            LOG.debug("user delete - user with id " + user.getId() + " successfully deleted");
             redirectAttributes.addFlashAttribute("alert_success",
                     "Deleted user " + user.getEmail());
         }

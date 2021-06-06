@@ -33,6 +33,10 @@
             .comment .date {
                 color: gray;
             }
+
+            .image {
+                max-width: 10em;
+            }
         </style>
     </jsp:attribute>
     <jsp:attribute name="body">
@@ -69,6 +73,11 @@
                                         </div>
                                     </div>
                                 </div>
+                                <c:if test="${event.image ne null}">
+                                    <div class="image float-right">
+                                        <img src="${pageContext.request.contextPath}/event/${event.id}/image" class="img-thumbnail" />
+                                    </div>
+                                </c:if>
                                 <p><c:out value="${event.description}" /></p>
                             </div>
                         </div>

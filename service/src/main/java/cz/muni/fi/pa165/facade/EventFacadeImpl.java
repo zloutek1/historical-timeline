@@ -5,15 +5,14 @@ import cz.muni.fi.pa165.dto.EventDTO;
 import cz.muni.fi.pa165.dto.TimelineDTO;
 import cz.muni.fi.pa165.entity.Event;
 import cz.muni.fi.pa165.entity.Timeline;
+import cz.muni.fi.pa165.exceptions.ServiceException;
 import cz.muni.fi.pa165.service.BeanMappingService;
 import cz.muni.fi.pa165.service.EventService;
 import cz.muni.fi.pa165.service.TimelineService;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +43,7 @@ public class EventFacadeImpl implements EventFacade{
         mappedEvent.setDate(event.getDate());
         mappedEvent.setLocation(event.getLocation());
         mappedEvent.setDescription(event.getDescription());
-
-        setImage(mappedEvent, event.getImage());
+        mappedEvent.setImage(event.getImage());
 
         eventService.create(mappedEvent);
         return mappedEvent.getId();
@@ -59,23 +57,8 @@ public class EventFacadeImpl implements EventFacade{
         event.setDate(updatedEvent.getDate());
         event.setLocation(updatedEvent.getLocation());
         event.setDescription(updatedEvent.getDescription());
-
-        setImage(event, updatedEvent.getImage());
+        event.setImage(updatedEvent.getImage());
     }
-
-    private void setImage(Event event, MultipartFile image){
-        if (image == null) {
-            event.setImage(null);
-            return;
-        }
-
-        try {
-            event.setImage(image.getBytes());
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e);
-        }
-    }
-
 
     @Override
     public void deleteEvent(Long eventId){
@@ -84,12 +67,28 @@ public class EventFacadeImpl implements EventFacade{
 
     @Override
     public void addTimeline(Long eventId, Long timelineId) {
-        getEvent(eventId).addTimeline(getTimeline(timelineId));
+        Timeline timeline = timelineService.findById(timelineId)
+                .orElseThrow(() -> new ServiceException("No Timeline with id " + timelineId + " found"));
+        Event event = eventService.findById(eventId)
+                .orElseThrow(() -> new ServiceException("No Event with id " + eventId + " found"));
+
+        if (!event.getDate().isAfter(timeline.getFromDate()) || !event.getDate().isBefore(timeline.getToDate())) {
+            throw new ServiceException("Event with id " + eventId + " out of bounds for Timeline with " + timelineId);
+        }
+
+        timeline.addEvent(event);
+        event.addTimeline(timeline);
     }
 
     @Override
     public void removeTimeline(Long eventId, Long timelineId) {
-        getEvent(eventId).removeTimeline(getTimeline(timelineId));
+        Timeline timeline = timelineService.findById(timelineId)
+                .orElseThrow(() -> new ServiceException("No timeline with id " + timelineId + " found"));
+        Event event = eventService.findById(eventId)
+                .orElseThrow(() -> new ServiceException("No event with id " + eventId + " found"));
+
+        timeline.removeEvent(event);
+        event.removeTimeline(timeline);
     }
 
     private Event getEvent(Long eventId){
@@ -100,16 +99,6 @@ public class EventFacadeImpl implements EventFacade{
         }
 
         return event.get();
-    }
-
-    private Timeline getTimeline(Long timelineId){
-        Optional<Timeline> timeline = timelineService.findById(timelineId);
-
-        if (timeline.isEmpty()){
-            throw new IllegalArgumentException("Could not find Timeline by ID: " + timelineId);
-        }
-
-        return timeline.get();
     }
 
     @Override

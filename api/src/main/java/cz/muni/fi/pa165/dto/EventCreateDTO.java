@@ -1,7 +1,6 @@
 package cz.muni.fi.pa165.dto;
 
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -19,5 +18,5 @@ public class EventCreateDTO {
     private LocalDate date;
     private String location;
     private String description;
-    private MultipartFile image;
+    private byte[] image;
 }

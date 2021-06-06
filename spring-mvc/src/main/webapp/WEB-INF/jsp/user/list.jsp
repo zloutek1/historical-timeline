@@ -31,9 +31,9 @@
                         onclick="return confirm('Do you really want to delete user ${user.firstName}  ${user.lastName}?')">
                             <i class="fas fa-trash" title="Delete"></i>
                         </button>
-                        <button class="btn btn-outline-info" title="Edit" href="${pageContext.request.contextPath}/user/edit/${user.id}">
+                        <a class="btn btn-outline-info" title="Edit" href="${pageContext.request.contextPath}/user/edit/${user.id}">
                             <i class="fas fa-edit" title="Edit"></i>
-                        </button>
+                        </a>
                      </form:form>
 
                      </td>

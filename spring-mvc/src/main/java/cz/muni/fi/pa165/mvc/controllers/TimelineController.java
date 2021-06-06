@@ -154,8 +154,8 @@ public class TimelineController {
     }
 
     @GetMapping("/{id}/add/event")
-    public String getAllEvents(Model model, @PathVariable Long id,
-                               RedirectAttributes redirectAttributes) {
+    public String getAddEvent(Model model, @PathVariable Long id,
+                              RedirectAttributes redirectAttributes) {
         LOG.debug("get timeline add all events");
 
         Optional<TimelineDTO> timelineOpt = timelineFacade.findById(id);
@@ -187,9 +187,31 @@ public class TimelineController {
             return "/timeline/add/event";
         }
 
-        timelineFacade.addEvent(addEventDTO.getTimelineId(), addEventDTO.getEventId());
+        Long eventId = addEventDTO.getEventId();
 
-        redirectAttributes.addFlashAttribute("alert_success", "Added event " + addEventDTO.getEventId());
+        try {
+            timelineFacade.addEvent(addEventDTO.getTimelineId(), eventId);
+            redirectAttributes.addFlashAttribute("alert_success", "Added event " + eventId);
+        } catch (SecurityException ex) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Failed to add event " + eventId);
+        }
+
         return "redirect:/timeline/" + addEventDTO.getTimelineId();
+    }
+
+    @PostMapping("/{timelineId}/remove/event/{eventId}")
+    public String postRemoveEvent(Model model,
+                                  @PathVariable Long timelineId, @PathVariable Long eventId,
+                                  RedirectAttributes redirectAttributes) {
+        LOG.debug("post timeline remove event");
+
+        try {
+            timelineFacade.removeEvent(timelineId, eventId);
+            redirectAttributes.addFlashAttribute("alert_success", "Removed event " + eventId);
+        } catch (SecurityException ex) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Failed to remove event " + eventId);
+        }
+
+        return "redirect:/timeline/" + timelineId;
     }
 }

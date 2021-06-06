@@ -44,7 +44,7 @@
 
             <div class="events container">
                 <div class="row justify-content-end mb-2">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addEventModal">Add event</button>
+                    <a class="btn btn-primary" href="${pageContext.request.contextPath}/timeline/${timeline.id}/add/event">Add event</a>
                 </div>
 
                 <c:choose>
@@ -64,7 +64,7 @@
                                     <div class="dropdown text-right col-1">
                                         <a type="button" id="eventDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
                                         <div class="dropdown-menu dropdown-primary" aria-labelledby="eventDropdownMenuButton">
-                                            <a class="dropdown-item" href="/pa165/event/edit/${event.id}">Edit</a>
+                                            <a class="dropdown-item" href="/pa165/event/update/${event.id}">Edit</a>
                                             <button type="button" class="dropdown-item btn btn-link text-danger" data-toggle="modal" data-target="#removeModal" data-event-id="${event.id}">Remove</button>
                                         </div>
                                     </div>
@@ -126,55 +126,6 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="addEventModal" tabindex="-1" role="dialog" aria-labelledby="addEventModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="addEventModalLabel">Add event</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body container">
-                            <ul class="nav nav-tabs">
-                                <li class="active"><a class="nav-link" data-toggle="tab" href="#addEvent-all">Load all</a></li>
-                                <li><a class="nav-link" data-toggle="tab" href="#addEvent-between">Between dates</a></li>
-                                <li><a class="nav-link" data-toggle="tab" href="#addEvent-create">Create new</a></li>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane fade show active" id="addEvent-all">
-                                    <div class="input-group mb-3">
-                                        <div class="row">
-                                            <button class="btn btn-outline-secondary" type="button" id="button-search-by-name">Load all</button>
-                                        </div>
-                                        <div class="row">
-                                            <select id="addEvent-all-select"></select>
-                                            <button class="btn btn-primary" type="button" id="addEvent-all-submit">Add event</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="addEvent-between">
-                                    <div class="input-group mb-3">
-                                        <div class="row">
-                                            <input type="text" id="event-by-time-from-input" class="form-control datepicker" placeholder="From date" aria-label="From date" aria-describedby="button-search-by-time">
-                                            <input type="text" id="event-by-time-to-input" class="form-control datepicker" placeholder="To date" aria-label="To date" aria-describedby="button-search-by-time">
-                                            <button class="btn btn-outline-secondary" type="button" id="button-search-by-time">Search</button>
-                                        </div>
-                                        <div class="row">
-                                            <select id="addEvent-all-by-time-select"></select>
-                                            <button class="btn btn-primary" type="button" id="addEvent-by-time-submit">Add event</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="addEvent-create">
-                                    <a class="btn btn-primary" href="${pageContext.request.contextPath}/event/new?timelineId=${timeline.id}" role="button">Create new event</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="removeModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -200,47 +151,15 @@
     </jsp:attribute>
 
     <jsp:attribute name="scripts">
-            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-            <script type="application/javascript">
-                $(document).on('show.bs.modal', '#removeModal', function (event) {
-                    let button = $(event.relatedTarget)
-                    let eventId = button.data('event-id')
-                    let modal = $(this)
-                    modal.find('form.submit').attr('action', '${pageContext.request.contextPath}/event/delete/' + eventId);
-                })
-
-                $(document).on('show.bs.modal', '#addEventModal', function (event) {
-                    let modal = $(this)
-                })
-
-                $(document).on('click', '#button-search-by-name', function (event) {
-                    $.getJSON("${pageContext.request.contextPath}/event", function (result) {
-                        const select = $('#addEvent-all-select')
-                        select.empty()
-                        $(result).each(function( index, value ) {
-                            select.append('<option value="'+value.id+'">'+value.name+'</option>')
-                        })
-                    })
-                })
-
-                $(document).on('click', '#button-search-by-time', function (event) {
-                    let fromDate = $('#event-by-time-from-input').val()
-                    let toDate =  $('#event-by-time-to-input').val()
-                    let url = "${pageContext.request.contextPath}/event?fromDate=" + fromDate + "&toDate=" + toDate
-                    $.getJSON(url, function (result) {
-                        const select = $('#addEvent-by-time-select')
-                        select.empty()
-                        $(result).each(function( index, value ) {
-                            select.append('<option value="'+value.id+'">'+value.name+'</option>')
-                        })
-                    });
-                })
-
-                $( function() {
-                    $( ".datepicker" ).datepicker({
-                        dateFormat: "dd.mm.yy"
-                    });
-                } );
-            </script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="<c:url value="/resources/js/datepicker.js" />"></script>
+        <script type="application/javascript">
+            $(document).on('show.bs.modal', '#removeModal', function (event) {
+                let button = $(event.relatedTarget)
+                let eventId = button.data('event-id')
+                let modal = $(this)
+                modal.find('form.submit').attr('action', '${pageContext.request.contextPath}/event/delete/' + eventId);
+            })
+        </script>
     </jsp:attribute>
 </my:maintemplate>

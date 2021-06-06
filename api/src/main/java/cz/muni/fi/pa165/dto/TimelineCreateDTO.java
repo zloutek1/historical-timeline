@@ -14,7 +14,13 @@ public class TimelineCreateDTO {
     @NotNull
     @Size(min = 3, max = 50)
     private String name;
+
+    @NotNull
     private LocalDate fromDate;
+
+    @NotNull
     private LocalDate toDate;
+
+    @NotNull
     private Long studyGroupId;
 }

@@ -76,7 +76,7 @@ public class TimelineFacadeImpl implements TimelineFacade {
     public void addEvent(Long timelineId, Long eventId) {
         Timeline timeline = timelineService.findById(timelineId)
                 .orElseThrow(() -> new ServiceException("No timeline with id " + timelineId + " found."));
-        Event event = eventService.findById(timelineId)
+        Event event = eventService.findById(eventId)
                 .orElseThrow(() -> new ServiceException("No event with id " + eventId + " found."));
         timeline.addEvent(event);
         event.addTimeline(timeline);
@@ -86,7 +86,7 @@ public class TimelineFacadeImpl implements TimelineFacade {
     public void removeEvent(Long timelineId, Long eventId) {
         Timeline timeline = timelineService.findById(timelineId)
                 .orElseThrow(() -> new ServiceException("No timeline with id " + timelineId + " found."));
-        Event event = eventService.findById(timelineId)
+        Event event = eventService.findById(eventId)
                 .orElseThrow(() -> new ServiceException("No event with id " + eventId + " found."));
         timeline.removeEvent(event);
         event.removeTimeline(timeline);

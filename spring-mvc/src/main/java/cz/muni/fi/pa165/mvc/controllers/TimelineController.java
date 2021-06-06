@@ -146,7 +146,6 @@ public class TimelineController {
         var events = timeline.get().getEvents();
         for (var event: events) {
             timelineFacade.removeEvent(id, event.getId());
-            eventFacade.removeTimeline(event.getId(), id);
         }
 
         timelineFacade.deleteTimeline(id);

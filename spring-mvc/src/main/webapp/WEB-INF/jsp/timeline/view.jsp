@@ -33,6 +33,10 @@
             .comment .date {
                 color: gray;
             }
+
+            .image {
+                max-width: 10em;
+            }
         </style>
     </jsp:attribute>
     <jsp:attribute name="body">
@@ -64,11 +68,16 @@
                                     <div class="dropdown text-right col-1">
                                         <a type="button" id="eventDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
                                         <div class="dropdown-menu dropdown-primary" aria-labelledby="eventDropdownMenuButton">
-                                            <a class="dropdown-item" href="/pa165/event/update/${event.id}">Edit</a>
+                                            <a class="dropdown-item" href="/pa165/event/update/${event.id}?timelineId=${timeline.id}">Edit</a>
                                             <button type="button" class="dropdown-item btn btn-link text-danger" data-toggle="modal" data-target="#removeModal" data-event-id="${event.id}">Remove</button>
                                         </div>
                                     </div>
                                 </div>
+                                <c:if test="${event.image ne null}">
+                                    <div class="image float-right">
+                                        <img src="${pageContext.request.contextPath}/event/${event.id}/image" class="img-thumbnail" />
+                                    </div>
+                                </c:if>
                                 <p><c:out value="${event.description}" /></p>
                             </div>
                         </div>
@@ -112,7 +121,7 @@
                                         <div class="dropdown-menu dropdown-primary" aria-labelledby="commentDropdownMenuButton">
                                             <a class="dropdown-item" href="${pageContext.request.contextPath}/comment/update/${comment.id}?timelineId=${timeline.id}">Edit</a>
                                             <form:form action="${pageContext.request.contextPath}/comment/delete/${comment.id}?timelineId=${timeline.id}" method="delete" cssClass="submit">
-                                                <button type="submit" class="dropdown-item btn btn-link text-danger">Delete</button>
+                                                <button type="submit" class="dropdown-item btn btn-link text-danger">Remove</button>
                                             </form:form>
                                         </div>
                                     </div>
@@ -158,7 +167,8 @@
                 let button = $(event.relatedTarget)
                 let eventId = button.data('event-id')
                 let modal = $(this)
-                modal.find('form.submit').attr('action', '${pageContext.request.contextPath}/event/delete/' + eventId);
+                let url = '${pageContext.request.contextPath}/timeline/${timeline.id}/remove/event/' + eventId;
+                modal.find('form.submit').attr('action', url);
             })
         </script>
     </jsp:attribute>

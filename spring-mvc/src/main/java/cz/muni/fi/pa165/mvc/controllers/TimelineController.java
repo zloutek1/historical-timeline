@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.mvc.controllers;
 
 import cz.muni.fi.pa165.dto.CommentCreateDTO;
+import cz.muni.fi.pa165.dto.TimelineAddEventDTO;
 import cz.muni.fi.pa165.dto.TimelineCreateDTO;
 import cz.muni.fi.pa165.dto.TimelineDTO;
 import cz.muni.fi.pa165.dto.TimelineUpdateDTO;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -58,6 +60,10 @@ public class TimelineController {
         var comment = new CommentCreateDTO();
         comment.setTimelineId(id);
         model.addAttribute("comment", comment);
+
+        var addEvent = new TimelineAddEventDTO();
+        addEvent.setTimelineId(id);
+        model.addAttribute("addEvent", addEvent);
 
         return "timeline/view";
     }
@@ -149,10 +155,42 @@ public class TimelineController {
         return "redirect:/home";
     }
 
-    @GetMapping("/{timelineId}/add/event/{eventId}")
-    public String addEvent(Model model, @PathVariable Long timelineId, @PathVariable Long eventId) {
+    @GetMapping("/{id}/add/event")
+    public String getAllEvents(Model model, @PathVariable Long id,
+                               RedirectAttributes redirectAttributes) {
+        LOG.debug("get timeline add all events");
+
+        Optional<TimelineDTO> timelineOpt = timelineFacade.findById(id);
+        if( timelineOpt.isEmpty() ) {
+            redirectAttributes.addFlashAttribute("alert_danger", "No timeline with id " + id);
+            return "redirect:/home";
+        }
+        var timeline = timelineOpt.get();
+        model.addAttribute("timeline", timeline);
+
+        var addEventDTO = new TimelineAddEventDTO();
+        addEventDTO.setTimelineId(id);
+        model.addAttribute("addEvent", addEventDTO);
+
+        var events = eventFacade.findAllInRange(timeline.getFromDate(), timeline.getToDate());
+        model.addAttribute("events", events);
+
+        return "/timeline/add/event";
+    }
+
+    @PostMapping("/add/event")
+    public String postEvent(Model model,
+                            @Valid @RequestBody TimelineAddEventDTO addEventDTO,
+                            BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         LOG.debug("post timeline add event");
-        timelineFacade.addEvent(timelineId, eventId);
-        return "redirect:/timeline/" + timelineId;
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("addEvent", addEventDTO);
+            return "/timeline/add/event";
+        }
+
+        timelineFacade.addEvent(addEventDTO.getTimelineId(), addEventDTO.getEventId());
+        redirectAttributes.addFlashAttribute("alert_success", "Added event " + addEventDTO.getEventId());
+        return "redirect:/timeline/" + addEventDTO.getTimelineId();
     }
 }

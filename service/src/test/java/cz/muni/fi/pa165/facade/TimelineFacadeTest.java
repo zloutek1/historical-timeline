@@ -135,9 +135,10 @@ public class TimelineFacadeTest extends AbstractTestNGSpringContextTests {
                 "Paris",
                 "no description",
                 null);
+        event.setId(123L);
 
-        when(timelineService.findById(anyLong())).thenReturn(Optional.of(timeline));
-        when(eventService.findById(anyLong())).thenReturn(Optional.of(event));
+        when(timelineService.findById(timeline.getId())).thenReturn(Optional.of(timeline));
+        when(eventService.findById(event.getId())).thenReturn(Optional.of(event));
 
         timelineFacade.addEvent(timeline.getId(), event.getId());
         assertThat(timeline.getEvents()).contains(event);

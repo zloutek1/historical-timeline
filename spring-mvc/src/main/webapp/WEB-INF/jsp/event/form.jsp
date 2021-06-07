@@ -8,12 +8,17 @@
 <my:maintemplate title="Event">
     <jsp:attribute name="body">
         <div class="row justify-content-center">
-            <div class="col-sm-6">
+            <div class="col-sm-8">
                 <form:form method="post"
                            modelAttribute="event"
                            cssClass="form-horizontal mt-5 p-5 border bg-light"
                            enctype="multipart/form-data">
                     <h1>Event</h1>
+                    <c:if test="${not empty duplicate_event}">
+                        <div class="alert alert-danger">
+                            <c:out value="${duplicate_event}"/>
+                        </div>
+                    </c:if>
                     <div class="form-group row">
                         <form:label path="name" cssClass="col-sm-2 control-label">Name</form:label>
                         <div class="col-sm-10">

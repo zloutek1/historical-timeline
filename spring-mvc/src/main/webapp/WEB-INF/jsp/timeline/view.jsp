@@ -79,6 +79,7 @@
                                     </div>
                                 </c:if>
                                 <p><c:out value="${event.description}" /></p>
+                                <p><i class="fas fa-map-pin"></i> <c:out value="${event.location}" /></p>
                             </div>
                         </div>
                     </c:forEach>

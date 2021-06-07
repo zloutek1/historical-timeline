@@ -15,6 +15,9 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author David Sevcik
+ */
 @Controller
 @RequestMapping("/home")
 public class HomeController {

@@ -39,15 +39,15 @@ which runs a spring rest web server accessible on http://localhost:8080/pa165/re
 Create a new timeline by POST method
 ```bash
  curl -X POST -i -H "Content-Type: application/json" --data
- '{"name":"test","fromDate":"1000-02-01","toDate":"1000-02-02", "studyGroup":"UNDEFINED"}'
+ '{"name":"test","fromDate":"1000-02-01","toDate":"1000-02-02", "studyGroupId":"1"}'
  http://localhost:8080/pa165/rest/timelines/create
 ```
 
 Update a timeline by PUT method
 ```bash
 curl -X PUT -i -H "Content-Type: application/json" --data
-'{"name":"test","fromDate":"1000-02-01","toDate":"1000-02-02"}'
-http://localhost:8080/pa165/rest/timelines/update/1
+'{"id":"1","name":"test","fromDate":"1000-02-01","toDate":"1000-02-02"}'
+http://localhost:8080/pa165/rest/timelines/update
 ```
 
 Delete a timeline by DELETE method

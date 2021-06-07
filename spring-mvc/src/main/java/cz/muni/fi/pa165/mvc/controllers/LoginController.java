@@ -19,6 +19,9 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Optional;
 
+/**
+ * @author Ondřej Machala
+ */
 @Controller
 @RequestMapping("/auth")
 public class LoginController {

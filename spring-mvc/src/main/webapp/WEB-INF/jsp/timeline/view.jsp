@@ -47,9 +47,11 @@
             </div>
 
             <div class="events container">
+                <c:if test="${authUser.role ne 'STUDENT'}">
                 <div class="row justify-content-end mb-2">
                     <a class="btn btn-primary" href="${pageContext.request.contextPath}/timeline/${timeline.id}/add/event">Add event</a>
                 </div>
+                </c:if>
 
                 <c:choose>
                 <c:when test="${empty timeline.events}">
@@ -65,16 +67,18 @@
                             <div class="event py-2 col container">
                                 <div class="row">
                                     <h3 class="col d-inline"><c:out value="${event.name}" /></h3>
-                                    <div class="dropdown text-right col-1">
-                                        <a type="button" id="eventDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
-                                        <div class="dropdown-menu dropdown-primary" aria-labelledby="eventDropdownMenuButton">
-                                            <a class="dropdown-item" href="/pa165/event/update/${event.id}?timelineId=${timeline.id}">Edit</a>
-                                            <form:form action="${pageContext.request.contextPath}/timeline/${timeline.id}/remove/event/${event.id}" method="post">
-                                                <button type="submit" class="dropdown-item btn btn-link">Remove</button>
-                                            </form:form>
-                                            <button type="button" class="dropdown-item btn btn-link text-danger" data-toggle="modal" data-target="#deleteModal" data-event-id="${event.id}">Delete</button>
+                                    <c:if test="${authUser.role ne 'STUDENT'}">
+                                        <div class="dropdown text-right col-1">
+                                            <a type="button" id="eventDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
+                                            <div class="dropdown-menu dropdown-primary" aria-labelledby="eventDropdownMenuButton">
+                                                <a class="dropdown-item" href="/pa165/event/update/${event.id}?timelineId=${timeline.id}">Edit</a>
+                                                <form:form action="${pageContext.request.contextPath}/timeline/${timeline.id}/remove/event/${event.id}" method="post">
+                                                    <button type="submit" class="dropdown-item btn btn-link">Remove</button>
+                                                </form:form>
+                                                <button type="button" class="dropdown-item btn btn-link text-danger" data-toggle="modal" data-target="#deleteModal" data-event-id="${event.id}">Delete</button>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </c:if>
                                 </div>
                                 <c:if test="${event.image ne null}">
                                     <div class="image float-right">
@@ -120,15 +124,17 @@
                                         <h4 class="m-0"><c:out value="${comment.author.firstName} ${comment.author.lastName}" /></h4>
                                         <p class="date m-0 ml-2"><my:localdatetime value = "${comment.time}" /></p>
                                     </div>
-                                    <div class="dropdown text-right col-1">
-                                        <a type="button" id="commentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
-                                        <div class="dropdown-menu dropdown-primary" aria-labelledby="commentDropdownMenuButton">
-                                            <a class="dropdown-item" href="${pageContext.request.contextPath}/comment/update/${comment.id}?timelineId=${timeline.id}">Edit</a>
-                                            <form:form action="${pageContext.request.contextPath}/comment/delete/${comment.id}?timelineId=${timeline.id}" method="delete" cssClass="submit">
-                                                <button type="submit" class="dropdown-item btn btn-link text-danger">Remove</button>
-                                            </form:form>
+                                    <c:if test="${authUser.role ne 'STUDENT' or authUser.id eq comment.author.id}">
+                                        <div class="dropdown text-right col-1">
+                                            <a type="button" id="commentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
+                                            <div class="dropdown-menu dropdown-primary" aria-labelledby="commentDropdownMenuButton">
+                                                <a class="dropdown-item" href="${pageContext.request.contextPath}/comment/update/${comment.id}?timelineId=${timeline.id}">Edit</a>
+                                                <form:form action="${pageContext.request.contextPath}/comment/delete/${comment.id}?timelineId=${timeline.id}" method="delete" cssClass="submit">
+                                                    <button type="submit" class="dropdown-item btn btn-link text-danger">Remove</button>
+                                                </form:form>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </c:if>
                                 </div>
                                 <div class="row">
                                     <p class="mb-1"><c:out value="${comment.text}" /></p>

@@ -109,7 +109,7 @@ public class EventController implements HandlerExceptionResolver {
         for(TimelineDTO timeline: timelines){
             if (timelineChecks(model, timeline.getId(), event.getDate())) return "event/form";
         }
-
+      
         eventFacade.updateEvent(event);
 
         return redirect(timelineId);

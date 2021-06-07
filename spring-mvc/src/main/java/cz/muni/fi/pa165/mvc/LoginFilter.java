@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * @author Ondřej Machala
+ */
 @WebFilter(urlPatterns = {"/home/*", "/user/*", "/timeline/*", "/event/*"})
 public class LoginFilter implements Filter {
     private static final Logger LOG = LoggerFactory.getLogger(LoginFilter.class);

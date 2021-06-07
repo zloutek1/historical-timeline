@@ -61,7 +61,7 @@
                             <c:otherwise>
                                 <c:forEach items="${studygroup.members}" var="member" varStatus="ic">
                                     <li class="list-group-item"><span><c:out value="${member.firstName} "> </c:out>  <c:out value="${member.lastName}"> </c:out></span>
-                                        <c:if test="${(authUser.id eq studygroup.leader.id) or (authUser.role eq 'ADMINISTRATOR') or (authUser.id == member.id)}">
+                                        <c:if test="${(authUser.id eq studygroup.leader.id) or (authUser.role eq 'ADMINISTRATOR')}">
                                             <form method="POST" class="float-right" action="${pageContext.request.contextPath}/studygroup/unregister/${studygroup.id}/${member.id}">
                                                 <button class="btn btn-outline-danger" type="submit" title="Unregister"
                                                         onclick="return confirm('Do you really want to unregister user ${member.firstName} ${member.lastName} from study group ${studygroup.name}?')">

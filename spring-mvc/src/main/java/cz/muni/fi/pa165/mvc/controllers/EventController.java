@@ -33,6 +33,10 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * @author Eva Krajníková
+ */
+
 @Controller
 @RequestMapping("/event")
 public class EventController implements HandlerExceptionResolver {

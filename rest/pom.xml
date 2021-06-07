@@ -39,7 +39,7 @@
         </dependency>
         <dependency>
             <groupId>cz.fi.muni.pa165</groupId>
-            <artifactId>service</artifactId>
+            <artifactId>data-population</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>

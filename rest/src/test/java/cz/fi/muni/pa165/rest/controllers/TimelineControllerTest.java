@@ -54,9 +54,6 @@ public class TimelineControllerTest extends AbstractTestNGSpringContextTests {
     @InjectMocks
     private TimelineController timelineController;
 
-    @Inject
-    private WebApplicationContext webApplicationContext;
-
     private MockMvc mockMvc;
 
     private AutoCloseable closeable;

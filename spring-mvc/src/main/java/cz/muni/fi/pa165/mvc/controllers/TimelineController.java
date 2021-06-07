@@ -88,6 +88,12 @@ public class TimelineController {
             model.addAttribute("studyGroupId", studyGroupId);
             return "/timeline/new";
         }
+
+        if (timeline.getFromDate().isAfter(timeline.getToDate())) {
+            model.addAttribute("new_timeline_failure", "Timeline before date must be after from date");
+            return "/timeline/new";
+        }
+
         Optional<TimelineDTO> optTimeline = timelineFacade.findByName(timeline.getName());
         if (optTimeline.isPresent()) {
             LOG.debug("post timeline new - timeline with name {} already in database", timeline.getName());

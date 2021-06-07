@@ -3,7 +3,6 @@ package cz.muni.fi.pa165.mvc.controllers;
 import cz.muni.fi.pa165.dto.EventCreateDTO;
 import cz.muni.fi.pa165.dto.EventDTO;
 import cz.muni.fi.pa165.dto.TimelineDTO;
-import cz.muni.fi.pa165.exceptions.ServiceException;
 import cz.muni.fi.pa165.facade.EventFacade;
 import cz.muni.fi.pa165.facade.TimelineFacade;
 import org.slf4j.Logger;
@@ -31,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Optional;
 
 /**
@@ -66,12 +66,12 @@ public class EventController implements HandlerExceptionResolver {
             return "event/form";
         }
 
+        if (timelineChecks(model, timelineId, event.getDate())) return "event/form";
+
         Long id = eventFacade.createEvent(event);
-        try {
+
+        if (timelineId != null) {
             eventFacade.addTimeline(id, timelineId);
-        } catch (ServiceException e){
-            model.addAttribute("alert_danger", e.getMessage());
-            return "event/form";
         }
 
         return redirect(timelineId);
@@ -103,9 +103,9 @@ public class EventController implements HandlerExceptionResolver {
             return "event/form";
         }
 
-        eventFacade.updateEvent(event);
+        if (timelineChecks(model, timelineId, event.getDate())) return "event/form";
 
-        timelineCheck(event, timelineId);
+        eventFacade.updateEvent(event);
 
         return redirect(timelineId);
     }
@@ -120,20 +120,23 @@ public class EventController implements HandlerExceptionResolver {
         return false;
     }
 
-    private void timelineCheck(EventDTO event, Long timelineId){
-        if (timelineId == null){
-            return;
+    private boolean timelineChecks(Model model, Long timelineId, LocalDate date) {
+        if (timelineId != null) {
+            var timeline = timelineFacade.findById(timelineId);
+            if (timeline.isEmpty()) {
+                model.addAttribute("alert_danger", "Timeline not found");
+                return true;
+            }
+            if (!inBounds(date, timeline.get())) {
+                model.addAttribute("alert_danger", "Event date out of bounds for Timeline");
+                return true;
+            }
         }
-
-        var timeline = timelineFacade.findById(timelineId);
-
-        if (timeline.isPresent() && !outOfBounds(event, timeline.get())){
-            eventFacade.removeTimeline(event.getId(), timelineId);
-        }
+        return false;
     }
 
-    private Boolean outOfBounds(EventDTO event, TimelineDTO timeline){
-        return event.getDate().isAfter(timeline.getFromDate()) && event.getDate().isBefore(timeline.getToDate());
+    private Boolean inBounds(LocalDate eventDate, TimelineDTO timeline){
+        return eventDate.isAfter(timeline.getFromDate()) && eventDate.isBefore(timeline.getToDate());
     }
 
     @PostMapping(value = "/delete/{id}")

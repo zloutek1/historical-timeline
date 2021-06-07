@@ -26,6 +26,9 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Optional;
 
+/**
+ * @author David Sevcik
+ */
 @Controller
 @RequestMapping("/studygroup")
 public class StudyGroupController {

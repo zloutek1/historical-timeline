@@ -40,20 +40,20 @@ Create a new timeline by POST method
 ```bash
  curl -X POST -i -H "Content-Type: application/json" --data
  '{"name":"test","fromDate":"1000-02-01","toDate":"1000-02-02", "studyGroup":"UNDEFINED"}'
- http://localhost:8080/pa165/rest/timeline/create
+ http://localhost:8080/pa165/rest/timelines/create
 ```
 
 Update a timeline by PUT method
 ```bash
 curl -X PUT -i -H "Content-Type: application/json" --data
 '{"name":"test","fromDate":"1000-02-01","toDate":"1000-02-02"}'
-http://localhost:8080/pa165/rest/timeline/update/1
+http://localhost:8080/pa165/rest/timelines/update/1
 ```
 
 Delete a timeline by DELETE method
 ```bash
 curl -X DELETE
-http://localhost:8080/pa165/rest/timeline/delete/1
+http://localhost:8080/pa165/rest/timelines/delete/1
 ```
 
 Get list of all Timelines
@@ -71,11 +71,11 @@ http://localhost:8080/pa165/rest/timelines/between/1000-02-01/1000-02-02
 Get Timeline by id
 ```bash
 curl -i -X GET
-http://localhost:8080/pa165/rest/timeline/1
+http://localhost:8080/pa165/rest/timelines/1
 ```
 
 Get Timeline by name
 ```
 curl -i -X GET
-http://localhost:8080/pa165/rest/timeline/testname
+http://localhost:8080/pa165/rest/timelines/testname
 ```

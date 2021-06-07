@@ -19,7 +19,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -38,7 +37,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
-import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -53,9 +51,6 @@ public class TimelineControllerTest extends AbstractTestNGSpringContextTests {
 
     @InjectMocks
     private TimelineController timelineController;
-
-    @Inject
-    private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
 
@@ -75,9 +70,10 @@ public class TimelineControllerTest extends AbstractTestNGSpringContextTests {
     @Test
     public void create_valid_creates() throws Exception {
         TimelineCreateDTO timeline = new TimelineCreateDTO();
-        timeline.setName("T1");
+        timeline.setName("TTT1");
         timeline.setFromDate(LocalDate.of(2000,5,28));
         timeline.setToDate(LocalDate.of(2000,6,29));
+        timeline.setStudyGroupId(2L);
 
         doReturn(1L)
                 .when(timelineFacade).createTimeline(any(TimelineCreateDTO.class));

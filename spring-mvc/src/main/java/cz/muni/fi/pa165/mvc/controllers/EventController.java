@@ -105,6 +105,11 @@ public class EventController implements HandlerExceptionResolver {
 
         if (timelineChecks(model, timelineId, event.getDate())) return "event/form";
 
+        var timelines = eventFacade.findTimelines(event.getId());
+        for(TimelineDTO timeline: timelines){
+            if (timelineChecks(model, timeline.getId(), event.getDate())) return "event/form";
+        }
+
         eventFacade.updateEvent(event);
 
         return redirect(timelineId);
@@ -128,7 +133,9 @@ public class EventController implements HandlerExceptionResolver {
                 return true;
             }
             if (!inBounds(date, timeline.get())) {
-                model.addAttribute("alert_danger", "Event date out of bounds for Timeline");
+                var from = timeline.get().getFromDate();
+                var to = timeline.get().getToDate();
+                model.addAttribute("alert_danger", "Event date out of bounds <" + from + ", " + to + "> for Timeline " + timelineId);
                 return true;
             }
         }
@@ -136,7 +143,10 @@ public class EventController implements HandlerExceptionResolver {
     }
 
     private Boolean inBounds(LocalDate eventDate, TimelineDTO timeline){
-        return eventDate.isAfter(timeline.getFromDate()) && eventDate.isBefore(timeline.getToDate());
+        return eventDate.isAfter(timeline.getFromDate()) &&
+                eventDate.isBefore(timeline.getToDate()) ||
+                eventDate.isEqual(timeline.getFromDate()) ||
+                eventDate.isEqual(timeline.getToDate());
     }
 
     @PostMapping(value = "/delete/{id}")

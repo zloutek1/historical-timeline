@@ -72,12 +72,19 @@ public class EventFacadeImpl implements EventFacade{
         Event event = eventService.findById(eventId)
                 .orElseThrow(() -> new ServiceException("No Event with id " + eventId + " found"));
 
-        if (!event.getDate().isAfter(timeline.getFromDate()) || !event.getDate().isBefore(timeline.getToDate())) {
+        if (!inBounds(event.getDate(), timeline)) {
             throw new ServiceException("Event with id " + eventId + " out of bounds for Timeline with " + timelineId);
         }
 
         timeline.addEvent(event);
         event.addTimeline(timeline);
+    }
+
+    private Boolean inBounds(LocalDate eventDate, Timeline timeline){
+        return eventDate.isAfter(timeline.getFromDate()) &&
+                eventDate.isBefore(timeline.getToDate()) ||
+                eventDate.isEqual(timeline.getFromDate()) ||
+                eventDate.isEqual(timeline.getToDate());
     }
 
     @Override

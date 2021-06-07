@@ -35,7 +35,7 @@ public class TimelineController {
     private TimelineFacade timelineFacade;
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final TimelineDTO createTimeline(@RequestBody TimelineCreateDTO timeline){
+    public final TimelineDTO createTimeline(@Valid @RequestBody TimelineCreateDTO timeline){
         try {
             Long id = timelineFacade.createTimeline(timeline);
             return timelineFacade.findById(id).orElseThrow(ResourceNotFoundException::new);
@@ -45,7 +45,7 @@ public class TimelineController {
     }
 
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final TimelineDTO updateTimeline(@RequestBody TimelineUpdateDTO timeline){
+    public final TimelineDTO updateTimeline(@Valid @RequestBody TimelineUpdateDTO timeline){
         try {
             timelineFacade.updateTimeline(timeline);
             return timelineFacade.findById(timeline.getId()).orElseThrow(ResourceNotFoundException::new);

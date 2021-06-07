@@ -140,14 +140,16 @@ public class EventController implements HandlerExceptionResolver {
         LOG.debug("delete Event");
 
         var event  = eventFacade.findById(id);
+        var timelines = eventFacade.findTimelines(id);
         if (event.isEmpty()){
             LOG.debug("Event with id {} does not exist", id);
             redirectAttributes.addFlashAttribute("alert_danger", "Event does not exist");
-        } else if (!eventFacade.findTimelines(id).isEmpty()){
+        } else if (timelines.size() == 0 || timelines.size() == 1 && timelines.get(0).getId().equals(timelineId)){
+            timelineFacade.removeEvent(timelineId, id);
+            eventFacade.deleteEvent(id);
+        } else {
             LOG.debug("Event with id {} is used in other Timelines", id);
             redirectAttributes.addFlashAttribute("alert_danger", "Event is used in other Timelines");
-        } else {
-            eventFacade.deleteEvent(id);
         }
 
         return redirect(timelineId);

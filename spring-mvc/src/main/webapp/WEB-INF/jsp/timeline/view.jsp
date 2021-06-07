@@ -151,7 +151,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <form:form action="#" method="post" cssClass="submit">
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <button type="submit" class="btn btn-danger">Remove</button>
                             </form:form>
                         </div>
                     </div>

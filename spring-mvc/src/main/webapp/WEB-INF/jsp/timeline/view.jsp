@@ -124,15 +124,17 @@
                                         <h4 class="m-0"><c:out value="${comment.author.firstName} ${comment.author.lastName}" /></h4>
                                         <p class="date m-0 ml-2"><my:localdatetime value = "${comment.time}" /></p>
                                     </div>
-                                    <div class="dropdown text-right col-1">
-                                        <a type="button" id="commentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
-                                        <div class="dropdown-menu dropdown-primary" aria-labelledby="commentDropdownMenuButton">
-                                            <a class="dropdown-item" href="${pageContext.request.contextPath}/comment/update/${comment.id}?timelineId=${timeline.id}">Edit</a>
-                                            <form:form action="${pageContext.request.contextPath}/comment/delete/${comment.id}?timelineId=${timeline.id}" method="delete" cssClass="submit">
-                                                <button type="submit" class="dropdown-item btn btn-link text-danger">Remove</button>
-                                            </form:form>
+                                    <c:if test="${authUser.role ne 'STUDENT' or authUser.id eq comment.author.id}">
+                                        <div class="dropdown text-right col-1">
+                                            <a type="button" id="commentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
+                                            <div class="dropdown-menu dropdown-primary" aria-labelledby="commentDropdownMenuButton">
+                                                <a class="dropdown-item" href="${pageContext.request.contextPath}/comment/update/${comment.id}?timelineId=${timeline.id}">Edit</a>
+                                                <form:form action="${pageContext.request.contextPath}/comment/delete/${comment.id}?timelineId=${timeline.id}" method="delete" cssClass="submit">
+                                                    <button type="submit" class="dropdown-item btn btn-link text-danger">Remove</button>
+                                                </form:form>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </c:if>
                                 </div>
                                 <div class="row">
                                     <p class="mb-1"><c:out value="${comment.text}" /></p>

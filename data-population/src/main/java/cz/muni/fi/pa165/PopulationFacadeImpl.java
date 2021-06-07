@@ -63,10 +63,9 @@ public class PopulationFacadeImpl implements PopulationFacade {
         literature.addMember(lauri);
         literature.addMember(nissa);
 
-        Timeline ww2 = timeline("World War 2", LocalDate.of(1939, 9, 1), LocalDate.of(1945, 9, 2), history);
-        Timeline ww1 = timeline("World War 1", LocalDate.of(1914, 7, 28), LocalDate.of(1918, 11, 11), history);
-        Timeline victorianEra = timeline("Victorian era", LocalDate.of(1837, 6, 20), LocalDate.of(1901, 1, 22), history);
-        Timeline trojanWar = timeline("Trojan war", year(-1260), year(-1180), history);
+        Timeline ww2 = timeline("World War 2", LocalDate.of(1933, 1, 30), LocalDate.of(1945, 9, 2), history);
+        Timeline ww1 = timeline("World War 1", LocalDate.of(1914, 6, 28), LocalDate.of(1918, 11, 11), history);
+        Timeline victorianEra = timeline("Victorian era", LocalDate.of(1837, 2, 20), LocalDate.of(1901, 2, 22), history);
 
         Timeline renaissanceLit = timeline("Renaissance", year(1500), year(1670), literature);
         Timeline romanticLit = timeline("Romantic", year(1798), year(1870), literature);
@@ -79,15 +78,9 @@ public class PopulationFacadeImpl implements PopulationFacade {
         event("Franz Ferdinand assassination", LocalDate.of(1914, 6, 28), "Austria", "WW1 was triggered from the assassination of Archduke Franz ferdinand and his pregnant wife Sophie by a Serbian terrorist group.", null, ww1);
         event("WW1 ends.", LocalDate.of(1918, 11, 11), "Germany", "German's ran out of soldiers, food and war material. Not only this but support for the Germans was disappearing.", null, ww1);
 
-
         event("Victoria becomes Queen", LocalDate.of(1837, 2, 27), "England", "Victoria is named Queen of Great Britain and Ireland.", null, victorianEra);
         event("US Civil War begins", LocalDate.of(1861, 2, 1), "United States", "The US Civil War begins. Also in this year, the Russian serfs were emancipated and Prince Albert died of typhoid.", null, victorianEra);
         event("Queen Victoria Dies", LocalDate.of(1901, 2, 1), "United Kingdom", "No description", null, victorianEra);
-
-        event("Trojan War Begins", LocalDate.of(-1000, 1, 7), "Troy, Turkey", "No Description", null, trojanWar);
-        event("Gods begin to take sides", LocalDate.of(-1000, 1, 11), "Troy, Turkey", "Zeus favors the Trojans. He sends a lying dream to Agamemnon that said that he would win if he attacked.", null, trojanWar);
-        event("The Trojan Horse", LocalDate.of(-1000, 1, 16), "Troy, Turkey", "Odysseus creates a plan to build a giant wooden horse. He and some other Greeks hide inside of it.", null, trojanWar);
-        event("The Greek Army Destroys Troy", LocalDate.of(-1000, 1, 19), "Troy, Turkey", "No Description", null, trojanWar);
 
         event("Hamlet", LocalDate.of(1599, 10, 14), "United Kingdom", "It is believed Shakespeare began his work on Hamlet this year, which was considered to one of his greatest plays of all times.", null, renaissanceLit);
 
@@ -96,8 +89,9 @@ public class PopulationFacadeImpl implements PopulationFacade {
         event("War and Peace", LocalDate.of(1869, 8, 5), "Russia", "In Russia, Leo Tolstoy publishes the text War and Peace. This novel is the study of early 19th-century Russian society and is regarded as one of the world's greatest novels.", null, victorianLit);
         event("Sherlock Holmes", LocalDate.of(1887, 2, 17), "United Kingdom", "Arthur Conan Doyle writes A Study in Scarlet, introducing Sherlock Holmes to the readers.", null, victorianLit);
 
-        comment("Hello there", LocalDateTime.of(LocalDate.of(2012, 11, 8), LocalTime.of(11, 44)), trojanWar, john);
-        comment("Welcome, I hope that you find this fascinating", LocalDateTime.of(LocalDate.of(2012, 11, 10), LocalTime.of(15, 8)), trojanWar, nissa);
+        comment("Hello there", LocalDateTime.of(LocalDate.of(2012, 11, 8), LocalTime.of(11, 44)), victorianLit, john);
+        comment("Welcome, I hope that you find this fascinating", LocalDateTime.of(LocalDate.of(2012, 11, 10), LocalTime.of(15, 8)), victorianLit, nissa);
+        comment("Was queen Victoria important?", LocalDateTime.of(LocalDate.of(2021, 6, 8), LocalTime.of(12, 22)), victorianEra, lauri);
     }
 
     private LocalDate year(int y) {

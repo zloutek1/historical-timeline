@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.mvc.controllers;
 
 import cz.muni.fi.pa165.dto.CommentCreateDTO;
+import cz.muni.fi.pa165.dto.EventDTO;
 import cz.muni.fi.pa165.dto.TimelineAddEventDTO;
 import cz.muni.fi.pa165.dto.TimelineCreateDTO;
 import cz.muni.fi.pa165.dto.TimelineDTO;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Comparator;
 import java.util.Optional;
 
 /**
@@ -51,6 +53,7 @@ public class TimelineController {
             return "redirect:/home";
         }
 
+        timelineOpt.get().getEvents().sort(Comparator.comparing(EventDTO::getDate));
         model.addAttribute("timeline", timelineOpt.get());
 
         var authUser = (UserDTO) session.getAttribute("authUser");

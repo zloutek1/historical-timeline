@@ -69,7 +69,10 @@
                                         <a type="button" id="eventDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
                                         <div class="dropdown-menu dropdown-primary" aria-labelledby="eventDropdownMenuButton">
                                             <a class="dropdown-item" href="/pa165/event/update/${event.id}?timelineId=${timeline.id}">Edit</a>
-                                            <button type="button" class="dropdown-item btn btn-link text-danger" data-toggle="modal" data-target="#removeModal" data-event-id="${event.id}">Remove</button>
+                                            <form:form action="${pageContext.request.contextPath}/timeline/${timeline.id}/remove/event/${event.id}" method="post">
+                                                <button type="submit" class="dropdown-item btn btn-link">Remove</button>
+                                            </form:form>
+                                            <button type="button" class="dropdown-item btn btn-link text-danger" data-toggle="modal" data-target="#deleteModal" data-event-id="${event.id}">Delete</button>
                                         </div>
                                     </div>
                                 </div>
@@ -79,6 +82,7 @@
                                     </div>
                                 </c:if>
                                 <p><c:out value="${event.description}" /></p>
+                                <p><i class="fas fa-map-pin"></i> <c:out value="${event.location}" /></p>
                             </div>
                         </div>
                     </c:forEach>
@@ -135,17 +139,17 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="removeModalLabel" aria-hidden="true">
+            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="removeModalLabel">Remove event</h5>
+                            <h5 class="modal-title" id="deleteModalLabel">Delete event</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            Are you sure you want to remove this event?
+                            Are you sure you want to delete this event?
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -161,13 +165,12 @@
 
     <jsp:attribute name="scripts">
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-        <script src="<c:url value="/resources/js/datepicker.js" />"></script>
         <script type="application/javascript">
-            $(document).on('show.bs.modal', '#removeModal', function (event) {
+            $(document).on('show.bs.modal', '#deleteModal', function (event) {
                 let button = $(event.relatedTarget)
                 let eventId = button.data('event-id')
                 let modal = $(this)
-                let url = '${pageContext.request.contextPath}/timeline/${timeline.id}/remove/event/' + eventId;
+                let url = '${pageContext.request.contextPath}/event/delete/' + eventId + '?timelineId=' + ${timeline.id};
                 modal.find('form.submit').attr('action', url);
             })
         </script>

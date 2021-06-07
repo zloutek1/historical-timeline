@@ -3,6 +3,6 @@ $( function() {
         dateFormat: "dd.mm.yy",
         changeMonth: true,
         changeYear: true,
-        yearRange: "0000:+50",
+        yearRange: "100:+50",
     });
 } );

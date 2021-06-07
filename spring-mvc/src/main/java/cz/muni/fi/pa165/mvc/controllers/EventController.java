@@ -143,8 +143,8 @@ public class EventController implements HandlerExceptionResolver {
     }
 
     private Boolean inBounds(LocalDate eventDate, TimelineDTO timeline){
-        return eventDate.isAfter(timeline.getFromDate()) &&
-                eventDate.isBefore(timeline.getToDate()) ||
+        return (eventDate.isAfter(timeline.getFromDate()) &&
+                eventDate.isBefore(timeline.getToDate())) ||
                 eventDate.isEqual(timeline.getFromDate()) ||
                 eventDate.isEqual(timeline.getToDate());
     }

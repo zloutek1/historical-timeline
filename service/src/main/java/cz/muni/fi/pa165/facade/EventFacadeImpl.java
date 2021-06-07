@@ -81,8 +81,8 @@ public class EventFacadeImpl implements EventFacade{
     }
 
     private Boolean inBounds(LocalDate eventDate, Timeline timeline){
-        return eventDate.isAfter(timeline.getFromDate()) &&
-                eventDate.isBefore(timeline.getToDate()) ||
+        return (eventDate.isAfter(timeline.getFromDate()) &&
+                eventDate.isBefore(timeline.getToDate())) ||
                 eventDate.isEqual(timeline.getFromDate()) ||
                 eventDate.isEqual(timeline.getToDate());
     }

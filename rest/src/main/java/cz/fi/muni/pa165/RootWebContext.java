@@ -1,6 +1,5 @@
 package cz.fi.muni.pa165;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -8,7 +7,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import cz.fi.muni.pa165.rest.controllers.TimelineController;
 import cz.fi.muni.pa165.rest.formatters.LocalDateTimeFormatter;
 import cz.muni.fi.pa165.DataPopulationConfiguration;
-import cz.muni.fi.pa165.config.ServiceConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

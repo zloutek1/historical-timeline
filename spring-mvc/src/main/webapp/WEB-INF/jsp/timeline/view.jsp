@@ -162,7 +162,6 @@
 
     <jsp:attribute name="scripts">
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-        <script src="<c:url value="/resources/js/datepicker.js" />"></script>
         <script type="application/javascript">
             $(document).on('show.bs.modal', '#removeModal', function (event) {
                 let button = $(event.relatedTarget)

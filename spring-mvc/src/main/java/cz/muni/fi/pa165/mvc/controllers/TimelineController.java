@@ -171,7 +171,12 @@ public class TimelineController {
         model.addAttribute("addEvent", addEventDTO);
 
         var events = eventFacade.findAllInRange(timeline.getFromDate(), timeline.getToDate());
+        events.removeAll(timeline.getEvents());
         model.addAttribute("events", events);
+
+        if (events.size() == 0) {
+            return "redirect:/event/new?timelineId=" + id;
+        }
 
         return "/timeline/add/event";
     }

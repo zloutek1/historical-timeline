@@ -72,9 +72,10 @@ public class TimelineControllerTest extends AbstractTestNGSpringContextTests {
     @Test
     public void create_valid_creates() throws Exception {
         TimelineCreateDTO timeline = new TimelineCreateDTO();
-        timeline.setName("T1");
+        timeline.setName("TTT1");
         timeline.setFromDate(LocalDate.of(2000,5,28));
         timeline.setToDate(LocalDate.of(2000,6,29));
+        timeline.setStudyGroupId(2L);
 
         doReturn(1L)
                 .when(timelineFacade).createTimeline(any(TimelineCreateDTO.class));
